@@ -1,8 +1,8 @@
 Automated Shipping Form Generator:
 
-1. Display last fortnight worth of jobs that contain outgoing parts, that do no have a corresponding shipping email.
-	Search all sent emails in last fortnight that include SV in subject. If the email contains In: * and Out: * then add to list of usedPartsJobs (name change?)
-	Search all sent emails in last fortnight that include SV in the subject. If they match a usedPartsJobs item, remove it from the list.
+1. Display last three weeks worth of jobs that contain outgoing parts, that do no have a corresponding shipping email.
+	Search all sent emails in last three weeks that include SV in subject. If the email contains In: * and Out: * then add to list of usedPartsJobs (name change?)
+	Search all sent emails in last three weeks that include SV in the subject. If they match a usedPartsJobs item, remove it from the list.
 	usedPartsJobs now contains all jobs that have pending forms to be filled and parts to be shipped. Display all these jobs.
 2. User picks job from list.
 	Finds job in sent mail, grabs fault, ingoing part serial and outgoing part serial.
