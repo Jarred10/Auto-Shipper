@@ -20,7 +20,8 @@ Public Class Form1
         ' Set some variables. '
         Dim myItems As Outlook.Items = myInbox.Items
         Dim myItem As Object
-        Dim Found As Boolean = False
+
+        Dim partsItems As New List(Of Object)
 
         ' Get a date object for two weeks ago. '
         Dim dt As Date = Date.Now.AddDays(-14)
@@ -35,10 +36,36 @@ Public Class Form1
         For Each myItem In myItems
             If InStr(1, myItem.Subject, "SV") > 0 Then
                 If InStr(1, myItem.Body, "Out: ") > 0 Then
-                    Debug.Print("Found job " + myItem.Subject + ". Received date: " + myItem.ReceivedTime)
+                    Dim x As Integer
+                    Dim found As Boolean = False
+                    For x = 1 To partsItems.Count
+                        Dim partsItem As String = partsItems.ElementAt(x - 1).Subject.ToString
+                        If partsItem.Contains(myItem.Subject.ToString) Or myItem.Subject.ToString.Contains(partsItem) Then
+                            found = True
+                        End If
+                    Next
+                    If Not found Then
+                        partsItems.Add(myItem)
+                        Debug.Print("Found job " + myItem.Subject + ". Received Date: " + myItem.ReceivedTime)
+                    End If
                 End If
             End If
         Next
+
+        For Each myItem In myItems
+            If InStr(1, myItem.Subject, "SV") > 0 Then
+                If InStr(1, myItem.Body, "Shipping ") > 0 Then
+                    partsItems.Remove(myItem)
+                    Debug.Print("Removed job " + myItem.Subject)
+                End If
+            End If
+        Next
+
+        For Each myItem In partsItems
+
+        Next
+
+
 
     End Sub
 End Class
