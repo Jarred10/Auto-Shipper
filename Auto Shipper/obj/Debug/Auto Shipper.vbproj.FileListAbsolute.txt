@@ -1,14 +1,13 @@
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.exe.config
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.exe
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.pdb
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.xml
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.vbprojResolveAssemblyReference.cache
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto_Shipper.Form1.resources
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto_Shipper.Resources.resources
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.vbproj.GenerateResource.Cache
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.exe
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.xml
-c:\users\jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.pdb
 C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Interop.Microsoft.Office.Core.dll
 C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Interop.Microsoft.Office.Interop.Outlook.dll
 C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.vbproj.ResolveComReference.cache
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto_Shipper.Form1.resources
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto_Shipper.Resources.resources
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.vbproj.GenerateResource.Cache
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.xml
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.exe.config
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.exe
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.pdb
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.xml
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.exe
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.pdb
