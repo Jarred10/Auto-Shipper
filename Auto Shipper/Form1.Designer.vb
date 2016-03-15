@@ -28,6 +28,7 @@ Partial Class Form1
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.ShipButton = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'finderButton
@@ -77,11 +78,22 @@ Partial Class Form1
         Me.TextBox4.Size = New System.Drawing.Size(479, 149)
         Me.TextBox4.TabIndex = 5
         '
+        'ShipButton
+        '
+        Me.ShipButton.Location = New System.Drawing.Point(924, 306)
+        Me.ShipButton.Name = "ShipButton"
+        Me.ShipButton.Size = New System.Drawing.Size(79, 26)
+        Me.ShipButton.TabIndex = 6
+        Me.ShipButton.Text = "Ship"
+        Me.ShipButton.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.Lavender
         Me.ClientSize = New System.Drawing.Size(1977, 1017)
+        Me.Controls.Add(Me.ShipButton)
         Me.Controls.Add(Me.TextBox4)
         Me.Controls.Add(Me.TextBox3)
         Me.Controls.Add(Me.TextBox2)
@@ -101,4 +113,5 @@ Partial Class Form1
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents TextBox3 As TextBox
     Friend WithEvents TextBox4 As TextBox
+    Friend WithEvents ShipButton As Button
 End Class

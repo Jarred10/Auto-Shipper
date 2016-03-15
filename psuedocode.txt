@@ -7,10 +7,13 @@ Automated Shipping Form Generator:
 2. User picks job from list.
 	Finds job in sent mail, grabs fault, ingoing part serial and outgoing part serial.
 3. User clicks Ship.
-	Creates email to send as update for job to include tracking number, times and part.
 	Automatically finds shipping doc for job and downloads it.
 	Fills in shipping doc automatically with fields and prints it.
 	Fills in a foodstuffs returns form automatically with fields and prints it.
 	Creates shipping label, fills out and prints it. Fills in email update with tracking number.
 4. Done?
+
+TODO:
+3.
+	Creates email to send as update for job to include tracking number, times and part.
 	

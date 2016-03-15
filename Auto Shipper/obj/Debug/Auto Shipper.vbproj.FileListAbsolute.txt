@@ -11,3 +11,4 @@ C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\
 C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Debug\Auto Shipper.xml
 C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.exe
 C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.pdb
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Debug\Auto Shipper.vbprojResolveAssemblyReference.cache

@@ -31,8 +31,10 @@ public class FillForm {
 			//reads in the existing source PDF
 			PdfReader pdfReader = new PdfReader(args[0]);
 			
+			String[] name = args[0].split("\\.");
+			
 			//creates the new PDF and opens source
-			PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(args[0] + "-Filled.pdf"));
+			PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(name[0] + "-Filled.pdf"));
 			
 			//grabs the first page of source
 			PdfContentByte canvas = pdfStamper.getUnderContent(1);

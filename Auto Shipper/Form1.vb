@@ -4,33 +4,33 @@ Public Class Form1
 
     Dim olApp As Outlook.Application
     Dim olNs As Outlook.NameSpace
-    Dim myInbox As Outlook.MAPIFolder
-    Dim myCalendar As Outlook.MAPIFolder
+    Dim inboxFolder As Outlook.MAPIFolder
+    Dim sentFolder As Outlook.MAPIFolder
+    Dim calendarFolder As Outlook.MAPIFolder
 
-    Dim myItems As Outlook.Items
-    Dim myCalendarItems As Outlook.Items
+    Dim inboxItemsList As Outlook.Items
+    Dim sentItemsList As Outlook.Items
+    Dim calendarItemsList As Outlook.Items
 
     Dim myItem As Object
     Dim calendarItem As Object
+    Dim shipItem As Object
 
     Dim unshippedItems As New List(Of Object)
-    Dim sentItems As New List(Of Object)
+    Dim shippedItems As New List(Of Object)
 
     ' Get a date object for three weeks ago. '
     Dim dt As Date = Date.Now.AddDays(-21)
 
     Private Sub finderButton_Click(sender As Object, e As EventArgs) Handles finderButton.Click
 
-        ' Limit items to last three weeks. '
-        myItems = myItems.Restrict("[ReceivedTime] >= '" + dt.ToString("MM/dd/yyyy HH:mm") + "'")
-        myCalendarItems = myCalendarItems.Restrict("[Start] >= '" + dt.ToString("MM/dd/yyyy HH:mm") + "'")
 
         ' Sort by oldest item first. 
-        myItems.Sort("[ReceivedTime]")
-        myCalendarItems.Sort("[Start]")
+        sentItemsList.Sort("[ReceivedTime]")
+        calendarItemsList.Sort("[Start]")
 
         ' Loops through all updates in last three weeks.
-        For Each myItem In myItems
+        For Each myItem In sentItemsList
             ' Checks if subject of update contains SV. All updates will contain this.
             If myItem.Subject.ToString.ToUpper.Contains("SV") Then
                 ' Checks if contents of update contain outgoing parts.
@@ -50,13 +50,13 @@ Public Class Form1
                     End If
                     ' If not an update with outgoing parts, check if the job has already had its parts shipped by looking at the subject or body.
                 ElseIf myItem.Body.ToString.ToUpper.Contains("SHIPPING") Or myItem.Subject.ToString.ToUpper.Contains("SHIPPING") Then
-                    sentItems.Add(myItem)
+                    shippedItems.Add(myItem)
                 End If
             End If
         Next
 
         ' Loops through all updates with shipped parts, and removed them from unshipped parts.
-        For Each myItem In sentItems
+        For Each myItem In shippedItems
             For Each partItem In unshippedItems
                 If findSV(partItem.Subject.ToString).Contains(findSV(myItem.Subject.ToString)) Then
                     unshippedItems.Remove(partItem)
@@ -66,7 +66,7 @@ Public Class Form1
         Next
 
         'Loops through all recent calendar items, looking for unshipped updates.
-        For Each calendarItem In myCalendarItems
+        For Each calendarItem In calendarItemsList
             If calendarItem.Subject.ToString.ToUpper.Contains("SV") Then
                 For Each myItem In unshippedItems
                     If findSV(calendarItem.Subject.ToString).Contains(findSV(myItem.Subject.ToString)) Then
@@ -83,20 +83,26 @@ Public Class Form1
 
     ' Function that returns the SV number of an update.
     Public Function findSV(Name As String) As String
-        Return Name.Substring(Name.ToUpper.IndexOf("SV"), 12).ToUpper
+        Try
+            Return Name.Substring(Name.ToUpper.IndexOf("SV"), 12).ToUpper
+        Catch
+            Return ""
+        End Try
     End Function
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         For Each myItem In unshippedItems
-            If findSV(myItem.Subject.ToString).Contains(findSV(ListBox1.SelectedItem.ToString)) Then
+            Dim SV = findSV(myItem.Subject.ToString)
+            If SV.Contains(findSV(ListBox1.SelectedItem.ToString)) Then
                 Dim contents() As String = myItem.Body.ToString.ToUpper.Split(Chr(10))
 
-                TextBox1.Text = findSV(myItem.Subject.ToString)
-
+                TextBox1.Text = SV
                 TextBox2.Text = contents(4)
                 TextBox3.Text = contents(5)
                 TextBox4.Text = contents(7)
 
+                shipItem = myItem
+                Exit For
             End If
         Next
     End Sub
@@ -112,13 +118,27 @@ Public Class Form1
         olNs = olApp.GetNamespace("MAPI")
         olNs.Logon()
 
-        ' Grab the sent items folder and calendar.
-        myInbox = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail)
-        myCalendar = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar)
+        ' Grab the inbox, sent items folder and calendar.
+        inboxFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox).Folders("Shipping Docs")
+        sentFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail)
+        calendarFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar)
 
-        ' Get the list of all emails and calendar appointments.
-        myItems = myInbox.Items
-        myCalendarItems = myCalendar.Items
+        ' Get the list of all emails and calendar appointments. Restrict to last three weeks.
+        inboxItemsList = inboxFolder.Items.Restrict("[ReceivedTime] >= '" + dt.ToString("MM/dd/yyyy HH:mm") + "'")
+        sentItemsList = sentFolder.Items.Restrict("[ReceivedTime] >= '" + dt.ToString("MM/dd/yyyy HH:mm") + "'")
+        calendarItemsList = calendarFolder.Items.Restrict("[Start] >= '" + dt.ToString("MM/dd/yyyy HH:mm") + "'")
 
+
+    End Sub
+
+    Private Sub ShipButton_Click(sender As Object, e As EventArgs) Handles ShipButton.Click
+        For Each myItem In inboxItemsList
+            If myItem.Subject.ToString.ToUpper.Contains("SV") Then
+                If findSV(myItem.Subject.ToString).Contains(findSV(shipItem.Subject.ToString)) And myItem.Subject.ToString.ToUpper.Contains("SHIP DOC") Then
+                    Dim fileName = myItem.Attachments.Item(1).FileName
+                    myItem.Attachments.Item(1).SaveAsFile("C:\Users\Jarred\Documents\Visual Studio 2015\Projects\Auto Shipper\java\test.PDF")
+                End If
+            End If
+        Next
     End Sub
 End Class
