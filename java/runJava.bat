@@ -1,1 +1,0 @@
-java -jar "testProgram.jar" test.PDF
