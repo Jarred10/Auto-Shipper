@@ -137,6 +137,7 @@ Public Class Form1
                 If findSV(myItem.Subject.ToString).Contains(findSV(shipItem.Subject.ToString)) And myItem.Subject.ToString.ToUpper.Contains("SHIP DOC") Then
                     Dim fileName = myItem.Attachments.Item(1).FileName
                     myItem.Attachments.Item(1).SaveAsFile("C:\Users\Jarred\Documents\Visual Studio 2015\Projects\Auto Shipper\java\test.PDF")
+                    System.Diagnostics.Process.Start("C:\Users\Jarred\Documents\Visual Studio 2015\Projects\Auto Shipper\java\runJava.bat")
                 End If
             End If
         Next

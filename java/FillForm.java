@@ -34,7 +34,7 @@ public class FillForm {
 			String[] name = args[0].split("\\.");
 			
 			//creates the new PDF and opens source
-			PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(name[0] + "-Filled.pdf"));
+			PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream("C:\\Users\\Jarred\\Documents\\Visual Studio 2015\\Projects\\Auto Shipper\\java\\" + name[0] + "-Filled.pdf"));
 			
 			//grabs the first page of source
 			PdfContentByte canvas = pdfStamper.getUnderContent(1);
@@ -43,6 +43,7 @@ public class FillForm {
 			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Jarred Green", fnt), 98, 380, 0);
 			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(paddedDate, fnt), 404, 380, 0);
 
+			//saves new pdf
 			pdfStamper.close();
 
 		} catch (IOException | DocumentException e) {
