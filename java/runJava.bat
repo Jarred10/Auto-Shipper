@@ -1,1 +1,1 @@
-java -jar "C:\Users\Jarred\Documents\Visual Studio 2015\Projects\Auto Shipper\java\testProgram.jar" test.PDF
+java -jar "testProgram.jar" test.PDF

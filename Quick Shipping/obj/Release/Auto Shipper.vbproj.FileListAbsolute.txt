@@ -1,0 +1,14 @@
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Release\Auto Shipper.exe.config
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Interop.Microsoft.Office.Core.dll
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Interop.Microsoft.Office.Interop.Outlook.dll
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto Shipper.vbproj.ResolveComReference.cache
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Release\Auto Shipper.exe
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Release\Auto Shipper.pdb
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\bin\Release\Auto Shipper.xml
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto Shipper.vbprojResolveAssemblyReference.cache
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto_Shipper.Form1.resources
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto_Shipper.Resources.resources
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto Shipper.vbproj.GenerateResource.Cache
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto Shipper.exe
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto Shipper.xml
+C:\Users\Jarred\documents\visual studio 2015\Projects\Auto Shipper\Auto Shipper\obj\Release\Auto Shipper.pdb

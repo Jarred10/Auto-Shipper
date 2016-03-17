@@ -24,7 +24,6 @@ Public Class Form1
 
     Private Sub finderButton_Click(sender As Object, e As EventArgs) Handles finderButton.Click
 
-
         ' Sort by oldest item first. 
         sentItemsList.Sort("[ReceivedTime]")
         calendarItemsList.Sort("[Start]")
@@ -92,13 +91,15 @@ Public Class Form1
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         For Each myItem In unshippedItems
-            Dim SV = findSV(myItem.Subject.ToString)
-            If SV.Contains(findSV(ListBox1.SelectedItem.ToString)) Then
-                Dim contents() As String = myItem.Body.ToString.ToUpper.Split(Chr(10))
+            Dim jobNumber As String = findSV(myItem.Subject.ToString)
+            If jobNumber.Contains(findSV(ListBox1.SelectedItem.ToString)) Then
+                Dim body = myItem.Body.ToString
+                Dim contents() As String = Split(body, vbCrLf)
 
-                TextBox1.Text = SV
-                TextBox2.Text = contents(4)
-                TextBox3.Text = contents(5)
+                TextBox1.Text = jobNumber
+
+                TextBox2.Text = contents(4).Substring(contents(4).IndexOf("IN: ") + 5)
+                TextBox3.Text = contents(5).Substring(contents(5).IndexOf("OUT: ") + 6)
                 TextBox4.Text = contents(7)
 
                 shipItem = myItem
@@ -135,9 +136,8 @@ Public Class Form1
         For Each myItem In inboxItemsList
             If myItem.Subject.ToString.ToUpper.Contains("SV") Then
                 If findSV(myItem.Subject.ToString).Contains(findSV(shipItem.Subject.ToString)) And myItem.Subject.ToString.ToUpper.Contains("SHIP DOC") Then
-                    Dim fileName = myItem.Attachments.Item(1).FileName
-                    myItem.Attachments.Item(1).SaveAsFile("C:\Users\Jarred\Documents\Visual Studio 2015\Projects\Auto Shipper\java\test.PDF")
-                    System.Diagnostics.Process.Start("C:\Users\Jarred\Documents\Visual Studio 2015\Projects\Auto Shipper\java\runJava.bat")
+                    myItem.Attachments.Item(1).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "test.pdf")
+                    Process.Start("cmd", "/c java -jar testProgram.jar test.PDF " + TextBox3.Text + " " + TextBox4.Text)
                 End If
             End If
         Next
