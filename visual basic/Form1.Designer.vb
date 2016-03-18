@@ -23,69 +23,70 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.finderButton = New System.Windows.Forms.Button()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.unshippedJobsListBox = New System.Windows.Forms.ListBox()
+        Me.jobNumberTextBox = New System.Windows.Forms.TextBox()
+        Me.serialInTextBox = New System.Windows.Forms.TextBox()
+        Me.serialOutTextBox = New System.Windows.Forms.TextBox()
+        Me.faultTextBox = New System.Windows.Forms.TextBox()
         Me.ShipButton = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.siteTextBox = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'finderButton
         '
-        Me.finderButton.Location = New System.Drawing.Point(12, 417)
+        Me.finderButton.Location = New System.Drawing.Point(12, 406)
         Me.finderButton.Name = "finderButton"
         Me.finderButton.Size = New System.Drawing.Size(160, 31)
         Me.finderButton.TabIndex = 0
         Me.finderButton.Text = "Find Unshipped Jobs"
         Me.finderButton.UseVisualStyleBackColor = True
         '
-        'ListBox1
+        'unshippedJobsListBox
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.ItemHeight = 16
-        Me.ListBox1.Location = New System.Drawing.Point(12, 12)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(765, 388)
-        Me.ListBox1.TabIndex = 1
+        Me.unshippedJobsListBox.FormattingEnabled = True
+        Me.unshippedJobsListBox.ItemHeight = 16
+        Me.unshippedJobsListBox.Location = New System.Drawing.Point(12, 12)
+        Me.unshippedJobsListBox.Name = "unshippedJobsListBox"
+        Me.unshippedJobsListBox.Size = New System.Drawing.Size(765, 388)
+        Me.unshippedJobsListBox.TabIndex = 1
         '
-        'TextBox1
+        'jobNumberTextBox
         '
-        Me.TextBox1.Location = New System.Drawing.Point(924, 12)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(265, 22)
-        Me.TextBox1.TabIndex = 2
+        Me.jobNumberTextBox.Location = New System.Drawing.Point(924, 12)
+        Me.jobNumberTextBox.Name = "jobNumberTextBox"
+        Me.jobNumberTextBox.Size = New System.Drawing.Size(265, 22)
+        Me.jobNumberTextBox.TabIndex = 2
         '
-        'TextBox2
+        'serialInTextBox
         '
-        Me.TextBox2.Location = New System.Drawing.Point(924, 49)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(265, 22)
-        Me.TextBox2.TabIndex = 3
+        Me.serialInTextBox.Location = New System.Drawing.Point(924, 49)
+        Me.serialInTextBox.Name = "serialInTextBox"
+        Me.serialInTextBox.Size = New System.Drawing.Size(265, 22)
+        Me.serialInTextBox.TabIndex = 3
         '
-        'TextBox3
+        'serialOutTextBox
         '
-        Me.TextBox3.Location = New System.Drawing.Point(924, 88)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(265, 22)
-        Me.TextBox3.TabIndex = 4
+        Me.serialOutTextBox.Location = New System.Drawing.Point(924, 88)
+        Me.serialOutTextBox.Name = "serialOutTextBox"
+        Me.serialOutTextBox.Size = New System.Drawing.Size(265, 22)
+        Me.serialOutTextBox.TabIndex = 4
         '
-        'TextBox4
+        'faultTextBox
         '
-        Me.TextBox4.Location = New System.Drawing.Point(924, 125)
-        Me.TextBox4.Multiline = True
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(479, 149)
-        Me.TextBox4.TabIndex = 5
+        Me.faultTextBox.Location = New System.Drawing.Point(924, 166)
+        Me.faultTextBox.Multiline = True
+        Me.faultTextBox.Name = "faultTextBox"
+        Me.faultTextBox.Size = New System.Drawing.Size(479, 149)
+        Me.faultTextBox.TabIndex = 5
         '
         'ShipButton
         '
-        Me.ShipButton.Location = New System.Drawing.Point(924, 306)
+        Me.ShipButton.Location = New System.Drawing.Point(924, 335)
         Me.ShipButton.Name = "ShipButton"
         Me.ShipButton.Size = New System.Drawing.Size(79, 26)
         Me.ShipButton.TabIndex = 6
@@ -95,47 +96,54 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(829, 15)
+        Me.Label1.Location = New System.Drawing.Point(816, 15)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(89, 17)
+        Me.Label1.Size = New System.Drawing.Size(102, 17)
         Me.Label1.TabIndex = 7
-        Me.Label1.Text = "Job Number:"
+        Me.Label1.Text = "JOB NUMBER:"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(853, 52)
+        Me.Label2.Location = New System.Drawing.Point(841, 52)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(65, 17)
+        Me.Label2.Size = New System.Drawing.Size(77, 17)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Serial IN:"
+        Me.Label2.Text = "SERIAL IN:"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(836, 91)
+        Me.Label3.Location = New System.Drawing.Point(824, 91)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(82, 17)
+        Me.Label3.Size = New System.Drawing.Size(94, 17)
         Me.Label3.TabIndex = 9
-        Me.Label3.Text = "Serial OUT:"
+        Me.Label3.Text = "SERIAL OUT:"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(862, 128)
+        Me.Label4.Location = New System.Drawing.Point(862, 169)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(56, 17)
         Me.Label4.TabIndex = 10
         Me.Label4.Text = "FAULT:"
         '
-        'Button1
+        'Label5
         '
-        Me.Button1.Location = New System.Drawing.Point(1030, 306)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 11
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(876, 129)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(42, 17)
+        Me.Label5.TabIndex = 12
+        Me.Label5.Text = "SITE:"
+        '
+        'siteTextBox
+        '
+        Me.siteTextBox.Location = New System.Drawing.Point(924, 126)
+        Me.siteTextBox.Name = "siteTextBox"
+        Me.siteTextBox.Size = New System.Drawing.Size(265, 22)
+        Me.siteTextBox.TabIndex = 11
         '
         'Form1
         '
@@ -143,17 +151,18 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Lavender
         Me.ClientSize = New System.Drawing.Size(1441, 505)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.siteTextBox)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ShipButton)
-        Me.Controls.Add(Me.TextBox4)
-        Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.ListBox1)
+        Me.Controls.Add(Me.faultTextBox)
+        Me.Controls.Add(Me.serialOutTextBox)
+        Me.Controls.Add(Me.serialInTextBox)
+        Me.Controls.Add(Me.jobNumberTextBox)
+        Me.Controls.Add(Me.unshippedJobsListBox)
         Me.Controls.Add(Me.finderButton)
         Me.Name = "Form1"
         Me.Text = "Form1"
@@ -163,15 +172,16 @@ Partial Class Form1
     End Sub
 
     Friend WithEvents finderButton As Button
-    Friend WithEvents ListBox1 As ListBox
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents TextBox3 As TextBox
-    Friend WithEvents TextBox4 As TextBox
+    Friend WithEvents unshippedJobsListBox As ListBox
+    Friend WithEvents jobNumberTextBox As TextBox
+    Friend WithEvents serialInTextBox As TextBox
+    Friend WithEvents serialOutTextBox As TextBox
+    Friend WithEvents faultTextBox As TextBox
     Friend WithEvents ShipButton As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents Label5 As Label
+    Friend WithEvents siteTextBox As TextBox
 End Class
