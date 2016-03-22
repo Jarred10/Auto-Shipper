@@ -49,7 +49,7 @@ public class FillForm {
 			while ((line = br.readLine()) != null) {
 
 				// use comma as separator
-				String[] lineSplit = line.split(",");
+				String[] lineSplit = line.split(";");
 				if(lineSplit[0].equals("name"))
 					name = lineSplit[1];
 
@@ -83,8 +83,11 @@ public class FillForm {
 			//adds text to PDF
 			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(name, fnt), 98, 380, 0);
 			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(paddedDate, fnt), 404, 380, 0);
-			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Out: " + outSerial, fnt), 60, 300, 0);
-			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Fault: " + fault, fnt), 60, 280, 0);
+			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Out: " + outSerial, fnt), 50, 300, 0);
+			canvas.setTextMatrix(60, 280);
+			ColumnText ct = new ColumnText(canvas);
+			ct.setSimpleColumn(new Phrase("Fault: " + fault, fnt), 50, 150, 570, 300, 20, Element.ALIGN_LEFT | Element.ALIGN_TOP);
+			ct.go();
 
 			//saves new PDF
 			pdfStamper.close();
@@ -102,7 +105,10 @@ public class FillForm {
 				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(site, fnt), 220, 580, 0);		
 				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(inSerial, fnt), 220, 412, 0);
 				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(outSerial, fnt), 220, 260, 0);		
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(fault, fnt), 55, 162, 0);
+
+				ct = new ColumnText(canvas);
+				ct.setSimpleColumn(new Phrase(fault, fnt), 55, 10, 530, 185, 25, Element.ALIGN_LEFT | Element.ALIGN_TOP);
+				ct.go();
 
 				pdfStamper.close();
 			}
