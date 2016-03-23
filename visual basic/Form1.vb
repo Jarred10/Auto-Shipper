@@ -16,11 +16,11 @@ Public Class Form1
 
     Dim inboxItem As Object
     Dim sentItem As Object
-    Dim myUnshippedItem As Object
+    Dim shippedJob As Object
+    Dim unshippedJob As Object
     Dim calendarItem As Object
-    Dim shipItem As Item
 
-    Dim unshippedItems As New List(Of Item)
+    Dim unshippedJobs As New List(Of Item)
 
     'Regular expression to find SV numbers
     Dim jobNumberRegex = New Regex("SV\d{10}")
@@ -30,32 +30,40 @@ Public Class Form1
 
     Private Sub finderButton_Click(sender As Object, e As EventArgs) Handles finderButton.Click
 
+        'Clears all textboxes and listbox
+        unshippedJobsListBox.Items.Clear()
+        jobNumberTextBox.Clear()
+        serialInTextBox.Clear()
+        serialOutTextBox.Clear()
+        siteTextBox.Clear()
+        faultTextBox.Clear()
+
         ' Loops through all sent mail in last three weeks.
         For Each sentItem In sentItemsList
-            Dim itemJobNumber = findJobNumber(sentItem.Subject)
+            Dim sentItemJob = findJobNumber(sentItem.Subject)
             ' Checks if subject of sent mail contains SV. Filters to all updates about jobs
-            If Not String.IsNullOrEmpty(itemJobNumber) Then
+            If Not String.IsNullOrEmpty(sentItemJob) Then
                 ' Checks if update was for a job that used parts, and not for 
                 If Contains(sentItem.Body, "out: ") Then
                     Dim x As Integer
                     Dim found As Boolean = False
                     'Checks for duplicate jobs, ie. if there is communication about a job and original update is in the email chain.
-                    For x = 0 To unshippedItems.Count - 1
-                        If Contains(itemJobNumber, unshippedItems.ElementAt(x).jobNumber) Then
+                    For x = 0 To unshippedJobs.Count - 1
+                        If Contains(sentItemJob, unshippedJobs.ElementAt(x).jobNumber) Then
                             found = True
                             Exit For
                         End If
                     Next
                     If Not found Then
-                        ' Adds mail item to a list of updates with parts.
-                        unshippedItems.Add(New Item(sentItem, itemJobNumber))
+                        ' Adds mail item to a list of unshipped jobs.
+                        unshippedJobs.Add(New Item(sentItem, sentItemJob))
                     End If
                     ' If update wasnt for job that used parts, checks if update was for shipping parts
                 ElseIf Contains(sentItem.Subject, "shipping") Or Contains(sentItem.Body, "shipping") Then
-                    ' Removes shipped updates from list of unshipped updates
-                    For Each myUnshippedItem In unshippedItems
-                        If Contains(itemJobNumber, myUnshippedItem.jobNumber) Then
-                            unshippedItems.Remove(myUnshippedItem)
+                    ' Removes shipped updates from list of unshipped updates by looping through all current unshipped jobs and comparing job number
+                    For Each unshippedJob In unshippedJobs
+                        If Contains(sentItemJob, unshippedJob.jobNumber) Then
+                            unshippedJobs.Remove(unshippedJob)
                             Exit For
                         End If
                     Next
@@ -66,44 +74,44 @@ Public Class Form1
         'Loops through all recent calendar items, looking for unshipped updates.
         For Each calendarItem In calendarItemsList
             Dim calendarItemJobNumber = findJobNumber(calendarItem.Subject)
+            'If calendar subject contained SV. Filters to all calendar appointments about jobs
             If Not String.IsNullOrEmpty(calendarItemJobNumber) Then
-                For Each sentItem In unshippedItems
-                    If Contains(calendarItemJobNumber, sentItem.jobNumber) Then
+                'Loops through all unshipped jobs
+                For Each unshippedJob In unshippedJobs
+                    'If calendar job number matches unshipped job number, need to add it to the listbox
+                    If Contains(calendarItemJobNumber, unshippedJob.jobNumber) Then
                         unshippedJobsListBox.Items.Add(calendarItem.Subject)
+                        'Tries to find the site for job using pre-existing format for foodstuffs job details. If it can't find site, assumes that job is not for foodstuffs
                         Dim siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
                         Dim contactIndex = calendarItem.Body.IndexOf("contact name ::", StringComparison.OrdinalIgnoreCase)
                         If siteIndex <> -1 And contactIndex <> -1 Then
-                            sentItem.site = Trim(calendarItem.Body.Substring(siteIndex + 8, contactIndex - (siteIndex + 10)))
-                            sentItem.fs = True
+                            unshippedJob.site = Trim(calendarItem.Body.Substring(siteIndex + 8, contactIndex - (siteIndex + 10)))
+                            unshippedJob.fs = True
                         End If
                     End If
                 Next
             End If
-
         Next
-
-
-
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles unshippedJobsListBox.SelectedIndexChanged
         If unshippedJobsListBox.SelectedItem IsNot Nothing Then
-            For Each shipItem In unshippedItems
-                If Contains(shipItem.jobNumber, findJobNumber(unshippedJobsListBox.SelectedItem)) Then
-                    Dim contents() As String = Split(shipItem.item.Body, vbCrLf)
-                    Dim index = 0
-                    jobNumberTextBox.Text = shipItem.jobNumber
-                    siteTextBox.Text = shipItem.site
+            For Each unshippedJob In unshippedJobs
+                If Contains(unshippedJob.jobNumber, findJobNumber(unshippedJobsListBox.SelectedItem)) Then
+                    Dim contents() As String = Split(unshippedJob.item.Body, vbCrLf)
+                    Dim index As Integer
+                    jobNumberTextBox.Text = unshippedJob.jobNumber
+                    siteTextBox.Text = unshippedJob.site
+                    foodstuffsJobCheckBox.Checked = unshippedJob.fs
 
-                    While index < contents.Length
+                    For index = 0 To contents.Length - 1
                         If Contains(contents(index), "IN: ") Then
                             serialInTextBox.Text = contents(index).Substring(contents(index).IndexOf("IN: ") + 5)
                         ElseIf Contains(contents(index), "OUT: ") Then
                             serialOutTextBox.Text = contents(index).Substring(contents(index).IndexOf("OUT: ") + 6)
                             faultTextBox.Text = contents(index + 2)
                         End If
-                        index += 1
-                    End While
+                    Next
                     Exit For
                 End If
             Next
@@ -114,23 +122,23 @@ Public Class Form1
         Dim shipped As Boolean
         For Each inboxItem In inboxItemsList
             Dim inboxItemJobNumber = findJobNumber(inboxItem.Subject)
-            If Not String.IsNullOrEmpty(inboxItemJobNumber) Then
-                If Contains(inboxItemJobNumber, shipItem.jobNumber) And Contains(inboxItem.Subject, "SHIP DOC") Then
+            If Not String.IsNullOrEmpty(inboxItemJobNumber) And Not IsNothing(unshippedJob) Then
+                If Contains(inboxItemJobNumber, unshippedJob.jobNumber) And Contains(inboxItem.Subject, "SHIP DOC") Then
                     inboxItem.Attachments.Item(1).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"))
-                    If shipItem.fs Then
-                        Process.Start("cmd", "/c java -jar testProgram.jar " + Chr(34) + shipItem.fs.ToString + "|" + jobNumberTextBox.Text + "|" + serialInTextBox.Text + "|" + serialOutTextBox.Text + "|" + siteTextBox.Text + "|" + faultTextBox.Text + Chr(34))
-                        Process.Start("cmd", "/c SumatraPDF.exe -silent -print-to-default fsDoc-Filled.pdf")
+                    If foodstuffsJobCheckBox.Checked Then
+                        Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "True|" + jobNumberTextBox.Text + "|" + serialInTextBox.Text + "|" + serialOutTextBox.Text + "|" + siteTextBox.Text + "|" + faultTextBox.Text + Chr(34))
+                        Process.Start("cmd", "/C SumatraPDF.exe -print-to-default fsDoc-Filled.pdf")
                     Else
-                        Process.Start("cmd", "/c java -jar testProgram.jar " + Chr(34) + shipItem.fs.ToString + "|" + serialOutTextBox.Text + "|" + faultTextBox.Text + Chr(34))
+                        Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "False|" + serialOutTextBox.Text + "|" + faultTextBox.Text + Chr(34))
                     End If
-                    Process.Start("cmd", "/c SumatraPDF.exe -silent -print-to-default shipDoc-Filled.pdf")
+                    Process.Start("cmd", "/C SumatraPDF.exe -print-to-default shipDoc-Filled.pdf")
                     shipped = True
                     Exit For
                 End If
             End If
         Next
 
-        If Not shipped Then MsgBox("Error: No shipping document found for job.")
+        If Not shipped Then MsgBox("Error: No job selected or shipping document found for job.")
 
         ' Deletes files after printing
         'If My.Computer.FileSystem.FileExists("shipDoc.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc.pdf")
