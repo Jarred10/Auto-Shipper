@@ -17,7 +17,7 @@ Public Class Form1
     Dim inboxItem As Object
     Dim sentItem As Object
     Dim shippedJob As Object
-    Dim unshippedJob As Object
+    Dim unshippedJob As Item
     Dim calendarItem As Object
 
     Dim unshippedJobs As New List(Of Item)
@@ -40,16 +40,16 @@ Public Class Form1
 
         ' Loops through all sent mail in last three weeks.
         For Each sentItem In sentItemsList
-            Dim sentItemJobNo = findJobNumber(sentItem.Subject)
+            Dim sentItemJobNo As String = findJobNumber(sentItem.Subject)
             ' Checks if subject of sent mail contains SV. Filters to all updates about jobs
             If Not String.IsNullOrEmpty(sentItemJobNo) Then
                 ' Checks if update was for a job that used parts, and not for 
-                If Contains(sentItem.Body, "out: ") Then
+                If sentItem.Body.ToString.Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
                     Dim x As Integer
                     Dim found As Boolean = False
                     'Checks for duplicate jobs, ie. if there is communication about a job and original update is in the email chain.
                     For x = 0 To unshippedJobs.Count - 1
-                        If Contains(sentItemJobNo, unshippedJobs.ElementAt(x).jobNumber) Then
+                        If sentItemJobNo.Contains(unshippedJobs.ElementAt(x).jobNumber, StringComparison.OrdinalIgnoreCase) Then
                             found = True
                             Exit For
                         End If
@@ -59,10 +59,10 @@ Public Class Form1
                         unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
                     End If
                     ' If update wasnt for job that used parts, checks if update was for shipping parts
-                ElseIf Contains(sentItem.Subject, "shipping") Or Contains(sentItem.Body, "shipping") Then
+                ElseIf sentItem.Subject.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Or sentItem.Body.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Then
                     ' Removes shipped updates from list of unshipped updates by looping through all current unshipped jobs and comparing job number
                     For Each unshippedJob In unshippedJobs
-                        If Contains(sentItemJobNo, unshippedJob.jobNumber) Then
+                        If sentItemJobNo.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) Then
                             unshippedJobs.Remove(unshippedJob)
                             Exit For
                         End If
@@ -73,13 +73,13 @@ Public Class Form1
 
         'Loops through all recent calendar items, looking for unshipped updates.
         For Each calendarItem In calendarItemsList
-            Dim calendarItemJobNumber = findJobNumber(calendarItem.Subject)
+            Dim calendarItemJobNumber As String = findJobNumber(calendarItem.Subject)
             'If calendar subject contained SV. Filters to all calendar appointments about jobs
             If Not String.IsNullOrEmpty(calendarItemJobNumber) Then
                 'Loops through all unshipped jobs
                 For Each unshippedJob In unshippedJobs
                     'If calendar job number matches unshipped job number, need to add it to the listbox
-                    If Contains(calendarItemJobNumber, unshippedJob.jobNumber) And Not unshippedJobsListBox.Items.Contains(calendarItem.Subject) Then
+                    If calendarItemJobNumber.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) And Not unshippedJobsListBox.Items.Contains(calendarItem.Subject) Then
                         unshippedJobsListBox.Items.Add(calendarItem.Subject)
                         'Tries to find the site for job using pre-existing format for foodstuffs job details. If it can't find site, assumes that job is not for foodstuffs
                         Dim siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
@@ -97,7 +97,7 @@ Public Class Form1
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles unshippedJobsListBox.SelectedIndexChanged
         If unshippedJobsListBox.SelectedItem IsNot Nothing Then
             For Each unshippedJob In unshippedJobs
-                If Contains(unshippedJob.jobNumber, findJobNumber(unshippedJobsListBox.SelectedItem)) Then
+                If unshippedJob.jobNumber.Contains(findJobNumber(unshippedJobsListBox.SelectedItem), StringComparison.OrdinalIgnoreCase) Then
                     Dim contents() As String = Split(unshippedJob.item.Body, vbCrLf)
                     Dim index As Integer
                     jobNumberTextBox.Text = unshippedJob.jobNumber
@@ -105,9 +105,9 @@ Public Class Form1
                     foodstuffsJobCheckBox.Checked = unshippedJob.fs
 
                     For index = 0 To contents.Length - 1
-                        If Contains(contents(index), "IN: ") Then
+                        If contents(index).Contains("in: ", StringComparison.OrdinalIgnoreCase) Then
                             serialInTextBox.Text = contents(index).Substring(contents(index).IndexOf("IN: ") + 5)
-                        ElseIf Contains(contents(index), "OUT: ") Then
+                        ElseIf contents(index).Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
                             serialOutTextBox.Text = contents(index).Substring(contents(index).IndexOf("OUT: ") + 6)
                             faultTextBox.Text = contents(index + 2)
                         End If
@@ -121,9 +121,9 @@ Public Class Form1
     Private Sub ShipButton_Click(sender As Object, e As EventArgs) Handles ShipButton.Click
         Dim shipped As Boolean
         For Each inboxItem In inboxItemsList
-            Dim inboxItemJobNumber = findJobNumber(inboxItem.Subject)
+            Dim inboxItemJobNumber As String = findJobNumber(inboxItem.Subject)
             If Not String.IsNullOrEmpty(inboxItemJobNumber) And Not IsNothing(unshippedJob) Then
-                If Contains(inboxItemJobNumber, unshippedJob.jobNumber) And (Contains(inboxItem.Subject, "SHIP DOC") Or Contains(inboxItem.Body, "SHIP DOC")) Then
+                If inboxItemJobNumber.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) And (inboxItem.Subject.ToString.Contains("ship doc", StringComparison.OrdinalIgnoreCase) Or inboxItem.Body.ToString.Contains("ship doc", StringComparison.OrdinalIgnoreCase)) Then
                     inboxItem.Attachments.Item(1).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"))
                     If foodstuffsJobCheckBox.Checked Then
                         Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "True|" + jobNumberTextBox.Text + "|" + serialInTextBox.Text + "|" + serialOutTextBox.Text + "|" + siteTextBox.Text + "|" + faultTextBox.Text + Chr(34))
@@ -208,21 +208,11 @@ Public Class Form1
                     If currentRow(0) = "folder" And Not String.IsNullOrEmpty(currentRow(1)) Then
                         updateFolder = currentRow(1)
                     End If
-                Catch ex As Microsoft.VisualBasic.
-                            FileIO.MalformedLineException
-                    MsgBox("Line " & ex.Message &
-                    "is not valid and will be skipped.")
+                Catch ex As Microsoft.VisualBasic.FileIO.MalformedLineException
+                    MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
                 End Try
             End While
         End Using
         loadConfig = ""
     End Function
-
-    'Case insensative string comparison added to base type String
-    Public Overloads Function Contains(source As String, toCheck As String)
-        Return source.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) <> -1
-    End Function
 End Class
-
-
-

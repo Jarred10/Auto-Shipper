@@ -52,7 +52,7 @@ Partial Class Form1
         '
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.ItemHeight = 16
-        Me.unshippedJobsListBox.Location = New System.Drawing.Point(15, 12)
+        Me.unshippedJobsListBox.Location = New System.Drawing.Point(20, 12)
         Me.unshippedJobsListBox.Name = "unshippedJobsListBox"
         Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 292)
         Me.unshippedJobsListBox.TabIndex = 1
