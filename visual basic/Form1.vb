@@ -6,15 +6,17 @@ Public Class Form1
 
     Dim olApp As Outlook.Application
     Dim olNs As Outlook.NameSpace
-    Dim inboxFolder As Outlook.MAPIFolder
+    Dim shipDocFolder As Outlook.MAPIFolder
     Dim sentFolder As Outlook.MAPIFolder
     Dim calendarFolder As Outlook.MAPIFolder
 
-    Dim inboxItemsList As Outlook.Items
+    Dim shipDocItemsList As Outlook.Items
     Dim sentItemsList As Outlook.Items
     Dim calendarItemsList As Outlook.Items
 
-    Dim inboxItem As Object
+    Dim outlookSearch As Outlook.Search
+
+    Dim shipDocItem As Object
     Dim sentItem As Object
     Dim shippedJob As Object
     Dim unshippedJob As Item
@@ -26,7 +28,8 @@ Public Class Form1
     Dim jobNumberRegex = New Regex("SV\d{10}")
 
     'Config
-    Dim updateFolder As String
+    Dim shipDocFolderName As String
+    Dim deleteOnPrint As Boolean
 
     Private Sub finderButton_Click(sender As Object, e As EventArgs) Handles finderButton.Click
 
@@ -45,11 +48,10 @@ Public Class Form1
             If Not String.IsNullOrEmpty(sentItemJobNo) Then
                 ' Checks if update was for a job that used parts, and not for 
                 If sentItem.Body.ToString.Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
-                    Dim x As Integer
                     Dim found As Boolean = False
                     'Checks for duplicate jobs, ie. if there is communication about a job and original update is in the email chain.
-                    For x = 0 To unshippedJobs.Count - 1
-                        If sentItemJobNo.Contains(unshippedJobs.ElementAt(x).jobNumber, StringComparison.OrdinalIgnoreCase) Then
+                    For i = 0 To unshippedJobs.Count - 1
+                        If sentItemJobNo.Contains(unshippedJobs.ElementAt(i).jobNumber, StringComparison.OrdinalIgnoreCase) Then
                             found = True
                             Exit For
                         End If
@@ -79,7 +81,7 @@ Public Class Form1
                 'Loops through all unshipped jobs
                 For Each unshippedJob In unshippedJobs
                     'If calendar job number matches unshipped job number, need to add it to the listbox
-                    If calendarItemJobNumber.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) And Not unshippedJobsListBox.Items.Contains(calendarItem.Subject) Then
+                    If calendarItemJobNumber.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) AndAlso Not unshippedJobsListBox.Items.Contains(calendarItem.Subject) Then
                         unshippedJobsListBox.Items.Add(calendarItem.Subject)
                         'Tries to find the site for job using pre-existing format for foodstuffs job details. If it can't find site, assumes that job is not for foodstuffs
                         Dim siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
@@ -94,6 +96,7 @@ Public Class Form1
         Next
     End Sub
 
+    'When user selects a job from the list, populate the text boxes with relevant information so they can edit or choose what to be added to form.
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles unshippedJobsListBox.SelectedIndexChanged
         If unshippedJobsListBox.SelectedItem IsNot Nothing Then
             For Each unshippedJob In unshippedJobs
@@ -105,12 +108,14 @@ Public Class Form1
                     foodstuffsJobCheckBox.Checked = unshippedJob.fs
 
                     For index = 0 To contents.Length - 1
-                        If contents(index).Contains("in: ", StringComparison.OrdinalIgnoreCase) Then
-                            serialInTextBox.Text = contents(index).Substring(contents(index).IndexOf("IN: ") + 5)
-                        ElseIf contents(index).Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
-                            serialOutTextBox.Text = contents(index).Substring(contents(index).IndexOf("OUT: ") + 6)
-                            faultTextBox.Text = contents(index + 2)
-                        End If
+                        With contents(index)
+                            If .Contains("in: ", StringComparison.OrdinalIgnoreCase) Then
+                                serialInTextBox.Text = .Substring(.IndexOf("IN: ") + 5)
+                            ElseIf .Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
+                                serialOutTextBox.Text = .Substring(.IndexOf("OUT: ") + 6)
+                                faultTextBox.Text = contents(index + 2)
+                            End If
+                        End With
                     Next
                     Exit For
                 End If
@@ -118,33 +123,57 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ShipButton_Click(sender As Object, e As EventArgs) Handles ShipButton.Click
-        Dim shipped As Boolean
-        For Each inboxItem In inboxItemsList
-            Dim inboxItemJobNumber As String = findJobNumber(inboxItem.Subject)
-            If Not String.IsNullOrEmpty(inboxItemJobNumber) And Not IsNothing(unshippedJob) Then
-                If inboxItemJobNumber.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) And (inboxItem.Subject.ToString.Contains("ship doc", StringComparison.OrdinalIgnoreCase) Or inboxItem.Body.ToString.Contains("ship doc", StringComparison.OrdinalIgnoreCase)) Then
-                    inboxItem.Attachments.Item(1).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"))
-                    If foodstuffsJobCheckBox.Checked Then
-                        Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "True|" + jobNumberTextBox.Text + "|" + serialInTextBox.Text + "|" + serialOutTextBox.Text + "|" + siteTextBox.Text + "|" + faultTextBox.Text + Chr(34))
-                        Process.Start("cmd", "/C SumatraPDF.exe -print-to-default fsDoc-Filled.pdf")
-                    Else
-                        Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "False|" + serialOutTextBox.Text + "|" + faultTextBox.Text + Chr(34))
-                    End If
-                    Process.Start("cmd", "/C SumatraPDF.exe -print-to-default shipDoc-Filled.pdf")
-                    shipped = True
+    ' Searches for email with subject that contains the chosen job to ship. Searches all matching emails for one with attachments.
+    Private Sub shipDocButton_Click(sender As Object, e As EventArgs) Handles shipDocButton.Click
+        Dim attachmentDownloaded = False
+        outlookSearch = olApp.AdvancedSearch("'" + shipDocFolder.FolderPath + "'", "urn:schemas:httpmail:subject LIKE '%" + unshippedJob.jobNumber + "%'", False)
+
+        If outlookSearch.Results.Count = 0 Then
+            MsgBox("Error: No shipping document email found for selected job.")
+
+        Else
+            For i = 1 To outlookSearch.Results.Count
+                shipDocItem = outlookSearch.Results.Item(i)
+                If shipDocItem.Attachments.Count > 0 AndAlso (LCase(shipDocItem.Subject) Like "*ship*doc*" Or LCase(shipDocItem.Body) Like "*ship*doc*") Then
+                    shipDocItem.Attachments(1).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"))
+                    attachmentDownloaded = True
                     Exit For
                 End If
+            Next
+
+            If Not attachmentDownloaded Then
+                MsgBox("Error: None of the emails found for job contain attachments.")
             End If
-        Next
 
-        If Not shipped Then MsgBox("Error: No job selected or unable to find shipping document for job.")
+        End If
 
-        ' Deletes files after printing
-        'If My.Computer.FileSystem.FileExists("shipDoc.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc.pdf")
-        'If My.Computer.FileSystem.FileExists("shipDoc-Filled.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc-Filled.pdf")
-        'If My.Computer.FileSystem.FileExists("fsDoc-Filled.pdf") Then My.Computer.FileSystem.DeleteFile("fsDoc-Filled.pdf")
 
+    End Sub
+
+
+    Private Sub produceButton_Click(sender As Object, e As EventArgs) Handles produceButton.Click
+        If foodstuffsJobCheckBox.Checked Then
+            Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "True|" + jobNumberTextBox.Text + "|" + serialInTextBox.Text + "|" + serialOutTextBox.Text + "|" + siteTextBox.Text + "|" + faultTextBox.Text + Chr(34))
+            Process.Start("cmd", "/C SumatraPDF.exe -print-to-default fsDoc-Filled.pdf")
+        Else
+            Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "False|" + serialOutTextBox.Text + "|" + faultTextBox.Text + Chr(34))
+        End If
+    End Sub
+
+
+    Private Sub printButton_Click(sender As Object, e As EventArgs) Handles printButton.Click
+        Dim printProcess As New ProcessStartInfo("cmd")
+        printProcess.CreateNoWindow = True
+        printProcess.Arguments = "/C SumatraPDF.exe -print-to-default shipDoc-Filled.pdf"
+
+        Process.Start(printProcess)
+
+        ' Deletes files after printing if set in config
+        If deleteOnPrint Then
+            If My.Computer.FileSystem.FileExists("shipDoc.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc.pdf")
+            If My.Computer.FileSystem.FileExists("shipDoc-Filled.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc-Filled.pdf")
+            If My.Computer.FileSystem.FileExists("fsDoc-Filled.pdf") Then My.Computer.FileSystem.DeleteFile("fsDoc-Filled.pdf")
+        End If
     End Sub
 
 
@@ -161,11 +190,11 @@ Public Class Form1
         loadConfig()
 
         ' Grab the shipping doc folder, sent items folder and calendar.
-        If String.IsNullOrEmpty(updateFolder) Then
-            inboxFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox)
+        If String.IsNullOrEmpty(shipDocFolderName) Then
+            shipDocFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox)
         Else
             Try
-                inboxFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox).Folders(updateFolder)
+                shipDocFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox).Folders(shipDocFolderName)
             Catch
                 MsgBox("Error: Invalid update folder in config file.")
                 Environment.Exit(0)
@@ -176,25 +205,26 @@ Public Class Form1
         calendarFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar)
 
         ' Restrict to last three weeks.
-        inboxItemsList = inboxFolder.Items.Restrict("[ReceivedTime] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
+        shipDocItemsList = shipDocFolder.Items.Restrict("[ReceivedTime] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
         sentItemsList = sentFolder.Items.Restrict("[ReceivedTime] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
         calendarItemsList = calendarFolder.Items.Restrict("[Start] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
 
 
         ' Sort by oldest items first. This is to try and find the original update/appointment before finding replies/further appointments
-        inboxItemsList.Sort("[ReceivedTime]", True)
+        shipDocItemsList.Sort("[ReceivedTime]", True)
         sentItemsList.Sort("[ReceivedTime]")
         calendarItemsList.Sort("[Start]")
 
     End Sub
 
-    ' Function that returns the job number of an update.
+    ' Function that returns the job number of an update if the argument contains it.
     Public Function findJobNumber(jobName As String)
         Dim jobNumberMatch = jobNumberRegex.Match(jobName.ToUpper)
         If jobNumberMatch.Success Then Return jobName.Substring(jobNumberMatch.Index, 12).ToUpper
         Return vbNullString
     End Function
 
+    ' Reads CSV file to set the folder where shipping docs are found
     Public Function loadConfig()
         Using MyReader As New Microsoft.VisualBasic.FileIO.TextFieldParser("config.csv")
             MyReader.TextFieldType = FileIO.FieldType.Delimited
@@ -205,8 +235,10 @@ Public Class Form1
             While Not MyReader.EndOfData
                 Try
                     currentRow = MyReader.ReadFields()
-                    If currentRow(0) = "folder" And Not String.IsNullOrEmpty(currentRow(1)) Then
-                        updateFolder = currentRow(1)
+                    If String.IsNullOrEmpty(shipDocFolderName) And currentRow(0) = "Folder" And Not String.IsNullOrEmpty(currentRow(1)) Then
+                        shipDocFolderName = currentRow(1)
+                    ElseIf currentRow(0) = "DeleteOnPrint" And Not String.IsNullOrEmpty(currentRow(1)) Then
+                        deleteOnPrint = currentRow(1) = "True"
                     End If
                 Catch ex As Microsoft.VisualBasic.FileIO.MalformedLineException
                     MsgBox("Line " & ex.Message & "is not valid and will be skipped.")
@@ -215,4 +247,5 @@ Public Class Form1
         End Using
         loadConfig = ""
     End Function
+
 End Class
