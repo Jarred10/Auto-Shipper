@@ -22,13 +22,12 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.finderButton = New System.Windows.Forms.Button()
+        Me.getDocButton = New System.Windows.Forms.Button()
         Me.unshippedJobsListBox = New System.Windows.Forms.ListBox()
         Me.jobNumberTextBox = New System.Windows.Forms.TextBox()
         Me.serialInTextBox = New System.Windows.Forms.TextBox()
         Me.serialOutTextBox = New System.Windows.Forms.TextBox()
         Me.faultTextBox = New System.Windows.Forms.TextBox()
-        Me.shipDocButton = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -42,14 +41,14 @@ Partial Class Form1
         Me.Label7 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
-        'finderButton
+        'getDocButton
         '
-        Me.finderButton.Location = New System.Drawing.Point(49, 360)
-        Me.finderButton.Name = "finderButton"
-        Me.finderButton.Size = New System.Drawing.Size(160, 31)
-        Me.finderButton.TabIndex = 0
-        Me.finderButton.Text = "Find Unshipped Jobs"
-        Me.finderButton.UseVisualStyleBackColor = True
+        Me.getDocButton.Location = New System.Drawing.Point(57, 360)
+        Me.getDocButton.Name = "getDocButton"
+        Me.getDocButton.Size = New System.Drawing.Size(146, 31)
+        Me.getDocButton.TabIndex = 0
+        Me.getDocButton.Text = "Get Shipping Doc"
+        Me.getDocButton.UseVisualStyleBackColor = True
         '
         'unshippedJobsListBox
         '
@@ -88,15 +87,6 @@ Partial Class Form1
         Me.faultTextBox.Name = "faultTextBox"
         Me.faultTextBox.Size = New System.Drawing.Size(760, 212)
         Me.faultTextBox.TabIndex = 5
-        '
-        'shipDocButton
-        '
-        Me.shipDocButton.Location = New System.Drawing.Point(251, 360)
-        Me.shipDocButton.Name = "shipDocButton"
-        Me.shipDocButton.Size = New System.Drawing.Size(172, 31)
-        Me.shipDocButton.TabIndex = 6
-        Me.shipDocButton.Text = "Find Shipping Document"
-        Me.shipDocButton.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -157,7 +147,7 @@ Partial Class Form1
         '
         'produceButton
         '
-        Me.produceButton.Location = New System.Drawing.Point(458, 360)
+        Me.produceButton.Location = New System.Drawing.Point(221, 360)
         Me.produceButton.Name = "produceButton"
         Me.produceButton.Size = New System.Drawing.Size(136, 31)
         Me.produceButton.TabIndex = 15
@@ -166,7 +156,7 @@ Partial Class Form1
         '
         'printButton
         '
-        Me.printButton.Location = New System.Drawing.Point(627, 360)
+        Me.printButton.Location = New System.Drawing.Point(375, 360)
         Me.printButton.Name = "printButton"
         Me.printButton.Size = New System.Drawing.Size(111, 31)
         Me.printButton.TabIndex = 16
@@ -196,7 +186,7 @@ Partial Class Form1
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 19.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(368, 9)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(226, 39)
+        Me.Label7.Size = New System.Drawing.Size(217, 38)
         Me.Label7.TabIndex = 19
         Me.Label7.Text = "Auto Shipper"
         '
@@ -217,13 +207,12 @@ Partial Class Form1
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.shipDocButton)
         Me.Controls.Add(Me.faultTextBox)
         Me.Controls.Add(Me.serialOutTextBox)
         Me.Controls.Add(Me.serialInTextBox)
         Me.Controls.Add(Me.jobNumberTextBox)
         Me.Controls.Add(Me.unshippedJobsListBox)
-        Me.Controls.Add(Me.finderButton)
+        Me.Controls.Add(Me.getDocButton)
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
@@ -231,13 +220,12 @@ Partial Class Form1
 
     End Sub
 
-    Friend WithEvents finderButton As Button
+    Friend WithEvents getDocButton As Button
     Friend WithEvents unshippedJobsListBox As ListBox
     Friend WithEvents jobNumberTextBox As TextBox
     Friend WithEvents serialInTextBox As TextBox
     Friend WithEvents serialOutTextBox As TextBox
     Friend WithEvents faultTextBox As TextBox
-    Friend WithEvents shipDocButton As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label

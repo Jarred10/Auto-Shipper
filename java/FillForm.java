@@ -1,11 +1,19 @@
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Pattern;
+import java.util.List;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
@@ -24,31 +32,11 @@ import com.itextpdf.text.pdf.PdfStamper;
 public class FillForm {
 	public static void main(String[] args) {
 		
-		//declare variables for fields of form
-		String jobNo, site, inSerial, outSerial, fault;
-		jobNo = site = inSerial = outSerial = fault = "";
-
-		//finds all fields using passed in arguments, seperated by | character
-		String argsString = "";
-		for (String s : args)
-			argsString += s + " ";
-		args = argsString.split(Pattern.quote("|"));
-
-		boolean foodstuffsJob = args[0].equalsIgnoreCase("true");
 		
-		//sets value of fields based on whether or not the job being shipped is for foodstuffs
-		//which is passed in as a bool value
-		if (foodstuffsJob) {
-			jobNo = args[1];
-			inSerial = args[2];
-			outSerial = args[3];
-			site = args[4];
-			fault = args[5];
-		} else {
-			outSerial = args[1];
-			fault = args[2];
-		}
-
+		//declare variables for fields of form
+		String jobType, jobNo, site, inSerial, outSerial, fault;
+		jobType = jobNo = site = inSerial = outSerial = fault = "";
+		
 		try {
 			//name of user
 			String name = "";
@@ -56,16 +44,27 @@ public class FillForm {
 			BufferedReader br = null;
 			String line = "";
 			
-			//reads in name of user from config CSV file
-			br = new BufferedReader(new FileReader("config.csv"));
+			//reads in name of user from config text file
+			br = new BufferedReader(new FileReader("config.txt"));
 			while ((line = br.readLine()) != null) {
 
 				// use comma as separator
-				String[] lineSplit = line.split(";");
+				String[] lineSplit = line.split(":");
 				if (lineSplit[0].equalsIgnoreCase("name"))
 					name = lineSplit[1];
 
 			}
+			
+			br.close();
+			
+			br = new BufferedReader(new FileReader("data.txt"));
+			jobType = br.readLine();
+			jobNo = br.readLine();
+			inSerial = br.readLine();
+			outSerial = br.readLine();
+			site = br.readLine();
+			fault = br.readLine();
+				
 
 			br.close();
 
@@ -103,7 +102,7 @@ public class FillForm {
 			pdfStamper.close();
 
 			//checks if job is for foodstuffs
-			if (foodstuffsJob) {
+			if (jobType.equals("Foodstuffs")) {
 
 				// reads in the existing source PDF document and creates new PDF document of filled form
 				pdfReader = new PdfReader("fsDoc.pdf");
@@ -126,6 +125,46 @@ public class FillForm {
 
 				// saves new PDF
 				pdfStamper.close();
+			}
+			else if(jobType.equals("Lotto")){
+				DateFormat df = new SimpleDateFormat("dd/MM/yy");
+				Date dateobj = new Date();
+				
+		        String fileName = "lottoDoc.docx";
+		        InputStream fis = new FileInputStream(fileName);
+		        XWPFDocument document = new XWPFDocument(fis);
+
+		        List<XWPFTable> tablesList = document.getTables();
+		        XWPFTable table = tablesList.get(0);
+		        
+		        int i = 0;
+		        
+		        XWPFTableRow tableRow = table.getRow(0);
+		        tableRow.getCell(1).setText(df.format(dateobj));
+		        
+		        tableRow = table.getRow(1);
+		        tableRow.getCell(1).setText("Jarred Green");
+		        
+		        tableRow = table.getRow(2);
+		        tableRow.getCell(1).setText(jobNo);
+		        
+		        tableRow = table.getRow(3);
+		        tableRow.getCell(1).setText(site);
+
+		        tableRow = table.getRow(6);
+		        tableRow.getCell(1).setText(inSerial);
+		        
+		        tableRow = table.getRow(7);
+		        tableRow.getCell(1).setText(outSerial);
+		        
+		        tableRow = table.getRow(9);
+		        tableRow.getCell(0).setText(fault);
+		        
+		        OutputStream out = new FileOutputStream("lottoDoc-Filled.docx");
+		        document.write(out);
+		        out.close();
+		        
+		        document.close();
 			}
 			
 		} 
