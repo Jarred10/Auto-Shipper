@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -64,9 +65,10 @@ public class FillForm {
 			outSerial = br.readLine();
 			site = br.readLine();
 			fault = br.readLine();
-				
 
 			br.close();
+			
+			new File("data.txt").delete();
 
 			// create a calendar object to get the current day, month and year.
 			Calendar cal = Calendar.getInstance();
@@ -136,9 +138,7 @@ public class FillForm {
 
 		        List<XWPFTable> tablesList = document.getTables();
 		        XWPFTable table = tablesList.get(0);
-		        
-		        int i = 0;
-		        
+		        		        
 		        XWPFTableRow tableRow = table.getRow(0);
 		        tableRow.getCell(1).setText(df.format(dateobj));
 		        

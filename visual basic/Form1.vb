@@ -80,6 +80,13 @@ Public Class Form1
             End If
         End If
 
+
+    End Sub
+
+
+    Private Sub produceButton_Click(sender As Object, e As EventArgs) Handles produceButton.Click
+
+
         'Creates object to store data on job, which java will read to fill form.
 
         Dim objWriter As New System.IO.StreamWriter("data.txt")
@@ -92,13 +99,8 @@ Public Class Form1
         objWriter.Flush()
         objWriter.Close()
 
-    End Sub
-
-
-    Private Sub produceButton_Click(sender As Object, e As EventArgs) Handles produceButton.Click
 
         Process.Start("cmd", "/C java -jar fillForm.jar")
-
     End Sub
 
 
@@ -113,7 +115,7 @@ Public Class Form1
                 If .FileExists("shipDoc.pdf") Then .DeleteFile("shipDoc.pdf")
                 If .FileExists("shipDoc-Filled.pdf") Then .DeleteFile("shipDoc-Filled.pdf")
                 If .FileExists("fsDoc-Filled.pdf") Then .DeleteFile("fsDoc-Filled.pdf")
-                If .FileExists("lottoDoc-Filled.pdf") Then .DeleteFile("lottoDoc-Filled.pdf")
+                If .FileExists("lottoDoc-Filled.docx") Then .DeleteFile("lottoDoc-Filled.docx")
             End With
         End If
     End Sub
