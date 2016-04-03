@@ -35,15 +35,16 @@ Partial Class Form1
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.siteTextBox = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.foodstuffsJobCheckBox = New System.Windows.Forms.CheckBox()
         Me.produceButton = New System.Windows.Forms.Button()
         Me.printButton = New System.Windows.Forms.Button()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.jobTypeTextBox = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'finderButton
         '
-        Me.finderButton.Location = New System.Drawing.Point(12, 315)
+        Me.finderButton.Location = New System.Drawing.Point(49, 360)
         Me.finderButton.Name = "finderButton"
         Me.finderButton.Size = New System.Drawing.Size(160, 31)
         Me.finderButton.TabIndex = 0
@@ -54,35 +55,35 @@ Partial Class Form1
         '
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.ItemHeight = 16
-        Me.unshippedJobsListBox.Location = New System.Drawing.Point(20, 12)
+        Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 57)
         Me.unshippedJobsListBox.Name = "unshippedJobsListBox"
         Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 292)
         Me.unshippedJobsListBox.TabIndex = 1
         '
         'jobNumberTextBox
         '
-        Me.jobNumberTextBox.Location = New System.Drawing.Point(144, 361)
+        Me.jobNumberTextBox.Location = New System.Drawing.Point(181, 406)
         Me.jobNumberTextBox.Name = "jobNumberTextBox"
         Me.jobNumberTextBox.Size = New System.Drawing.Size(760, 22)
         Me.jobNumberTextBox.TabIndex = 2
         '
         'serialInTextBox
         '
-        Me.serialInTextBox.Location = New System.Drawing.Point(144, 398)
+        Me.serialInTextBox.Location = New System.Drawing.Point(181, 443)
         Me.serialInTextBox.Name = "serialInTextBox"
         Me.serialInTextBox.Size = New System.Drawing.Size(760, 22)
         Me.serialInTextBox.TabIndex = 3
         '
         'serialOutTextBox
         '
-        Me.serialOutTextBox.Location = New System.Drawing.Point(144, 437)
+        Me.serialOutTextBox.Location = New System.Drawing.Point(181, 480)
         Me.serialOutTextBox.Name = "serialOutTextBox"
         Me.serialOutTextBox.Size = New System.Drawing.Size(760, 22)
         Me.serialOutTextBox.TabIndex = 4
         '
         'faultTextBox
         '
-        Me.faultTextBox.Location = New System.Drawing.Point(144, 514)
+        Me.faultTextBox.Location = New System.Drawing.Point(181, 591)
         Me.faultTextBox.Multiline = True
         Me.faultTextBox.Name = "faultTextBox"
         Me.faultTextBox.Size = New System.Drawing.Size(760, 212)
@@ -90,7 +91,7 @@ Partial Class Form1
         '
         'shipDocButton
         '
-        Me.shipDocButton.Location = New System.Drawing.Point(178, 315)
+        Me.shipDocButton.Location = New System.Drawing.Point(251, 360)
         Me.shipDocButton.Name = "shipDocButton"
         Me.shipDocButton.Size = New System.Drawing.Size(172, 31)
         Me.shipDocButton.TabIndex = 6
@@ -101,7 +102,7 @@ Partial Class Form1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(9, 361)
+        Me.Label1.Location = New System.Drawing.Point(46, 406)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(113, 17)
         Me.Label1.TabIndex = 7
@@ -111,7 +112,7 @@ Partial Class Form1
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(35, 398)
+        Me.Label2.Location = New System.Drawing.Point(72, 443)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(87, 17)
         Me.Label2.TabIndex = 8
@@ -121,7 +122,7 @@ Partial Class Form1
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(17, 437)
+        Me.Label3.Location = New System.Drawing.Point(54, 480)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(105, 17)
         Me.Label3.TabIndex = 9
@@ -131,7 +132,7 @@ Partial Class Form1
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(60, 517)
+        Me.Label4.Location = New System.Drawing.Point(97, 591)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(62, 17)
         Me.Label4.TabIndex = 10
@@ -141,7 +142,7 @@ Partial Class Form1
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(75, 475)
+        Me.Label5.Location = New System.Drawing.Point(112, 554)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(47, 17)
         Me.Label5.TabIndex = 12
@@ -149,33 +150,14 @@ Partial Class Form1
         '
         'siteTextBox
         '
-        Me.siteTextBox.Location = New System.Drawing.Point(144, 475)
+        Me.siteTextBox.Location = New System.Drawing.Point(181, 554)
         Me.siteTextBox.Name = "siteTextBox"
         Me.siteTextBox.Size = New System.Drawing.Size(760, 22)
         Me.siteTextBox.TabIndex = 11
         '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(725, 322)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(151, 17)
-        Me.Label6.TabIndex = 13
-        Me.Label6.Text = "FOODSTUFFS JOB:"
-        '
-        'foodstuffsJobCheckBox
-        '
-        Me.foodstuffsJobCheckBox.AutoSize = True
-        Me.foodstuffsJobCheckBox.Location = New System.Drawing.Point(883, 322)
-        Me.foodstuffsJobCheckBox.Name = "foodstuffsJobCheckBox"
-        Me.foodstuffsJobCheckBox.Size = New System.Drawing.Size(18, 17)
-        Me.foodstuffsJobCheckBox.TabIndex = 14
-        Me.foodstuffsJobCheckBox.UseVisualStyleBackColor = True
-        '
         'produceButton
         '
-        Me.produceButton.Location = New System.Drawing.Point(356, 315)
+        Me.produceButton.Location = New System.Drawing.Point(458, 360)
         Me.produceButton.Name = "produceButton"
         Me.produceButton.Size = New System.Drawing.Size(136, 31)
         Me.produceButton.TabIndex = 15
@@ -184,23 +166,51 @@ Partial Class Form1
         '
         'printButton
         '
-        Me.printButton.Location = New System.Drawing.Point(498, 315)
+        Me.printButton.Location = New System.Drawing.Point(627, 360)
         Me.printButton.Name = "printButton"
         Me.printButton.Size = New System.Drawing.Size(111, 31)
         Me.printButton.TabIndex = 16
         Me.printButton.Text = "Print Forms"
         Me.printButton.UseVisualStyleBackColor = True
         '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(71, 517)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(88, 17)
+        Me.Label6.TabIndex = 18
+        Me.Label6.Text = "JOB TYPE:"
+        '
+        'jobTypeTextBox
+        '
+        Me.jobTypeTextBox.Location = New System.Drawing.Point(181, 517)
+        Me.jobTypeTextBox.Name = "jobTypeTextBox"
+        Me.jobTypeTextBox.Size = New System.Drawing.Size(760, 22)
+        Me.jobTypeTextBox.TabIndex = 17
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 19.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(368, 9)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(226, 39)
+        Me.Label7.TabIndex = 19
+        Me.Label7.Text = "Auto Shipper"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(913, 738)
+        Me.ClientSize = New System.Drawing.Size(977, 823)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.jobTypeTextBox)
         Me.Controls.Add(Me.printButton)
         Me.Controls.Add(Me.produceButton)
-        Me.Controls.Add(Me.foodstuffsJobCheckBox)
-        Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.siteTextBox)
         Me.Controls.Add(Me.Label4)
@@ -234,8 +244,9 @@ Partial Class Form1
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents siteTextBox As TextBox
-    Friend WithEvents Label6 As Label
-    Friend WithEvents foodstuffsJobCheckBox As CheckBox
     Friend WithEvents produceButton As Button
     Friend WithEvents printButton As Button
+    Friend WithEvents Label6 As Label
+    Friend WithEvents jobTypeTextBox As TextBox
+    Friend WithEvents Label7 As Label
 End Class

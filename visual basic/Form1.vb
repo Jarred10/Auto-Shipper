@@ -1,18 +1,16 @@
 ﻿Imports System.Text.RegularExpressions
 Imports Microsoft.Office.Interop
 Imports System.Runtime.CompilerServices
+Imports Auto_Shipper
 
 Public Class Form1
 
     Dim olApp As Outlook.Application
     Dim olNs As Outlook.NameSpace
     Dim shipDocFolder As Outlook.MAPIFolder
-    Dim sentFolder As Outlook.MAPIFolder
-    Dim calendarFolder As Outlook.MAPIFolder
 
-    Dim shipDocItemsList As Outlook.Items
-    Dim sentItemsList As Outlook.Items
-    Dim calendarItemsList As Outlook.Items
+    Dim sentItemsSearch As Outlook.Search
+    Dim calendarSearch As Outlook.Search
 
     Dim outlookSearch As Outlook.Search
 
@@ -41,58 +39,63 @@ Public Class Form1
         siteTextBox.Clear()
         faultTextBox.Clear()
 
-        ' Loops through all sent mail in last three weeks.
-        For Each sentItem In sentItemsList
+        ' Loops through all sent mail in last three weeks that contain "SV"
+        For Each sentItem In sentItemsSearch.Results
             Dim sentItemJobNo As String = findJobNumber(sentItem.Subject)
-            ' Checks if subject of sent mail contains SV. Filters to all updates about jobs
-            If Not String.IsNullOrEmpty(sentItemJobNo) Then
-                ' Checks if update was for a job that used parts, and not for 
-                If sentItem.Body.ToString.Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
-                    Dim found As Boolean = False
-                    'Checks for duplicate jobs, ie. if there is communication about a job and original update is in the email chain.
-                    For i = 0 To unshippedJobs.Count - 1
-                        If sentItemJobNo.Contains(unshippedJobs.ElementAt(i).jobNumber, StringComparison.OrdinalIgnoreCase) Then
-                            found = True
-                            Exit For
-                        End If
-                    Next
-                    If Not found Then
-                        ' Adds mail item to a list of unshipped jobs.
-                        unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
-                    End If
-                    ' If update wasnt for job that used parts, checks if update was for shipping parts
-                ElseIf sentItem.Subject.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Or sentItem.Body.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Then
-                    ' Removes shipped updates from list of unshipped updates by looping through all current unshipped jobs and comparing job number
-                    For Each unshippedJob In unshippedJobs
-                        If sentItemJobNo.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) Then
-                            unshippedJobs.Remove(unshippedJob)
-                            Exit For
-                        End If
-                    Next
-                End If
+            If sentItemJobNo = "SV1603240021" Then
+                Dim b = True
             End If
-        Next
-
-        'Loops through all recent calendar items, looking for unshipped updates.
-        For Each calendarItem In calendarItemsList
-            Dim calendarItemJobNumber As String = findJobNumber(calendarItem.Subject)
-            'If calendar subject contained SV. Filters to all calendar appointments about jobs
-            If Not String.IsNullOrEmpty(calendarItemJobNumber) Then
-                'Loops through all unshipped jobs
+            ' Checks if update was for a job that used parts, and not for 
+            If sentItem.Body.ToString.Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
+                If Not unshippedJobs.Contains(New Item(sentItem, sentItemJobNo)) Then
+                    ' Adds mail item to a list of unshipped jobs.
+                    unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
+                End If
+                ' If update wasnt for job that used parts, checks if update was for shipping parts
+            ElseIf sentItem.Subject.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Or sentItem.Body.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Then
+                ' Removes shipped updates from list of unshipped updates by looping through all current unshipped jobs and comparing job number
                 For Each unshippedJob In unshippedJobs
-                    'If calendar job number matches unshipped job number, need to add it to the listbox
-                    If calendarItemJobNumber.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) AndAlso Not unshippedJobsListBox.Items.Contains(calendarItem.Subject) Then
-                        unshippedJobsListBox.Items.Add(calendarItem.Subject)
-                        'Tries to find the site for job using pre-existing format for foodstuffs job details. If it can't find site, assumes that job is not for foodstuffs
-                        Dim siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
-                        Dim contactIndex = calendarItem.Body.IndexOf("contact name ::", StringComparison.OrdinalIgnoreCase)
-                        If siteIndex <> -1 And contactIndex <> -1 Then
-                            unshippedJob.site = Trim(calendarItem.Body.Substring(siteIndex + 8, contactIndex - (siteIndex + 10)))
-                            unshippedJob.fs = True
-                        End If
+                    If sentItemJobNo.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) Then
+                        unshippedJobs.Remove(unshippedJob)
+                        Exit For
                     End If
                 Next
             End If
+        Next
+
+        For Each unshippedJob In unshippedJobs
+            For Each calendarItem In calendarSearch.Results
+                Dim calendarItemJobNumber As String = findJobNumber(calendarItem.Subject)
+                If calendarItemJobNumber Like unshippedJob.jobNumber Then
+                    unshippedJobsListBox.Items.Add(calendarItem.Subject)
+                    Dim siteIndex As Integer
+                    Dim secondIndex As Integer
+                    If calendarItem.Body.ToString.Contains("foodstuffs", StringComparison.OrdinalIgnoreCase) Then
+                        'Determines if job is for foodstuffs
+                        siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
+                        secondIndex = calendarItem.Body.IndexOf("contact name ::", StringComparison.OrdinalIgnoreCase)
+                        If siteIndex <> -1 And secondIndex <> -1 Then
+                            siteIndex += 8
+                            unshippedJob.site = Trim(calendarItem.Body.Substring(siteIndex, secondIndex - siteIndex - 2))
+                            unshippedJob.jobType = jobTypes.Foodstuffs
+                        End If
+
+                    ElseIf calendarItem.Body.ToString.Contains("nzlotteries", StringComparison.OrdinalIgnoreCase) Then
+                        'Determines if job is for Lotto
+                        siteIndex = calendarItem.Body.IndexOf("retailer name:", StringComparison.OrdinalIgnoreCase)
+                        secondIndex = calendarItem.Body.IndexOf("address:", StringComparison.OrdinalIgnoreCase)
+                        If siteIndex <> -1 And secondIndex <> -1 Then
+                            siteIndex += 15
+                            unshippedJob.site = Trim(calendarItem.Body.Substring(siteIndex, secondIndex - (siteIndex - 2)))
+                            unshippedJob.jobType = jobTypes.Lotto
+                        End If
+                    Else
+                        'If job is not for foodstuffs or lotto, no additional forms required
+                        unshippedJob.jobType = jobTypes.Other
+                    End If
+                    Exit For
+                End If
+            Next
         Next
     End Sub
 
@@ -102,18 +105,17 @@ Public Class Form1
             For Each unshippedJob In unshippedJobs
                 If unshippedJob.jobNumber.Contains(findJobNumber(unshippedJobsListBox.SelectedItem), StringComparison.OrdinalIgnoreCase) Then
                     Dim contents() As String = Split(unshippedJob.item.Body, vbCrLf)
-                    Dim index As Integer
                     jobNumberTextBox.Text = unshippedJob.jobNumber
                     siteTextBox.Text = unshippedJob.site
-                    foodstuffsJobCheckBox.Checked = unshippedJob.fs
+                    jobTypeTextBox.Text = unshippedJob.jobType.ToString
 
-                    For index = 0 To contents.Length - 1
-                        With contents(index)
+                    For i = 0 To contents.Length - 1
+                        With contents(i)
                             If .Contains("in: ", StringComparison.OrdinalIgnoreCase) Then
                                 serialInTextBox.Text = .Substring(.IndexOf("IN: ") + 5)
                             ElseIf .Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
                                 serialOutTextBox.Text = .Substring(.IndexOf("OUT: ") + 6)
-                                faultTextBox.Text = contents(index + 2)
+                                faultTextBox.Text = contents(i + 2)
                             End If
                         End With
                     Next
@@ -152,9 +154,8 @@ Public Class Form1
 
 
     Private Sub produceButton_Click(sender As Object, e As EventArgs) Handles produceButton.Click
-        If foodstuffsJobCheckBox.Checked Then
+        If unshippedJob.jobType = jobTypes.Foodstuffs Then
             Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "True|" + jobNumberTextBox.Text + "|" + serialInTextBox.Text + "|" + serialOutTextBox.Text + "|" + siteTextBox.Text + "|" + faultTextBox.Text + Chr(34))
-            Process.Start("cmd", "/C SumatraPDF.exe -print-to-default fsDoc-Filled.pdf")
         Else
             Process.Start("cmd", "/C java -jar fillForm.jar " + Chr(34) + "False|" + serialOutTextBox.Text + "|" + faultTextBox.Text + Chr(34))
         End If
@@ -162,17 +163,16 @@ Public Class Form1
 
 
     Private Sub printButton_Click(sender As Object, e As EventArgs) Handles printButton.Click
-        Dim printProcess As New ProcessStartInfo("cmd")
-        printProcess.CreateNoWindow = True
-        printProcess.Arguments = "/C SumatraPDF.exe -print-to-default shipDoc-Filled.pdf"
-
-        Process.Start(printProcess)
+        If unshippedJob.jobType = jobTypes.Foodstuffs Then Process.Start("cmd", "/C SumatraPDF.exe -print-to-default fsDoc-Filled.pdf")
+        Process.Start("cmd", "/C SumatraPDF.exe -print-to-default shipDoc-Filled.pdf")
 
         ' Deletes files after printing if set in config
         If deleteOnPrint Then
-            If My.Computer.FileSystem.FileExists("shipDoc.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc.pdf")
-            If My.Computer.FileSystem.FileExists("shipDoc-Filled.pdf") Then My.Computer.FileSystem.DeleteFile("shipDoc-Filled.pdf")
-            If My.Computer.FileSystem.FileExists("fsDoc-Filled.pdf") Then My.Computer.FileSystem.DeleteFile("fsDoc-Filled.pdf")
+            With My.Computer.FileSystem
+                If .FileExists("shipDoc.pdf") Then .DeleteFile("shipDoc.pdf")
+                If .FileExists("shipDoc-Filled.pdf") Then .DeleteFile("shipDoc-Filled.pdf")
+                If .FileExists("fsDoc-Filled.pdf") Then .DeleteFile("fsDoc-Filled.pdf")
+            End With
         End If
     End Sub
 
@@ -201,19 +201,16 @@ Public Class Form1
             End Try
         End If
 
-        sentFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail)
-        calendarFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar)
-
         ' Restrict to last three weeks.
-        shipDocItemsList = shipDocFolder.Items.Restrict("[ReceivedTime] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
-        sentItemsList = sentFolder.Items.Restrict("[ReceivedTime] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
-        calendarItemsList = calendarFolder.Items.Restrict("[Start] >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'")
+        sentItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
+            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:httpmail:datereceived >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'", False)
+        calendarSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).FolderPath _
+            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:calendar:dtstart >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'", False)
 
 
         ' Sort by oldest items first. This is to try and find the original update/appointment before finding replies/further appointments
-        shipDocItemsList.Sort("[ReceivedTime]", True)
-        sentItemsList.Sort("[ReceivedTime]")
-        calendarItemsList.Sort("[Start]")
+        sentItemsSearch.Results.Sort("[ReceivedTime]")
+        calendarSearch.Results.Sort("[Start]")
 
     End Sub
 
