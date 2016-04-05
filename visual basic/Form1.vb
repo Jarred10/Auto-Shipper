@@ -1,50 +1,60 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports Auto_Shipper
 Imports Microsoft.Office.Interop
-Imports System.Runtime.CompilerServices
-Imports Auto_Shipper
 
 Public Class Form1
 
+    'basic outlook objects
     Dim olApp As Outlook.Application
     Dim olNs As Outlook.NameSpace
+
+    'folder where shipping docs are held
     Dim shipDocFolder As Outlook.MAPIFolder
 
+    'variables for searching outlook folders
+    Dim shipDocSearch As Outlook.Search
     Dim sentItemsSearch As Outlook.Search
     Dim calendarSearch As Outlook.Search
 
-    Dim outlookSearch As Outlook.Search
-
+    'objects used to store items while looping
     Dim shipDocItem As Object
     Dim sentItem As Object
     Dim shippedJob As Object
     Dim unshippedJob As Item
     Dim calendarItem As Object
 
+    'list of jobs that arent shipped
     Dim unshippedJobs As New List(Of Item)
 
-    'Regular expression to find SV numbers
-    Dim jobNumberRegex = New Regex("SV\d{10}")
+    'Regular expression to find SV numbers. Pattern = SV followed by 10 digits
+    Dim jobNumberRegex = New System.Text.RegularExpressions.Regex("SV\d{10}")
 
-    'Config
+    ' --- Config ---
+
+    'file name of config. in future this may be configurable if needed
+    Dim FILE_NAME As String = "config.txt"
+    'name of folder in outlook where shipping documents are found
     Dim shipDocFolderName As String
+    'whether or not to delete forms after printing them
     Dim deleteOnPrint As Boolean
-    Dim ingoingPartsKeyword As String
-    Dim outgoingPartsKeyword As String
+    'term to search for before the ingoing serial
+    Dim ingoingPartsTerm As String
+    'term to search for before the outgoing serial
+    Dim outgoingPartsTerm As String
 
-
+    'finds unshipped jobs
     Private Sub jobButton_Click(sender As Object, e As EventArgs) Handles jobButton.Click
 
         ' Loops through all sent mail in last three weeks that contain "SV"
         For Each sentItem In sentItemsSearch.Results
             Dim sentItemJobNo As String = findJobNumber(sentItem.Subject)
             ' Checks if update was for a job that used parts, and not for 
-            If sentItem.Body.ToString.Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
+            If sentItem.Body.ToString.Contains(ingoingPartsTerm, StringComparison.OrdinalIgnoreCase) AndAlso sentItem.Body.ToString.Contains(outgoingPartsTerm, StringComparison.OrdinalIgnoreCase) Then
                 If Not unshippedJobs.Contains(New Item(sentItem, sentItemJobNo)) Then
                     ' Adds mail item to a list of unshipped jobs.
                     unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
                 End If
                 ' If update wasnt for job that used parts, checks if update was for shipping parts
-            ElseIf sentItem.Subject.ToString.Contains("shippingg", StringComparison.OrdinalIgnoreCase) Or sentItem.Body.ToString.Contains("shippingg", StringComparison.OrdinalIgnoreCase) Then
+            ElseIf sentItem.Subject.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Or sentItem.Body.ToString.Contains("shipping", StringComparison.OrdinalIgnoreCase) Then
                 ' Removes shipped updates from list of unshipped updates by looping through all current unshipped jobs and comparing job number
                 For Each unshippedJob In unshippedJobs
                     If sentItemJobNo.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) Then
@@ -106,9 +116,9 @@ Public Class Form1
 
                     For x = 0 To contents.Length - 1
                         With contents(x)
-                            If .Contains("in: ", StringComparison.OrdinalIgnoreCase) Then
+                            If .Contains(ingoingPartsTerm, StringComparison.OrdinalIgnoreCase) Then
                                 serialInTextBox.Text = .Substring(.IndexOf("IN: ") + 5)
-                            ElseIf .Contains("out: ", StringComparison.OrdinalIgnoreCase) Then
+                            ElseIf .Contains(outgoingPartsTerm, StringComparison.OrdinalIgnoreCase) Then
                                 serialOutTextBox.Text = .Substring(.IndexOf("OUT: ") + 6)
                                 faultTextBox.Text = contents(x + 2)
                             End If
@@ -129,22 +139,21 @@ Public Class Form1
             unshippedJob.shipDocFound = False
 
             'Performs outlook seearch for emails in the shipping document folder with the job number in the subject line
-            outlookSearch = olApp.AdvancedSearch("'" + shipDocFolder.FolderPath + "'", "urn:schemas:httpmail:subject LIKE '%" + unshippedJob.jobNumber + "%'")
+            shipDocSearch = olApp.AdvancedSearch("'" + shipDocFolder.FolderPath + "'", "urn:schemas:httpmail:subject LIKE '%" + unshippedJob.jobNumber + "%'")
 
             'If the results of the search turn up nothing, throw error
-            If outlookSearch.Results.Count = 0 Then
+            If shipDocSearch.Results.Count = 0 Then
                 MsgBox("No shipping document email found for selected job in folder: " + shipDocFolderName + ".")
             Else
                 'Loop through all results
-                For i = 1 To outlookSearch.Results.Count
-                    shipDocItem = outlookSearch.Results.Item(i)
+                For i = 1 To shipDocSearch.Results.Count
+                    shipDocItem = shipDocSearch.Results.Item(i)
                     'Checks if email has any attachments, and either the subject or body of email contain ship doc in some form
                     If shipDocItem.Attachments.Count > 0 AndAlso (LCase(shipDocItem.Subject) Like "*ship*doc*" Or LCase(shipDocItem.Body) Like "*ship*doc*") Then
-                        Console.WriteLine(shipDocItem.Attachments(1).DisplayName)
                         'Loops through all attachments, in most cases this will be only one file
                         For a = 1 To shipDocItem.Attachments.Count
                             'Checks if the name of attachment indicates that it is a shipping document
-                            If UCase(shipDocItem.Attachments(a).DisplayName) Like "_DT*.PDF" Then
+                            If UCase(shipDocItem.Attachments(a).DisplayName) Like "_D*.PDF" Then
                                 'Saves attachment and sets flag on item that it has an appropriate shipping document downloaded for it
                                 shipDocItem.Attachments(a).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"))
                                 unshippedJob.shipDocFound = True
@@ -192,19 +201,27 @@ Public Class Form1
 
 
     Private Sub printButton_Click(sender As Object, e As EventArgs) Handles printButton.Click
-        If unshippedJob.jobType = jobTypes.Foodstuffs Then Process.Start("cmd", "/C SumatraPDF.exe -print-to-default fsDoc-Filled.pdf")
-        If unshippedJob.jobType = jobTypes.Lotto Then Process.Start("cmd", "/C SumatraPDF.exe -print-to-default lottoDoc-Filled.pdf")
-        Process.Start("cmd", "/C SumatraPDF.exe -print-to-default shipDoc-Filled.pdf")
+        If IsNothing(unshippedJob) Then
+            MsgBox("No job selected.")
+            'Checks if selected job has had a shipping document downloaded for it
+        ElseIf Not unshippedJob.shipDocFound Then
+            MsgBox("No shipping document has been downloaded for the selected job.")
+        Else
+            If unshippedJob.jobType = jobTypes.Foodstuffs Then Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default fsDoc-Filled.pdf")
+            If unshippedJob.jobType = jobTypes.Lotto Then Process.Start("cmd", "/C start wordpad.exe /p lottoDoc-Filled.docx")
+            Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default shipDoc-Filled.pdf")
 
-        ' Deletes files after printing if set in config
-        If deleteOnPrint Then
-            With My.Computer.FileSystem
-                If .FileExists("shipDoc.pdf") Then .DeleteFile("shipDoc.pdf")
-                If .FileExists("shipDoc-Filled.pdf") Then .DeleteFile("shipDoc-Filled.pdf")
-                If .FileExists("fsDoc-Filled.pdf") Then .DeleteFile("fsDoc-Filled.pdf")
-                If .FileExists("lottoDoc-Filled.docx") Then .DeleteFile("lottoDoc-Filled.docx")
-            End With
+            ' Deletes files after printing if set in config
+            If deleteOnPrint Then
+                With My.Computer.FileSystem
+                    If .FileExists("shipDoc.pdf") Then .DeleteFile("shipDoc.pdf")
+                    If .FileExists("shipDoc-Filled.pdf") Then .DeleteFile("shipDoc-Filled.pdf")
+                    If .FileExists("fsDoc-Filled.pdf") Then .DeleteFile("fsDoc-Filled.pdf")
+                    If .FileExists("lottoDoc-Filled.docx") Then .DeleteFile("lottoDoc-Filled.docx")
+                End With
+            End If
         End If
+
     End Sub
 
 
@@ -240,44 +257,67 @@ Public Class Form1
         Return vbNullString
     End Function
 
-    ' Reads CSV file to set the folder where shipping docs are found
+    ' Reads config file, checks if all expected values are found
     Public Function loadConfig()
 
-        Dim FILE_NAME As String = "config.txt"
+        'number of lines in config file, limits the number of lines to read from config file
         Dim LINES As Integer = 5
 
+        'values to store config information
         Dim lineArray() As String
         Dim key As String
         Dim value As String
 
+        'checks if config file exists
         If System.IO.File.Exists(FILE_NAME) Then
 
             Dim objReader As New System.IO.StreamReader(FILE_NAME)
 
+            'loops through the config file
             For i = 0 To LINES - 1
-                lineArray = objReader.ReadLine().Split("="c)
-                If (lineArray.Count < 2) Then
+                'splits line using delimiator of '='
+                lineArray = objReader.ReadLine().Split(Chr(61))
+                'if not exactly two items in array, alert issue
+                If (lineArray.Count <> 2) Then
                     MsgBox("Corrupt configuration file at line: " + i + ".")
                     Environment.Exit(0)
                 End If
                 key = lineArray(0)
                 value = lineArray(1)
                 Select Case i
+                    'first loop gets name
                     Case 0
+                        'checks if first config line is for name, if not alert and exit
+                        If key = "name" Then
+                            'checks if value for name is empty, if true alert and exit
+                            If String.IsNullOrEmpty(value) Then
+                                MsgBox("No value found for name in config file at line " + i.ToString + ".")
+                                Environment.Exit(0)
+                            End If
+                        Else
+                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: name. Actual: " + key + ".")
+                            Environment.Exit(0)
+                        End If
+
+                        'second loop gets folder
                     Case 1
+                        'checks if first config line is for folder, if not alert and exit
                         If key = "folder" Then
+                            'grabs inbox as folder and sets boolean to set if we can find the folder
                             Dim objFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox)
                             Dim folderExists As Boolean
 
+                            'if key is empty or inbox, defaults to using the inbox. if using inbox fails, alert and exit
                             If String.IsNullOrEmpty(value) Or LCase(value) = "inbox" Then
                                 Try
                                     shipDocFolder = objFolder
                                     shipDocFolderName = "Inbox"
                                 Catch
-                                    MsgBox("Unable to find inbox in outlook.")
+                                    MsgBox("Unable to find inbox folder in outlook.")
                                     Environment.Exit(0)
                                 End Try
-                            Else
+                            Else 'if key is some custom value and not inbox or empty
+                                'loop through all subfolders of inbox, checking if any match the given value
                                 For x = 1 To objFolder.Folders.Count
                                     If objFolder.Folders.Item(x).Name = value Then
                                         shipDocFolder = objFolder.Folders(x)
@@ -285,6 +325,7 @@ Public Class Form1
                                         Exit For
                                     End If
                                 Next
+                                'if we havent already found it, loops through all folders of the mailbox
                                 If Not folderExists Then
                                     objFolder = objFolder.Parent.Folder
                                     For x = 1 To objFolder.Folders.Count
@@ -295,19 +336,53 @@ Public Class Form1
                                         End If
                                     Next
                                 End If
+                                'if we still havent found the folder, alert and exit
                                 If Not folderExists Then
                                     MsgBox("Unable to find " + value + " in your outlook folders.")
                                     Environment.Exit(0)
                                 End If
                             End If
                         Else
-                            MsgBox("Unexpected value at line " + i + " in config file. Expected: folder. Actual: " + key + ".")
+                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: folder. Actual: " + key + ".")
                             Environment.Exit(0)
                         End If
+                        'third line gets the boolean to delete files on printing
                     Case 2
+                        If key = "deleteOnPrint" Then
+                            If value = "True" Or value = "False" Then
+                                deleteOnPrint = (value = "True")
+                            Else
+                                MsgBox("Incorrect value found for deleteOnPrint. Expected True or False. Actual: " + value + ".")
+                                Environment.Exit(0)
+                            End If
+                        Else
+                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: deleteOnPrint. Actual: " + key + ".")
+                            Environment.Exit(0)
+                        End If
                     Case 3
+                        If key = "ingoingPartsTerm" Then
+                            If Not String.IsNullOrEmpty(value) Then
+                                ingoingPartsTerm = value
+                            Else
+                                MsgBox("No value found for ingoing parts term in config file at line " + i.ToString + ".")
+                                Environment.Exit(0)
+                            End If
+                        Else
+                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: ingoingPartsTerm. Actual: " + key + ".")
+                            Environment.Exit(0)
+                        End If
                     Case 4
-                    Case 5
+                        If key = "outgoingPartsTerm" Then
+                            If Not String.IsNullOrEmpty(value) Then
+                                outgoingPartsTerm = value
+                            Else
+                                MsgBox("No value found for outgoing parts term in config file at line " + i.ToString + ".")
+                                Environment.Exit(0)
+                            End If
+                        Else
+                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: outgoingPartsTerm. Actual: " + key + ".")
+                            Environment.Exit(0)
+                        End If
                 End Select
             Next
         Else
@@ -315,6 +390,7 @@ Public Class Form1
                 If Not createConfig(FILE_NAME) Then
                     MsgBox("Configuration not created correctly.")
                     Environment.Exit(0)
+                Else loadConfig()
                 End If
             Else
                 Environment.Exit(0)

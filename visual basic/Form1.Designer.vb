@@ -46,7 +46,7 @@ Partial Class Form1
         Me.getDocButton.Location = New System.Drawing.Point(200, 360)
         Me.getDocButton.Name = "getDocButton"
         Me.getDocButton.Size = New System.Drawing.Size(140, 30)
-        Me.getDocButton.TabIndex = 0
+        Me.getDocButton.TabIndex = 19
         Me.getDocButton.Text = "Get Shipping Doc"
         Me.getDocButton.UseVisualStyleBackColor = True
         '
@@ -185,7 +185,7 @@ Partial Class Form1
         Me.jobButton.Location = New System.Drawing.Point(75, 360)
         Me.jobButton.Name = "jobButton"
         Me.jobButton.Size = New System.Drawing.Size(100, 30)
-        Me.jobButton.TabIndex = 19
+        Me.jobButton.TabIndex = 0
         Me.jobButton.Text = "Get Jobs"
         Me.jobButton.UseVisualStyleBackColor = True
         '
