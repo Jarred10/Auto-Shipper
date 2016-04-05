@@ -1,13 +1,11 @@
 ﻿Public Class Item
     Implements IEquatable(Of Item)
 
-    'Outlook item (mailitem or calendaritem)
     Public item As Object
-    'String for SV number
     Public jobNumber As String
-
     Public site As String
     Public jobType As jobTypes
+    Public shipDocFound As Boolean
 
     Public Sub New(item As Object, jobNumber As String)
         MyClass.item = item

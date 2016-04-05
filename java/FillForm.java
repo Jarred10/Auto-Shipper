@@ -33,7 +33,6 @@ import com.itextpdf.text.pdf.PdfStamper;
 public class FillForm {
 	public static void main(String[] args) {
 		
-		
 		//declare variables for fields of form
 		String jobType, jobNo, site, inSerial, outSerial, fault;
 		jobType = jobNo = site = inSerial = outSerial = fault = "";
@@ -68,7 +67,10 @@ public class FillForm {
 
 			br.close();
 			
-			new File("data.txt").delete();
+
+			
+			File data = new File("data.txt");
+			//if(data.exists()) data.delete();
 
 			// create a calendar object to get the current day, month and year.
 			Calendar cal = Calendar.getInstance();
@@ -102,6 +104,7 @@ public class FillForm {
 
 			// saves new PDF
 			pdfStamper.close();
+			
 
 			//checks if job is for foodstuffs
 			if (jobType.equals("Foodstuffs")) {
@@ -129,11 +132,14 @@ public class FillForm {
 				pdfStamper.close();
 			}
 			else if(jobType.equals("Lotto")){
+
 				DateFormat df = new SimpleDateFormat("dd/MM/yy");
 				Date dateobj = new Date();
 				
+				
 		        String fileName = "lottoDoc.docx";
 		        InputStream fis = new FileInputStream(fileName);
+		        
 		        XWPFDocument document = new XWPFDocument(fis);
 
 		        List<XWPFTable> tablesList = document.getTables();
@@ -165,6 +171,7 @@ public class FillForm {
 		        out.close();
 		        
 		        document.close();
+		        
 			}
 			
 		} 

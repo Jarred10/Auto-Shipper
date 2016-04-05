@@ -38,14 +38,14 @@ Partial Class Form1
         Me.printButton = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.jobTypeTextBox = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
+        Me.jobButton = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'getDocButton
         '
-        Me.getDocButton.Location = New System.Drawing.Point(57, 360)
+        Me.getDocButton.Location = New System.Drawing.Point(200, 360)
         Me.getDocButton.Name = "getDocButton"
-        Me.getDocButton.Size = New System.Drawing.Size(146, 31)
+        Me.getDocButton.Size = New System.Drawing.Size(140, 30)
         Me.getDocButton.TabIndex = 0
         Me.getDocButton.Text = "Get Shipping Doc"
         Me.getDocButton.UseVisualStyleBackColor = True
@@ -54,9 +54,9 @@ Partial Class Form1
         '
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.ItemHeight = 16
-        Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 57)
+        Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 25)
         Me.unshippedJobsListBox.Name = "unshippedJobsListBox"
-        Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 292)
+        Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 324)
         Me.unshippedJobsListBox.TabIndex = 1
         '
         'jobNumberTextBox
@@ -147,18 +147,18 @@ Partial Class Form1
         '
         'produceButton
         '
-        Me.produceButton.Location = New System.Drawing.Point(221, 360)
+        Me.produceButton.Location = New System.Drawing.Point(365, 360)
         Me.produceButton.Name = "produceButton"
-        Me.produceButton.Size = New System.Drawing.Size(136, 31)
+        Me.produceButton.Size = New System.Drawing.Size(120, 30)
         Me.produceButton.TabIndex = 15
         Me.produceButton.Text = "Produce Forms"
         Me.produceButton.UseVisualStyleBackColor = True
         '
         'printButton
         '
-        Me.printButton.Location = New System.Drawing.Point(375, 360)
+        Me.printButton.Location = New System.Drawing.Point(510, 360)
         Me.printButton.Name = "printButton"
-        Me.printButton.Size = New System.Drawing.Size(111, 31)
+        Me.printButton.Size = New System.Drawing.Size(100, 30)
         Me.printButton.TabIndex = 16
         Me.printButton.Text = "Print Forms"
         Me.printButton.UseVisualStyleBackColor = True
@@ -180,15 +180,14 @@ Partial Class Form1
         Me.jobTypeTextBox.Size = New System.Drawing.Size(760, 22)
         Me.jobTypeTextBox.TabIndex = 17
         '
-        'Label7
+        'jobButton
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 19.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(368, 9)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(217, 38)
-        Me.Label7.TabIndex = 19
-        Me.Label7.Text = "Auto Shipper"
+        Me.jobButton.Location = New System.Drawing.Point(75, 360)
+        Me.jobButton.Name = "jobButton"
+        Me.jobButton.Size = New System.Drawing.Size(100, 30)
+        Me.jobButton.TabIndex = 19
+        Me.jobButton.Text = "Get Jobs"
+        Me.jobButton.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -196,7 +195,7 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(977, 823)
-        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.jobButton)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.jobTypeTextBox)
         Me.Controls.Add(Me.printButton)
@@ -214,7 +213,7 @@ Partial Class Form1
         Me.Controls.Add(Me.unshippedJobsListBox)
         Me.Controls.Add(Me.getDocButton)
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Quick Shipper"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -236,5 +235,5 @@ Partial Class Form1
     Friend WithEvents printButton As Button
     Friend WithEvents Label6 As Label
     Friend WithEvents jobTypeTextBox As TextBox
-    Friend WithEvents Label7 As Label
+    Friend WithEvents jobButton As Button
 End Class

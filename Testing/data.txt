@@ -1,0 +1,6 @@
+Lotto
+SV1604040006
+000195 + lotto tc psu
+000957 + lotto tc psu
+Challenge Putaruru
+Ticket checker not reading tickets. Replaced ticket checker and PSU and tested. All working. 

@@ -72,6 +72,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="configCreate.Designer.vb">
+      <DependentUpon>configCreate.vb</DependentUpon>
+    </Compile>
+    <Compile Include="configCreate.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +105,9 @@
     <Compile Include="StringExtensions.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="configCreate.resx">
+      <DependentUpon>configCreate.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
