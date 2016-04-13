@@ -37,18 +37,24 @@ Public Class Form1
     'whether or not to delete forms after printing them
     Dim deleteOnPrint As Boolean
     'term to search for before the ingoing serial
-    Dim ingoingPartsTerm As String
+    Dim ingoingPartsKeyword As String
     'term to search for before the outgoing serial
-    Dim outgoingPartsTerm As String
+    Dim outgoingPartsKeyword As String
+    'location in update to find fault. top is before times, 
+    Dim emailLayout() As String
+    'number of weeks back to check
+    Dim weeksBackToCheck As Integer
 
     'finds unshipped jobs
     Private Sub jobButton_Click(sender As Object, e As EventArgs) Handles jobButton.Click
+
+        unshippedJobsListBox.Items.Clear()
 
         ' Loops through all sent mail in last three weeks that contain "SV"
         For Each sentItem In sentItemsSearch.Results
             Dim sentItemJobNo As String = findJobNumber(sentItem.Subject)
             ' Checks if update was for a job that used parts, and not for 
-            If sentItem.Body.ToString.Contains(ingoingPartsTerm, StringComparison.OrdinalIgnoreCase) AndAlso sentItem.Body.ToString.Contains(outgoingPartsTerm, StringComparison.OrdinalIgnoreCase) Then
+            If sentItem.Body.ToString.Contains(ingoingPartsKeyword, StringComparison.OrdinalIgnoreCase) AndAlso sentItem.Body.ToString.Contains(outgoingPartsKeyword, StringComparison.OrdinalIgnoreCase) Then
                 If Not unshippedJobs.Contains(New Item(sentItem, sentItemJobNo)) Then
                     ' Adds mail item to a list of unshipped jobs.
                     unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
@@ -116,9 +122,9 @@ Public Class Form1
 
                     For x = 0 To contents.Length - 1
                         With contents(x)
-                            If .Contains(ingoingPartsTerm, StringComparison.OrdinalIgnoreCase) Then
+                            If .Contains(ingoingPartsKeyword, StringComparison.OrdinalIgnoreCase) Then
                                 serialInTextBox.Text = .Substring(.IndexOf("IN: ") + 5)
-                            ElseIf .Contains(outgoingPartsTerm, StringComparison.OrdinalIgnoreCase) Then
+                            ElseIf .Contains(outgoingPartsKeyword, StringComparison.OrdinalIgnoreCase) Then
                                 serialOutTextBox.Text = .Substring(.IndexOf("OUT: ") + 6)
                                 faultTextBox.Text = contents(x + 2)
                             End If
@@ -227,6 +233,8 @@ Public Class Form1
 
     'Initialise all the needed outlook items when form is loaded.
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+
         ' Start Outlook.
         ' If it is already running, you'll use the same instance.
         olApp = CreateObject("Outlook.Application")
@@ -235,13 +243,13 @@ Public Class Form1
         olNs = olApp.GetNamespace("MAPI")
         olNs.Logon()
 
-        loadConfig()
+        checkSettings()
 
         ' Restrict to last three weeks.
         sentItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
-            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:httpmail:datereceived >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'", False)
+            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:httpmail:datereceived >= '" + Format(DateAdd("d", -(7 * weeksBackToCheck), Now), "Short Date") + "'", False)
         calendarSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).FolderPath _
-            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:calendar:dtstart >= '" + Format(DateAdd("d", -21, Now), "Short Date") + "'", False)
+            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:calendar:dtstart >= '" + Format(DateAdd("d", -(7 * weeksBackToCheck), Now), "Short Date") + "'", False)
 
 
         ' Sort by oldest items first. This is to try and find the original update/appointment before finding replies/further appointments
@@ -258,150 +266,19 @@ Public Class Form1
     End Function
 
     ' Reads config file, checks if all expected values are found
-    Public Function loadConfig()
+    Public Function checkSettings()
 
-        'number of lines in config file, limits the number of lines to read from config file
-        Dim LINES As Integer = 5
-
-        'values to store config information
-        Dim lineArray() As String
-        Dim key As String
-        Dim value As String
-
-        'checks if config file exists
-        If System.IO.File.Exists(FILE_NAME) Then
-
-            Dim objReader As New System.IO.StreamReader(FILE_NAME)
-
-            'loops through the config file
-            For i = 0 To LINES - 1
-                'splits line using delimiator of '='
-                lineArray = objReader.ReadLine().Split(Chr(61))
-                'if not exactly two items in array, alert issue
-                If (lineArray.Count <> 2) Then
-                    MsgBox("Corrupt configuration file at line: " + i + ".")
-                    Environment.Exit(0)
-                End If
-                key = lineArray(0)
-                value = lineArray(1)
-                Select Case i
-                    'first loop gets name
-                    Case 0
-                        'checks if first config line is for name, if not alert and exit
-                        If key = "name" Then
-                            'checks if value for name is empty, if true alert and exit
-                            If String.IsNullOrEmpty(value) Then
-                                MsgBox("No value found for name in config file at line " + i.ToString + ".")
-                                Environment.Exit(0)
-                            End If
-                        Else
-                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: name. Actual: " + key + ".")
-                            Environment.Exit(0)
-                        End If
-
-                        'second loop gets folder
-                    Case 1
-                        'checks if first config line is for folder, if not alert and exit
-                        If key = "folder" Then
-                            'grabs inbox as folder and sets boolean to set if we can find the folder
-                            Dim objFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox)
-                            Dim folderExists As Boolean
-
-                            'if key is empty or inbox, defaults to using the inbox. if using inbox fails, alert and exit
-                            If String.IsNullOrEmpty(value) Or LCase(value) = "inbox" Then
-                                Try
-                                    shipDocFolder = objFolder
-                                    shipDocFolderName = "Inbox"
-                                Catch
-                                    MsgBox("Unable to find inbox folder in outlook.")
-                                    Environment.Exit(0)
-                                End Try
-                            Else 'if key is some custom value and not inbox or empty
-                                'loop through all subfolders of inbox, checking if any match the given value
-                                For x = 1 To objFolder.Folders.Count
-                                    If objFolder.Folders.Item(x).Name = value Then
-                                        shipDocFolder = objFolder.Folders(x)
-                                        folderExists = True
-                                        Exit For
-                                    End If
-                                Next
-                                'if we havent already found it, loops through all folders of the mailbox
-                                If Not folderExists Then
-                                    objFolder = objFolder.Parent.Folder
-                                    For x = 1 To objFolder.Folders.Count
-                                        If objFolder.Folders.Item(x).Name = value Then
-                                            shipDocFolder = objFolder.Folders(x)
-                                            folderExists = True
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                'if we still havent found the folder, alert and exit
-                                If Not folderExists Then
-                                    MsgBox("Unable to find " + value + " in your outlook folders.")
-                                    Environment.Exit(0)
-                                End If
-                            End If
-                        Else
-                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: folder. Actual: " + key + ".")
-                            Environment.Exit(0)
-                        End If
-                        'third line gets the boolean to delete files on printing
-                    Case 2
-                        If key = "deleteOnPrint" Then
-                            If value = "True" Or value = "False" Then
-                                deleteOnPrint = (value = "True")
-                            Else
-                                MsgBox("Incorrect value found for deleteOnPrint. Expected True or False. Actual: " + value + ".")
-                                Environment.Exit(0)
-                            End If
-                        Else
-                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: deleteOnPrint. Actual: " + key + ".")
-                            Environment.Exit(0)
-                        End If
-                    Case 3
-                        If key = "ingoingPartsTerm" Then
-                            If Not String.IsNullOrEmpty(value) Then
-                                ingoingPartsTerm = value
-                            Else
-                                MsgBox("No value found for ingoing parts term in config file at line " + i.ToString + ".")
-                                Environment.Exit(0)
-                            End If
-                        Else
-                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: ingoingPartsTerm. Actual: " + key + ".")
-                            Environment.Exit(0)
-                        End If
-                    Case 4
-                        If key = "outgoingPartsTerm" Then
-                            If Not String.IsNullOrEmpty(value) Then
-                                outgoingPartsTerm = value
-                            Else
-                                MsgBox("No value found for outgoing parts term in config file at line " + i.ToString + ".")
-                                Environment.Exit(0)
-                            End If
-                        Else
-                            MsgBox("Unexpected value at line " + i.ToString + " in config file. Expected: outgoingPartsTerm. Actual: " + key + ".")
-                            Environment.Exit(0)
-                        End If
-                End Select
-            Next
-        Else
-            If MsgBoxResult.Yes = MsgBox("Unable to find configuartion file with name: " + FILE_NAME + ". Would you like to create one?", MsgBoxStyle.YesNo Or MsgBoxStyle.DefaultButton1 Or MsgBoxStyle.Critical) Then
-                If Not createConfig(FILE_NAME) Then
-                    MsgBox("Configuration not created correctly.")
-                    Environment.Exit(0)
-                Else loadConfig()
-                End If
-            Else
-                Environment.Exit(0)
+        For i = 0 To My.Settings.Properties.Count
+            If My.Settings.PropertyValues.Item(i) Is Nothing Then
+                MsgBox("Settings fucked.")
+                Settings.ShowDialog()
             End If
-        End If
-        loadConfig = ""
+        Next
+
     End Function
 
-    Public Function createConfig(FILE_NAME As String) As Boolean
-        Dim SecondForm As New configCreate
-        SecondForm.ShowDialog()
-        Return System.IO.File.Exists(FILE_NAME)
-    End Function
+
+    Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
+        Settings.ShowDialog()
+    End Sub
 End Class

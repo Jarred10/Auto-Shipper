@@ -22,6 +22,7 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.getDocButton = New System.Windows.Forms.Button()
         Me.unshippedJobsListBox = New System.Windows.Forms.ListBox()
         Me.jobNumberTextBox = New System.Windows.Forms.TextBox()
@@ -39,6 +40,13 @@ Partial Class Form1
         Me.Label6 = New System.Windows.Forms.Label()
         Me.jobTypeTextBox = New System.Windows.Forms.TextBox()
         Me.jobButton = New System.Windows.Forms.Button()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.EditConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuStrip1.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'getDocButton
@@ -54,9 +62,9 @@ Partial Class Form1
         '
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.ItemHeight = 16
-        Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 25)
+        Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 41)
         Me.unshippedJobsListBox.Name = "unshippedJobsListBox"
-        Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 324)
+        Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 308)
         Me.unshippedJobsListBox.TabIndex = 1
         '
         'jobNumberTextBox
@@ -189,12 +197,49 @@ Partial Class Form1
         Me.jobButton.Text = "Get Jobs"
         Me.jobButton.UseVisualStyleBackColor = True
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditConfigToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(159, 30)
+        '
+        'EditConfigToolStripMenuItem
+        '
+        Me.EditConfigToolStripMenuItem.Name = "EditConfigToolStripMenuItem"
+        Me.EditConfigToolStripMenuItem.Size = New System.Drawing.Size(158, 26)
+        Me.EditConfigToolStripMenuItem.Text = "Edit Config"
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(977, 28)
+        Me.MenuStrip1.TabIndex = 21
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'FileToolStripMenuItem
+        '
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem})
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(44, 24)
+        Me.FileToolStripMenuItem.Text = "File"
+        '
+        'SettingsToolStripMenuItem
+        '
+        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
+        Me.SettingsToolStripMenuItem.Text = "Settings"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(977, 823)
+        Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.jobButton)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.jobTypeTextBox)
@@ -212,8 +257,12 @@ Partial Class Form1
         Me.Controls.Add(Me.jobNumberTextBox)
         Me.Controls.Add(Me.unshippedJobsListBox)
         Me.Controls.Add(Me.getDocButton)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.Text = "Quick Shipper"
+        Me.ContextMenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -236,4 +285,9 @@ Partial Class Form1
     Friend WithEvents Label6 As Label
     Friend WithEvents jobTypeTextBox As TextBox
     Friend WithEvents jobButton As Button
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents EditConfigToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
 End Class

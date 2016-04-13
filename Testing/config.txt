@@ -1,5 +1,7 @@
-name=Jarred
+name=Jarred Green
 folder=Shipping Docs
 deleteOnPrint=False
-ingoingPartsTerm=in: 
-outgoingPartsTerm=out: 
+ingoingPartsKeyword=In: 
+outgoingPartsKeyword=Out: 
+emaiLayout=Times,Parts,Update
+weeksToCheck=4

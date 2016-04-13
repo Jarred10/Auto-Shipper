@@ -11,4 +11,4 @@ C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\Auto Shipper.exe
 C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\Auto Shipper.xml
 C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\Auto Shipper.pdb
 C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\Quick Shipping.vbprojResolveAssemblyReference.cache
-C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\Auto_Shipper.configCreate.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\Auto_Shipper.Settings.resources
