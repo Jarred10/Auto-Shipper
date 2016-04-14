@@ -1,69 +1,100 @@
 ﻿Public Class Settings
 
+    'Color to make textbox background and label colours when invalid input
     Dim errorColor As Color = Color.FromArgb(112, 44, 43)
-    Dim submitted As Boolean
 
-    Dim textBoxes(3) As Control
-    Dim labels(3) As Control
+    'List of tuples to match textboxes with their labels, for colouring purposes
+    Dim tuples As New List(Of Tuple(Of TextBox, Label))
 
     Private indexOfItemUnderMouseToDrag As Integer
     Private indexOfItemUnderMouseToDrop As Integer
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub saveSettingsButton_Click(sender As Object, e As EventArgs) Handles saveSettingsButton.Click
 
-        submitted = True
 
-        Dim ctrl As Control
         Dim missingField As Boolean
-        'setups up for config
 
-        For i = 0 To textBoxes.Count - 1
-            ctrl = textBoxes(i)
-            If ctrl.Text = "" Then
-                ctrl.BackColor = errorColor
-                labels(i).ForeColor = errorColor
+        For Each item In tuples
+            If String.IsNullOrEmpty(item.Item1.Text) Then
+                item.Item1.BackColor = errorColor
+                item.Item2.ForeColor = errorColor
                 missingField = True
             Else
-                labels(i).ForeColor = SystemColors.ControlText
+                item.Item2.ForeColor = SystemColors.ControlText
             End If
         Next
 
         'if all fields are completed
         If Not missingField Then
-            Dim objWriter As New System.IO.StreamWriter("config.txt")
-            With objWriter
-            End With
-            objWriter.WriteLine("name=" + nameTextBox.Text)
-            objWriter.WriteLine("folder=" + folderTextBox.Text)
-            objWriter.WriteLine("deleteOnPrint=" + deleteCheckBox.Checked.ToString)
-            objWriter.WriteLine("ingoingPartsKeyword=" + inTextBox.Text)
-            objWriter.WriteLine("outgoingPartsKeyword=" + outTextBox.Text)
-            objWriter.WriteLine("emaiLayout=" + emailLayoutListBox.Items(0) + "," + emailLayoutListBox.Items(1) + "," + emailLayoutListBox.Items(2))
-            objWriter.Close()
+            My.Settings.Name = nameTextBox.Text
+            My.Settings.Folder = folderTextBox.Text
+            My.Settings.DeleteOnPrint = deleteCheckBox.Checked
+            My.Settings.NewPartKeyword = newTextBox.Text
+            My.Settings.FaultyPartKeyword = faultyTextBox.Text
+            My.Settings.EmailLayout.Clear()
+            My.Settings.EmailLayout.AddRange(emailLayoutListBox.Items.Cast(Of String).ToArray)
+            My.Settings.WeeksToCheck = weeksNumericUpDown.Value
+            My.Settings.Save()
 
-            MsgBox("Configuration succesfully created.")
-            Me.Close()
+            DialogResult = System.Windows.Forms.DialogResult.OK
         End If
     End Sub
 
-    Private Sub textBox_Enter(sender As Object, e As EventArgs) Handles nameTextBox.Enter, folderTextBox.Enter, inTextBox.Enter, outTextBox.Enter
+    Private Sub textBox_Enter(sender As Object, e As EventArgs) Handles nameTextBox.Enter, folderTextBox.Enter, newTextBox.Enter, faultyTextBox.Enter
         sender.BackColor = SystemColors.Window
     End Sub
 
-    Private Sub textBox_Leave(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, inTextBox.Leave, outTextBox.Leave
-        If submitted Then
-            If sender.Text = "" Then
-                sender.BackColor = errorColor
-            Else
-                labels(Array.IndexOf(textBoxes, sender)).ForeColor = SystemColors.ControlText
+    Private Sub textBox_Leave(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, newTextBox.Leave, faultyTextBox.Leave
+
+        Dim tuple As Tuple(Of TextBox, Label)
+
+        For Each item In tuples
+            If Object.ReferenceEquals(item.Item1, sender) Then
+                tuple = item
+                Exit For
             End If
+        Next
+
+        If tuple.Item1.Text = "" Then
+            tuple.Item1.BackColor = errorColor
+            tuple.Item2.ForeColor = errorColor
+        Else
+            tuple.Item2.ForeColor = SystemColors.ControlText
         End If
     End Sub
 
-    Private Sub configCreate_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        textBoxes = {nameTextBox, folderTextBox, inTextBox, outTextBox}
-        labels = {Label1, Label2, Label3, Label4}
-        emailLayoutListBox.ItemHeight = 25
+    Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        tuples = New List(Of Tuple(Of TextBox, Label)) From
+        {
+            Tuple.Create(nameTextBox, nameLabel),
+            Tuple.Create(folderTextBox, folderLabel),
+            Tuple.Create(newTextBox, newLabel),
+            Tuple.Create(faultyTextBox, faultyLabel)
+        }
+
+        If Not String.IsNullOrEmpty(My.Settings.Name) Then
+            nameTextBox.Text = My.Settings.Name
+        End If
+        If Not String.IsNullOrEmpty(My.Settings.Folder) Then
+            folderTextBox.Text = My.Settings.Folder
+        End If
+        If Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) Then
+            newTextBox.Text = My.Settings.NewPartKeyword
+        End If
+        If Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Then
+            faultyTextBox.Text = My.Settings.FaultyPartKeyword
+        End If
+
+        If My.Settings.EmailLayout IsNot Nothing Then
+            emailLayoutListBox.Items.Clear()
+            For Each item In My.Settings.EmailLayout
+                emailLayoutListBox.Items.Add(item)
+            Next
+        End If
+
+        deleteCheckBox.Checked = My.Settings.DeleteOnPrint
+        weeksNumericUpDown.Value = My.Settings.WeeksToCheck
     End Sub
 
     Private Sub upButton_Click(sender As Object, e As EventArgs) Handles upButton.Click
@@ -101,13 +132,11 @@
     End Sub
 
     Private Sub clearButton_Click(sender As Object, e As EventArgs) Handles resetButton.Click
-        Dim ctrl As Control
         'loops through all textboxes and labels, reseting them to default
-        For i = 0 To textBoxes.Count - 1
-            ctrl = textBoxes(i)
-            ctrl.Text = ""
-            ctrl.BackColor = SystemColors.Window
-            labels(i).ForeColor = SystemColors.ControlText
+        For Each item In tuples
+            item.Item1.Text = ""
+            item.Item1.BackColor = SystemColors.Window
+            item.Item2.ForeColor = SystemColors.ControlText
         Next
 
         'returns listbox to default

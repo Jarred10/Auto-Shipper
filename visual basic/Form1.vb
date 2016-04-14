@@ -32,18 +32,6 @@ Public Class Form1
 
     'file name of config. in future this may be configurable if needed
     Dim FILE_NAME As String = "config.txt"
-    'name of folder in outlook where shipping documents are found
-    Dim shipDocFolderName As String
-    'whether or not to delete forms after printing them
-    Dim deleteOnPrint As Boolean
-    'term to search for before the ingoing serial
-    Dim ingoingPartsKeyword As String
-    'term to search for before the outgoing serial
-    Dim outgoingPartsKeyword As String
-    'location in update to find fault. top is before times, 
-    Dim emailLayout() As String
-    'number of weeks back to check
-    Dim weeksBackToCheck As Integer
 
     'finds unshipped jobs
     Private Sub jobButton_Click(sender As Object, e As EventArgs) Handles jobButton.Click
@@ -54,7 +42,7 @@ Public Class Form1
         For Each sentItem In sentItemsSearch.Results
             Dim sentItemJobNo As String = findJobNumber(sentItem.Subject)
             ' Checks if update was for a job that used parts, and not for 
-            If sentItem.Body.ToString.Contains(ingoingPartsKeyword, StringComparison.OrdinalIgnoreCase) AndAlso sentItem.Body.ToString.Contains(outgoingPartsKeyword, StringComparison.OrdinalIgnoreCase) Then
+            If sentItem.Body.ToString.Contains(My.Settings.NewPartKeyword, StringComparison.OrdinalIgnoreCase) AndAlso sentItem.Body.ToString.Contains(My.Settings.FaultyPartKeyword, StringComparison.OrdinalIgnoreCase) Then
                 If Not unshippedJobs.Contains(New Item(sentItem, sentItemJobNo)) Then
                     ' Adds mail item to a list of unshipped jobs.
                     unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
@@ -122,9 +110,9 @@ Public Class Form1
 
                     For x = 0 To contents.Length - 1
                         With contents(x)
-                            If .Contains(ingoingPartsKeyword, StringComparison.OrdinalIgnoreCase) Then
+                            If .Contains(My.Settings.NewPartKeyword, StringComparison.OrdinalIgnoreCase) Then
                                 serialInTextBox.Text = .Substring(.IndexOf("IN: ") + 5)
-                            ElseIf .Contains(outgoingPartsKeyword, StringComparison.OrdinalIgnoreCase) Then
+                            ElseIf .Contains(My.Settings.FaultyPartKeyword, StringComparison.OrdinalIgnoreCase) Then
                                 serialOutTextBox.Text = .Substring(.IndexOf("OUT: ") + 6)
                                 faultTextBox.Text = contents(x + 2)
                             End If
@@ -149,7 +137,7 @@ Public Class Form1
 
             'If the results of the search turn up nothing, throw error
             If shipDocSearch.Results.Count = 0 Then
-                MsgBox("No shipping document email found for selected job in folder: " + shipDocFolderName + ".")
+                MsgBox("No shipping document email found for selected job in folder: " + My.Settings.Folder + ".")
             Else
                 'Loop through all results
                 For i = 1 To shipDocSearch.Results.Count
@@ -179,7 +167,6 @@ Public Class Form1
 
 
     Private Sub produceButton_Click(sender As Object, e As EventArgs) Handles produceButton.Click
-
 
         If IsNothing(unshippedJob) Then
             MsgBox("No job selected.")
@@ -218,7 +205,7 @@ Public Class Form1
             Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default shipDoc-Filled.pdf")
 
             ' Deletes files after printing if set in config
-            If deleteOnPrint Then
+            If My.Settings.DeleteOnPrint Then
                 With My.Computer.FileSystem
                     If .FileExists("shipDoc.pdf") Then .DeleteFile("shipDoc.pdf")
                     If .FileExists("shipDoc-Filled.pdf") Then .DeleteFile("shipDoc-Filled.pdf")
@@ -234,6 +221,12 @@ Public Class Form1
     'Initialise all the needed outlook items when form is loaded.
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        If My.Settings.EmailLayout Is Nothing Then
+            My.Settings.EmailLayout = New System.Collections.Specialized.StringCollection
+        End If
+
+        checkSettings()
+
 
         ' Start Outlook.
         ' If it is already running, you'll use the same instance.
@@ -243,13 +236,12 @@ Public Class Form1
         olNs = olApp.GetNamespace("MAPI")
         olNs.Logon()
 
-        checkSettings()
 
         ' Restrict to last three weeks.
         sentItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
-            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:httpmail:datereceived >= '" + Format(DateAdd("d", -(7 * weeksBackToCheck), Now), "Short Date") + "'", False)
+            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:httpmail:datereceived >= '" + Format(DateAdd("d", -(7 * My.Settings.WeeksToCheck), Now), "Short Date") + "'", False)
         calendarSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).FolderPath _
-            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:calendar:dtstart >= '" + Format(DateAdd("d", -(7 * weeksBackToCheck), Now), "Short Date") + "'", False)
+            + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:calendar:dtstart >= '" + Format(DateAdd("d", -(7 * My.Settings.WeeksToCheck), Now), "Short Date") + "'", False)
 
 
         ' Sort by oldest items first. This is to try and find the original update/appointment before finding replies/further appointments
@@ -265,20 +257,32 @@ Public Class Form1
         Return vbNullString
     End Function
 
-    ' Reads config file, checks if all expected values are found
+    ' Checks if all settings are present. If not, open settings menu.
     Public Function checkSettings()
-
-        For i = 0 To My.Settings.Properties.Count
-            If My.Settings.PropertyValues.Item(i) Is Nothing Then
-                MsgBox("Settings fucked.")
-                Settings.ShowDialog()
+        If Not allSettingsFound() Then
+            'If settings menu returns OK, update status. Otherwise, alert user and exit.
+            If Settings.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+                Text = "Quick Shipper - Settings created sucessfully."
+            Else
+                MsgBox("Settings couldn't be saved.")
+                Environment.Exit(1)
             End If
-        Next
-
+        Else
+            Text = "Quick Shipper - Settings found and loaded."
+        End If
     End Function
 
 
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
-        Settings.ShowDialog()
+        If Settings.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+            Text = "Quick Shipper - Settings saved."
+        Else
+            MsgBox("Settings couldn't be saved.")
+            Environment.Exit(1)
+        End If
     End Sub
+
+    Public Function allSettingsFound()
+        Return String.IsNullOrEmpty(My.Settings.Name) Or String.IsNullOrEmpty(My.Settings.Folder) Or String.IsNullOrEmpty(My.Settings.NewPartKeyword) Or Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Or My.Settings.EmailLayout.Count = 0
+    End Function
 End Class

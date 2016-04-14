@@ -22,37 +22,36 @@ Partial Class Settings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.folderLabel = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
+        Me.newLabel = New System.Windows.Forms.Label()
+        Me.faultyLabel = New System.Windows.Forms.Label()
         Me.folderTextBox = New System.Windows.Forms.TextBox()
-        Me.inTextBox = New System.Windows.Forms.TextBox()
-        Me.outTextBox = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.newTextBox = New System.Windows.Forms.TextBox()
+        Me.faultyTextBox = New System.Windows.Forms.TextBox()
+        Me.saveSettingsButton = New System.Windows.Forms.Button()
         Me.resetButton = New System.Windows.Forms.Button()
         Me.deleteCheckBox = New System.Windows.Forms.CheckBox()
         Me.nameTextBox = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.nameLabel = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.upButton = New System.Windows.Forms.Button()
         Me.downButton = New System.Windows.Forms.Button()
         Me.emailLayoutListBox = New System.Windows.Forms.ListBox()
-        Me.loadButton = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.weeksNumericUpDown = New System.Windows.Forms.NumericUpDown()
         CType(Me.weeksNumericUpDown, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Label2
+        'folderLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(13, 78)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(61, 20)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Folder:"
+        Me.folderLabel.AutoSize = True
+        Me.folderLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.folderLabel.Location = New System.Drawing.Point(13, 78)
+        Me.folderLabel.Name = "folderLabel"
+        Me.folderLabel.Size = New System.Drawing.Size(61, 20)
+        Me.folderLabel.TabIndex = 1
+        Me.folderLabel.Text = "Folder:"
         '
         'Label5
         '
@@ -64,25 +63,25 @@ Partial Class Settings
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "Delete On Print:"
         '
-        'Label3
+        'newLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(13, 154)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(181, 20)
-        Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Ingoing Parts Keyword:"
+        Me.newLabel.AutoSize = True
+        Me.newLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.newLabel.Location = New System.Drawing.Point(13, 154)
+        Me.newLabel.Name = "newLabel"
+        Me.newLabel.Size = New System.Drawing.Size(161, 20)
+        Me.newLabel.TabIndex = 3
+        Me.newLabel.Text = "New Parts Keyword:"
         '
-        'Label4
+        'faultyLabel
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(13, 227)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(195, 20)
-        Me.Label4.TabIndex = 4
-        Me.Label4.Text = "Outgoing Parts Keyword:"
+        Me.faultyLabel.AutoSize = True
+        Me.faultyLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultyLabel.Location = New System.Drawing.Point(13, 227)
+        Me.faultyLabel.Name = "faultyLabel"
+        Me.faultyLabel.Size = New System.Drawing.Size(173, 20)
+        Me.faultyLabel.TabIndex = 4
+        Me.faultyLabel.Text = "Faulty Parts Keyword:"
         '
         'folderTextBox
         '
@@ -93,38 +92,38 @@ Partial Class Settings
         Me.folderTextBox.Size = New System.Drawing.Size(376, 27)
         Me.folderTextBox.TabIndex = 6
         '
-        'inTextBox
+        'newTextBox
         '
-        Me.inTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.inTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.inTextBox.Location = New System.Drawing.Point(17, 177)
-        Me.inTextBox.Name = "inTextBox"
-        Me.inTextBox.Size = New System.Drawing.Size(376, 27)
-        Me.inTextBox.TabIndex = 8
+        Me.newTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.newTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.newTextBox.Location = New System.Drawing.Point(17, 177)
+        Me.newTextBox.Name = "newTextBox"
+        Me.newTextBox.Size = New System.Drawing.Size(376, 27)
+        Me.newTextBox.TabIndex = 8
         '
-        'outTextBox
+        'faultyTextBox
         '
-        Me.outTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.outTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.outTextBox.Location = New System.Drawing.Point(17, 250)
-        Me.outTextBox.Name = "outTextBox"
-        Me.outTextBox.Size = New System.Drawing.Size(376, 27)
-        Me.outTextBox.TabIndex = 9
+        Me.faultyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.faultyTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultyTextBox.Location = New System.Drawing.Point(17, 250)
+        Me.faultyTextBox.Name = "faultyTextBox"
+        Me.faultyTextBox.Size = New System.Drawing.Size(376, 27)
+        Me.faultyTextBox.TabIndex = 9
         '
-        'Button1
+        'saveSettingsButton
         '
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(16, 471)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(191, 40)
-        Me.Button1.TabIndex = 10
-        Me.Button1.Text = "Create Configuration"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.saveSettingsButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.saveSettingsButton.Location = New System.Drawing.Point(16, 471)
+        Me.saveSettingsButton.Name = "saveSettingsButton"
+        Me.saveSettingsButton.Size = New System.Drawing.Size(191, 40)
+        Me.saveSettingsButton.TabIndex = 10
+        Me.saveSettingsButton.Text = "Save Settings"
+        Me.saveSettingsButton.UseVisualStyleBackColor = True
         '
         'resetButton
         '
         Me.resetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.resetButton.Location = New System.Drawing.Point(317, 471)
+        Me.resetButton.Location = New System.Drawing.Point(258, 471)
         Me.resetButton.Name = "resetButton"
         Me.resetButton.Size = New System.Drawing.Size(75, 40)
         Me.resetButton.TabIndex = 11
@@ -150,15 +149,15 @@ Partial Class Settings
         Me.nameTextBox.Size = New System.Drawing.Size(376, 27)
         Me.nameTextBox.TabIndex = 5
         '
-        'Label1
+        'nameLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(13, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(58, 20)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Name:"
+        Me.nameLabel.AutoSize = True
+        Me.nameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.nameLabel.Location = New System.Drawing.Point(13, 9)
+        Me.nameLabel.Name = "nameLabel"
+        Me.nameLabel.Size = New System.Drawing.Size(58, 20)
+        Me.nameLabel.TabIndex = 0
+        Me.nameLabel.Text = "Name:"
         '
         'Label7
         '
@@ -201,16 +200,6 @@ Partial Class Settings
         Me.emailLayoutListBox.Size = New System.Drawing.Size(150, 64)
         Me.emailLayoutListBox.TabIndex = 18
         '
-        'loadButton
-        '
-        Me.loadButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.loadButton.Location = New System.Drawing.Point(226, 471)
-        Me.loadButton.Name = "loadButton"
-        Me.loadButton.Size = New System.Drawing.Size(75, 40)
-        Me.loadButton.TabIndex = 19
-        Me.loadButton.Text = "Load"
-        Me.loadButton.UseVisualStyleBackColor = True
-        '
         'Label6
         '
         Me.Label6.AutoSize = True
@@ -229,54 +218,52 @@ Partial Class Settings
         Me.weeksNumericUpDown.TabIndex = 21
         Me.weeksNumericUpDown.Value = New Decimal(New Integer() {4, 0, 0, 0})
         '
-        'configCreate
+        'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(409, 534)
         Me.Controls.Add(Me.weeksNumericUpDown)
         Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.loadButton)
         Me.Controls.Add(Me.emailLayoutListBox)
         Me.Controls.Add(Me.downButton)
         Me.Controls.Add(Me.upButton)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.nameTextBox)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.nameLabel)
         Me.Controls.Add(Me.deleteCheckBox)
         Me.Controls.Add(Me.resetButton)
-        Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.outTextBox)
-        Me.Controls.Add(Me.inTextBox)
+        Me.Controls.Add(Me.saveSettingsButton)
+        Me.Controls.Add(Me.faultyTextBox)
+        Me.Controls.Add(Me.newTextBox)
         Me.Controls.Add(Me.folderTextBox)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.faultyLabel)
+        Me.Controls.Add(Me.newLabel)
         Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label2)
-        Me.Name = "configCreate"
+        Me.Controls.Add(Me.folderLabel)
+        Me.Name = "Settings"
         Me.Text = "Configuration Creator"
         CType(Me.weeksNumericUpDown, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Label2 As Label
+    Friend WithEvents folderLabel As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents Label3 As Label
-    Friend WithEvents Label4 As Label
+    Friend WithEvents newLabel As Label
+    Friend WithEvents faultyLabel As Label
     Friend WithEvents folderTextBox As TextBox
-    Friend WithEvents inTextBox As TextBox
-    Friend WithEvents outTextBox As TextBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents newTextBox As TextBox
+    Friend WithEvents faultyTextBox As TextBox
+    Friend WithEvents saveSettingsButton As Button
     Friend WithEvents resetButton As Button
     Friend WithEvents deleteCheckBox As CheckBox
     Friend WithEvents nameTextBox As TextBox
-    Friend WithEvents Label1 As Label
+    Friend WithEvents nameLabel As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents upButton As Button
     Friend WithEvents downButton As Button
     Friend WithEvents emailLayoutListBox As ListBox
-    Friend WithEvents loadButton As Button
     Friend WithEvents Label6 As Label
     Friend WithEvents weeksNumericUpDown As NumericUpDown
 End Class
