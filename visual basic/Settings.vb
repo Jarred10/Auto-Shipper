@@ -11,7 +11,6 @@
 
     Private Sub saveSettingsButton_Click(sender As Object, e As EventArgs) Handles saveSettingsButton.Click
 
-
         Dim missingField As Boolean
 
         For Each item In tuples
@@ -31,25 +30,32 @@
             My.Settings.DeleteOnPrint = deleteCheckBox.Checked
             My.Settings.NewPartKeyword = newTextBox.Text
             My.Settings.FaultyPartKeyword = faultyTextBox.Text
+            My.Settings.ToSiteTimeKeyword = toTextBox.Text
+            My.Settings.AwaySiteTimeKeyword = awayTextBox.Text
+            My.Settings.ShippingKeyword = shippingTextBox.Text
             My.Settings.EmailLayout.Clear()
             My.Settings.EmailLayout.AddRange(emailLayoutListBox.Items.Cast(Of String).ToArray)
             My.Settings.WeeksToCheck = weeksNumericUpDown.Value
+            My.Settings.BlackList.Clear()
+            For Each item In blacklistListBox.Items
+                My.Settings.BlackList.Add(item)
+            Next
             My.Settings.Save()
 
             DialogResult = System.Windows.Forms.DialogResult.OK
         End If
     End Sub
 
-    Private Sub textBox_Enter(sender As Object, e As EventArgs) Handles nameTextBox.Enter, folderTextBox.Enter, newTextBox.Enter, faultyTextBox.Enter
+    Private Sub textBox_Enter(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, newTextBox.Leave, faultyTextBox.Leave, toTextBox.Leave, awayTextBox.Leave, shippingTextBox.Leave
         sender.BackColor = SystemColors.Window
     End Sub
 
-    Private Sub textBox_Leave(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, newTextBox.Leave, faultyTextBox.Leave
+    Private Sub textBox_Leave(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, newTextBox.Leave, faultyTextBox.Leave, toTextBox.Leave, awayTextBox.Leave, shippingTextBox.Leave
 
-        Dim tuple As Tuple(Of TextBox, Label)
+        Dim tuple As Tuple(Of TextBox, Label) = Nothing
 
         For Each item In tuples
-            If Object.ReferenceEquals(item.Item1, sender) Then
+            If ReferenceEquals(item.Item1, sender) Then
                 tuple = item
                 Exit For
             End If
@@ -70,7 +76,10 @@
             Tuple.Create(nameTextBox, nameLabel),
             Tuple.Create(folderTextBox, folderLabel),
             Tuple.Create(newTextBox, newLabel),
-            Tuple.Create(faultyTextBox, faultyLabel)
+            Tuple.Create(faultyTextBox, faultyLabel),
+            Tuple.Create(toTextBox, toLabel),
+            Tuple.Create(awayTextBox, awayLabel),
+            Tuple.Create(shippingTextBox, shippingLabel)
         }
 
         If Not String.IsNullOrEmpty(My.Settings.Name) Then
@@ -85,16 +94,34 @@
         If Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Then
             faultyTextBox.Text = My.Settings.FaultyPartKeyword
         End If
+        If Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) Then
+            toTextBox.Text = My.Settings.ToSiteTimeKeyword
+        End If
+        If Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) Then
+            awayTextBox.Text = My.Settings.AwaySiteTimeKeyword
+        End If
+        If Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) Then
+            shippingTextBox.Text = My.Settings.ShippingKeyword
+        End If
 
-        If My.Settings.EmailLayout IsNot Nothing Then
-            emailLayoutListBox.Items.Clear()
-            For Each item In My.Settings.EmailLayout
-                emailLayoutListBox.Items.Add(item)
-            Next
+        emailLayoutListBox.Items.Clear()
+
+        If Not (String.IsNullOrEmpty(My.Settings.EmailLayout(0)) Or String.IsNullOrEmpty(My.Settings.EmailLayout(1)) Or String.IsNullOrEmpty(My.Settings.EmailLayout(2))) Then
+            emailLayoutListBox.Items.Add(My.Settings.EmailLayout(0))
+            emailLayoutListBox.Items.Add(My.Settings.EmailLayout(1))
+            emailLayoutListBox.Items.Add(My.Settings.EmailLayout(2))
         End If
 
         deleteCheckBox.Checked = My.Settings.DeleteOnPrint
         weeksNumericUpDown.Value = My.Settings.WeeksToCheck
+
+        If My.Settings.BlackList.Count > 0 Then
+            blacklistListBox.Items.Clear()
+            For Each item In My.Settings.BlackList
+                blacklistListBox.Items.Add(item)
+            Next
+        End If
+
     End Sub
 
     Private Sub upButton_Click(sender As Object, e As EventArgs) Handles upButton.Click
@@ -150,5 +177,11 @@
 
         'sets checkbox to default
         deleteCheckBox.Checked = False
+    End Sub
+
+    Private Sub deleteBlacklistButton_Click(sender As Object, e As EventArgs) Handles deleteBlacklistButton.Click
+        If blacklistListBox.SelectedIndex <> -1 Then
+            blacklistListBox.Items.Remove(blacklistListBox.SelectedItem)
+        End If
     End Sub
 End Class

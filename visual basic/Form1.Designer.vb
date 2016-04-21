@@ -45,6 +45,7 @@ Partial Class Form1
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.blacklistButton = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -60,6 +61,7 @@ Partial Class Form1
         '
         'unshippedJobsListBox
         '
+        Me.unshippedJobsListBox.DisplayMember = "calendarSubject"
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.ItemHeight = 16
         Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 41)
@@ -233,12 +235,22 @@ Partial Class Form1
         Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
+        'blacklistButton
+        '
+        Me.blacklistButton.Location = New System.Drawing.Point(796, 360)
+        Me.blacklistButton.Name = "blacklistButton"
+        Me.blacklistButton.Size = New System.Drawing.Size(145, 30)
+        Me.blacklistButton.TabIndex = 22
+        Me.blacklistButton.Text = "Add to Black List"
+        Me.blacklistButton.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(977, 823)
+        Me.Controls.Add(Me.blacklistButton)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.jobButton)
         Me.Controls.Add(Me.Label6)
@@ -290,4 +302,5 @@ Partial Class Form1
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents blacklistButton As Button
 End Class

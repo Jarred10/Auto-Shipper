@@ -80,18 +80,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property DeleteOnPrint() As Boolean
-            Get
-                Return CType(Me("DeleteOnPrint"),Boolean)
-            End Get
-            Set
-                Me("DeleteOnPrint") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property NewPartKeyword() As String
             Get
@@ -115,13 +103,50 @@ Namespace My
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property EmailLayout() As Global.System.Collections.Specialized.StringCollection
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property ToSiteTimeKeyword() As String
             Get
-                Return CType(Me("EmailLayout"),Global.System.Collections.Specialized.StringCollection)
+                Return CType(Me("ToSiteTimeKeyword"),String)
             End Get
             Set
-                Me("EmailLayout") = value
+                Me("ToSiteTimeKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property AwaySiteTimeKeyword() As String
+            Get
+                Return CType(Me("AwaySiteTimeKeyword"),String)
+            End Get
+            Set
+                Me("AwaySiteTimeKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property ShippingKeyword() As String
+            Get
+                Return CType(Me("ShippingKeyword"),String)
+            End Get
+            Set
+                Me("ShippingKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property DeleteOnPrint() As Boolean
+            Get
+                Return CType(Me("DeleteOnPrint"),Boolean)
+            End Get
+            Set
+                Me("DeleteOnPrint") = value
             End Set
         End Property
         
@@ -134,6 +159,28 @@ Namespace My
             End Get
             Set
                 Me("WeeksToCheck") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+        Public Property EmailLayout() As Global.System.Collections.Specialized.StringCollection
+            Get
+                Return CType(Me("EmailLayout"),Global.System.Collections.Specialized.StringCollection)
+            End Get
+            Set
+                Me("EmailLayout") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+        Public Property BlackList() As Global.System.Collections.Specialized.StringCollection
+            Get
+                Return CType(Me("BlackList"),Global.System.Collections.Specialized.StringCollection)
+            End Get
+            Set
+                Me("BlackList") = value
             End Set
         End Property
     End Class

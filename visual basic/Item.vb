@@ -1,11 +1,12 @@
 ﻿Public Class Item
     Implements IEquatable(Of Item)
 
-    Public item As Object
-    Public jobNumber As String
-    Public site As String
-    Public jobType As jobTypes
-    Public shipDocFound As Boolean
+    Public Property item As Object
+    Public Property jobNumber As String
+    Public Property calendarSubject As String
+    Public Property site As String
+    Public Property jobType As jobTypes
+    Public Property shipDocFound As Boolean
 
     Public Sub New(item As Object, jobNumber As String)
         MyClass.item = item
@@ -17,6 +18,6 @@
         If other Is Nothing Then
             Return False
         End If
-        Return Me.jobNumber = other.jobNumber
+        Return jobNumber = other.jobNumber
     End Function
 End Class
