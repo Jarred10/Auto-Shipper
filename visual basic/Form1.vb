@@ -31,6 +31,7 @@ Public Class Form1
     'finds unshipped jobs
     Private Sub jobButton_Click(sender As Object, e As EventArgs) Handles jobButton.Click
 
+        clear()
         unshippedJobsListBox.Items.Clear()
         unshippedJobs.Clear()
 
@@ -90,36 +91,65 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            unshippedJob = Nothing
         Next
     End Sub
 
     'When user selects a job from the list, populate the text boxes with relevant information so they can edit or choose what to be added to form.
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles unshippedJobsListBox.SelectedIndexChanged
-        If unshippedJobsListBox.SelectedItem IsNot Nothing Then
-            For i = 0 To unshippedJobs.Count
-                unshippedJob = unshippedJobs(i)
-                If unshippedJob.jobNumber.Contains(unshippedJobsListBox.SelectedItem.jobNumber, StringComparison.OrdinalIgnoreCase) Then
-                    Dim contents() As String = Split(unshippedJob.item.Body, vbCrLf)
-                    jobNumberTextBox.Text = unshippedJob.jobNumber
-                    siteTextBox.Text = unshippedJob.site
-                    jobTypeTextBox.Text = unshippedJob.jobType.ToString
+        For Each unshippedJob In unshippedJobs
+            'if selected items job number matches a job number from list of unshipped jobs
+            If unshippedJob.jobNumber.Contains(unshippedJobsListBox.SelectedItem.jobNumber, StringComparison.OrdinalIgnoreCase) Then
+                'sets textboxes to already stored values
+                jobNumberTextBox.Text = unshippedJob.jobNumber
+                siteTextBox.Text = unshippedJob.site
+                jobTypeComboBox.Text = unshippedJob.jobType.ToString
+                faultTextBox.Clear()
 
-                    For x = 0 To contents.Length - 1
-                        With contents(x)
-                            If .Contains(My.Settings.NewPartKeyword, StringComparison.OrdinalIgnoreCase) Then
-                                serialInTextBox.Text = .Substring(.IndexOf("IN: ") + 5)
-                            ElseIf .Contains(My.Settings.FaultyPartKeyword, StringComparison.OrdinalIgnoreCase) Then
-                                serialOutTextBox.Text = .Substring(.IndexOf("OUT: ") + 6)
-                                faultTextBox.Text = contents(x + 2)
+                Dim index = 0
+                Dim contents() As String = Split(unshippedJob.item.Body, vbCrLf)
+
+                For i = 0 To My.Settings.EmailLayout.Count - 1
+                    If My.Settings.EmailLayout(i) = "Times" Then
+                        While Not contents(index).Contains(My.Settings.AwaySiteTimeKeyword)
+                            index += 1
+                        End While
+                        index += 1
+                    ElseIf My.Settings.EmailLayout(i) = "Parts" Then
+                        While Not contents(index).Contains(My.Settings.FaultyPartKeyword)
+                            If contents(index).Contains(My.Settings.NewPartKeyword) Then
+                                serialInTextBox.Text = contents(index).Substring(My.Settings.NewPartKeyword.Length).Trim()
                             End If
-                        End With
-                    Next
+                            index += 1
+                        End While
+                        serialOutTextBox.Text = contents(index).Substring(My.Settings.FaultyPartKeyword.Length).Trim()
+                        index += 1
+                    ElseIf My.Settings.EmailLayout(i) = "Update" Then
+                        If i < 2 Then
 
-                    Exit For
-                End If
-            Next
-        End If
+                            If My.Settings.EmailLayout(i + 1) = "Parts" Then
+                                While Not contents(index).Contains(My.Settings.NewPartKeyword)
+                                    faultTextBox.Text += contents(index)
+                                    index += 1
+                                End While
+                            ElseIf My.Settings.EmailLayout(i + 1) = "Time" Then
+                                While Not contents(index).Contains(My.Settings.ToSiteTimeKeyword)
+                                    faultTextBox.Text += contents(index)
+                                    index += 1
+                                End While
+                            End If
+                        Else
+                            While index < contents.Length
+                                faultTextBox.Text += contents(index)
+                                index += 1
+                            End While
+                        End If
+                    Else
+                        MsgBox("Invalid email layout settings.")
+                    End If
+                Next
+                Exit For
+            End If
+        Next
     End Sub
 
     ' Searches for email with subject that contains the chosen job to ship. Searches all matching emails for one with attachments.
@@ -159,7 +189,6 @@ Public Class Form1
                 End If
             End If
         End If
-
     End Sub
 
 
@@ -211,7 +240,19 @@ Public Class Form1
                 End With
             End If
         End If
+    End Sub
 
+    Private Sub blacklistButton_Click(sender As Object, e As EventArgs) Handles blacklistButton.Click
+        If IsNothing(unshippedJob) Then
+            MsgBox("No job selected.")
+        Else
+            If unshippedJobsListBox.SelectedIndex <> -1 AndAlso Not My.Settings.BlackList.Contains(unshippedJobsListBox.SelectedItem.jobNumber) Then
+                My.Settings.BlackList.Add(unshippedJobsListBox.SelectedItem.jobNumber)
+                unshippedJobsListBox.Items.Remove(unshippedJobsListBox.SelectedItem)
+                clear()
+                My.Settings.Save()
+            End If
+        End If
     End Sub
 
 
@@ -247,14 +288,14 @@ Public Class Form1
     End Function
 
     ' Checks if all settings are present. If not, open settings menu.
-    Public Function checkSettings()
+    Public Sub checkSettings()
         If Not allSettingsFound() Then
             SettingsToolStripMenuItem_Click(SettingsToolStripMenuItem, New EventArgs())
         Else
             initializeSettings()
             Text = "Quick Shipper - Settings found and loaded."
         End If
-    End Function
+    End Sub
 
 
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
@@ -264,7 +305,7 @@ Public Class Form1
         End If
     End Sub
 
-    Public Function initializeSettings()
+    Public Sub initializeSettings()
 
         ' Restrict to last three weeks.
         sentItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
@@ -303,7 +344,7 @@ Public Class Form1
                 Environment.Exit(0)
             End If
         End If
-    End Function
+    End Sub
 
     Public Function allSettingsFound()
         Return Not String.IsNullOrEmpty(My.Settings.Name) AndAlso
@@ -316,10 +357,18 @@ Public Class Form1
             Not My.Settings.EmailLayout.Count = 0
     End Function
 
-    Private Sub blacklistButton_Click(sender As Object, e As EventArgs) Handles blacklistButton.Click
-        If unshippedJobsListBox.SelectedIndex <> -1 AndAlso Not My.Settings.BlackList.Contains(unshippedJobsListBox.SelectedItem.jobNumber) Then
-            My.Settings.BlackList.Add(unshippedJobsListBox.SelectedItem.jobNumber)
-            My.Settings.Save()
-        End If
+    Public Sub clear()
+        shipDocItem = Nothing
+        sentItem = Nothing
+        shippedJob = Nothing
+        unshippedJob = Nothing
+        calendarItem = Nothing
+
+        jobNumberTextBox.Clear()
+        serialInTextBox.Clear()
+        serialOutTextBox.Clear()
+        jobTypeComboBox.SelectedIndex = -1
+        siteTextBox.Clear()
+        faultTextBox.Clear()
     End Sub
 End Class

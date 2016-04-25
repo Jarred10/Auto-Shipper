@@ -22,7 +22,6 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Me.getDocButton = New System.Windows.Forms.Button()
         Me.unshippedJobsListBox = New System.Windows.Forms.ListBox()
         Me.jobNumberTextBox = New System.Windows.Forms.TextBox()
@@ -38,137 +37,158 @@ Partial Class Form1
         Me.produceButton = New System.Windows.Forms.Button()
         Me.printButton = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.jobTypeTextBox = New System.Windows.Forms.TextBox()
         Me.jobButton = New System.Windows.Forms.Button()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.EditConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.blacklistButton = New System.Windows.Forms.Button()
-        Me.ContextMenuStrip1.SuspendLayout()
+        Me.jobTypeComboBox = New System.Windows.Forms.ComboBox()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'getDocButton
         '
-        Me.getDocButton.Location = New System.Drawing.Point(200, 360)
+        Me.getDocButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.getDocButton.Location = New System.Drawing.Point(195, 331)
+        Me.getDocButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.getDocButton.Name = "getDocButton"
-        Me.getDocButton.Size = New System.Drawing.Size(140, 30)
+        Me.getDocButton.Size = New System.Drawing.Size(199, 38)
         Me.getDocButton.TabIndex = 19
-        Me.getDocButton.Text = "Get Shipping Doc"
+        Me.getDocButton.Text = "Get Shipping Document"
         Me.getDocButton.UseVisualStyleBackColor = True
         '
         'unshippedJobsListBox
         '
         Me.unshippedJobsListBox.DisplayMember = "calendarSubject"
+        Me.unshippedJobsListBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.unshippedJobsListBox.FormattingEnabled = True
-        Me.unshippedJobsListBox.ItemHeight = 16
-        Me.unshippedJobsListBox.Location = New System.Drawing.Point(57, 41)
+        Me.unshippedJobsListBox.HorizontalScrollbar = True
+        Me.unshippedJobsListBox.ItemHeight = 20
+        Me.unshippedJobsListBox.Location = New System.Drawing.Point(13, 32)
+        Me.unshippedJobsListBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.unshippedJobsListBox.Name = "unshippedJobsListBox"
-        Me.unshippedJobsListBox.Size = New System.Drawing.Size(889, 308)
+        Me.unshippedJobsListBox.Size = New System.Drawing.Size(776, 284)
         Me.unshippedJobsListBox.TabIndex = 1
         '
         'jobNumberTextBox
         '
-        Me.jobNumberTextBox.Location = New System.Drawing.Point(181, 406)
+        Me.jobNumberTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.jobNumberTextBox.Location = New System.Drawing.Point(13, 405)
+        Me.jobNumberTextBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.jobNumberTextBox.Name = "jobNumberTextBox"
-        Me.jobNumberTextBox.Size = New System.Drawing.Size(760, 22)
+        Me.jobNumberTextBox.Size = New System.Drawing.Size(366, 27)
         Me.jobNumberTextBox.TabIndex = 2
         '
         'serialInTextBox
         '
-        Me.serialInTextBox.Location = New System.Drawing.Point(181, 443)
+        Me.serialInTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.serialInTextBox.Location = New System.Drawing.Point(13, 460)
+        Me.serialInTextBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.serialInTextBox.Name = "serialInTextBox"
-        Me.serialInTextBox.Size = New System.Drawing.Size(760, 22)
+        Me.serialInTextBox.Size = New System.Drawing.Size(366, 27)
         Me.serialInTextBox.TabIndex = 3
         '
         'serialOutTextBox
         '
-        Me.serialOutTextBox.Location = New System.Drawing.Point(181, 480)
+        Me.serialOutTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.serialOutTextBox.Location = New System.Drawing.Point(419, 461)
+        Me.serialOutTextBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.serialOutTextBox.Name = "serialOutTextBox"
-        Me.serialOutTextBox.Size = New System.Drawing.Size(760, 22)
+        Me.serialOutTextBox.Size = New System.Drawing.Size(370, 27)
         Me.serialOutTextBox.TabIndex = 4
         '
         'faultTextBox
         '
-        Me.faultTextBox.Location = New System.Drawing.Point(181, 591)
+        Me.faultTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultTextBox.Location = New System.Drawing.Point(13, 570)
+        Me.faultTextBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.faultTextBox.Multiline = True
         Me.faultTextBox.Name = "faultTextBox"
-        Me.faultTextBox.Size = New System.Drawing.Size(760, 212)
+        Me.faultTextBox.Size = New System.Drawing.Size(776, 243)
         Me.faultTextBox.TabIndex = 5
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(46, 406)
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(9, 381)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(113, 17)
+        Me.Label1.Size = New System.Drawing.Size(126, 20)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "JOB NUMBER:"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(72, 443)
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(9, 437)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(87, 17)
+        Me.Label2.Size = New System.Drawing.Size(94, 20)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "SERIAL IN:"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(54, 480)
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(415, 437)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(105, 17)
+        Me.Label3.Size = New System.Drawing.Size(113, 20)
         Me.Label3.TabIndex = 9
         Me.Label3.Text = "SERIAL OUT:"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(97, 591)
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(9, 546)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(62, 17)
+        Me.Label4.Size = New System.Drawing.Size(67, 20)
         Me.Label4.TabIndex = 10
         Me.Label4.Text = "FAULT:"
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(112, 554)
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(9, 491)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(47, 17)
+        Me.Label5.Size = New System.Drawing.Size(50, 20)
         Me.Label5.TabIndex = 12
         Me.Label5.Text = "SITE:"
         '
         'siteTextBox
         '
-        Me.siteTextBox.Location = New System.Drawing.Point(181, 554)
+        Me.siteTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.siteTextBox.Location = New System.Drawing.Point(13, 515)
+        Me.siteTextBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.siteTextBox.Name = "siteTextBox"
-        Me.siteTextBox.Size = New System.Drawing.Size(760, 22)
+        Me.siteTextBox.Size = New System.Drawing.Size(366, 27)
         Me.siteTextBox.TabIndex = 11
         '
         'produceButton
         '
-        Me.produceButton.Location = New System.Drawing.Point(365, 360)
+        Me.produceButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.produceButton.Location = New System.Drawing.Point(402, 331)
+        Me.produceButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.produceButton.Name = "produceButton"
-        Me.produceButton.Size = New System.Drawing.Size(120, 30)
+        Me.produceButton.Size = New System.Drawing.Size(120, 38)
         Me.produceButton.TabIndex = 15
-        Me.produceButton.Text = "Produce Forms"
+        Me.produceButton.Text = "Create Forms"
         Me.produceButton.UseVisualStyleBackColor = True
         '
         'printButton
         '
-        Me.printButton.Location = New System.Drawing.Point(510, 360)
+        Me.printButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.printButton.Location = New System.Drawing.Point(530, 331)
+        Me.printButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.printButton.Name = "printButton"
-        Me.printButton.Size = New System.Drawing.Size(100, 30)
+        Me.printButton.Size = New System.Drawing.Size(106, 38)
         Me.printButton.TabIndex = 16
         Me.printButton.Text = "Print Forms"
         Me.printButton.UseVisualStyleBackColor = True
@@ -176,41 +196,24 @@ Partial Class Form1
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(71, 517)
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(415, 381)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(88, 17)
+        Me.Label6.Size = New System.Drawing.Size(95, 20)
         Me.Label6.TabIndex = 18
         Me.Label6.Text = "JOB TYPE:"
         '
-        'jobTypeTextBox
-        '
-        Me.jobTypeTextBox.Location = New System.Drawing.Point(181, 517)
-        Me.jobTypeTextBox.Name = "jobTypeTextBox"
-        Me.jobTypeTextBox.Size = New System.Drawing.Size(760, 22)
-        Me.jobTypeTextBox.TabIndex = 17
-        '
         'jobButton
         '
-        Me.jobButton.Location = New System.Drawing.Point(75, 360)
+        Me.jobButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.jobButton.Location = New System.Drawing.Point(13, 331)
+        Me.jobButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.jobButton.Name = "jobButton"
-        Me.jobButton.Size = New System.Drawing.Size(100, 30)
+        Me.jobButton.Size = New System.Drawing.Size(174, 38)
         Me.jobButton.TabIndex = 0
-        Me.jobButton.Text = "Get Jobs"
+        Me.jobButton.Text = "Find Unshipped Jobs"
         Me.jobButton.UseVisualStyleBackColor = True
-        '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditConfigToolStripMenuItem})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(159, 30)
-        '
-        'EditConfigToolStripMenuItem
-        '
-        Me.EditConfigToolStripMenuItem.Name = "EditConfigToolStripMenuItem"
-        Me.EditConfigToolStripMenuItem.Size = New System.Drawing.Size(158, 26)
-        Me.EditConfigToolStripMenuItem.Text = "Edit Config"
         '
         'MenuStrip1
         '
@@ -218,7 +221,8 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(977, 28)
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(8, 2, 0, 2)
+        Me.MenuStrip1.Size = New System.Drawing.Size(805, 28)
         Me.MenuStrip1.TabIndex = 21
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -237,24 +241,37 @@ Partial Class Form1
         '
         'blacklistButton
         '
-        Me.blacklistButton.Location = New System.Drawing.Point(796, 360)
+        Me.blacklistButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.blacklistButton.Location = New System.Drawing.Point(644, 331)
+        Me.blacklistButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.blacklistButton.Name = "blacklistButton"
-        Me.blacklistButton.Size = New System.Drawing.Size(145, 30)
+        Me.blacklistButton.Size = New System.Drawing.Size(145, 38)
         Me.blacklistButton.TabIndex = 22
         Me.blacklistButton.Text = "Add to Black List"
         Me.blacklistButton.UseVisualStyleBackColor = True
         '
+        'jobTypeComboBox
+        '
+        Me.jobTypeComboBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.jobTypeComboBox.FormattingEnabled = True
+        Me.jobTypeComboBox.Items.AddRange(New Object() {"Foodstuffs", "Lotto", "Other"})
+        Me.jobTypeComboBox.Location = New System.Drawing.Point(419, 405)
+        Me.jobTypeComboBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.jobTypeComboBox.Name = "jobTypeComboBox"
+        Me.jobTypeComboBox.Size = New System.Drawing.Size(370, 28)
+        Me.jobTypeComboBox.TabIndex = 23
+        '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(977, 823)
+        Me.ClientSize = New System.Drawing.Size(805, 827)
+        Me.Controls.Add(Me.jobTypeComboBox)
         Me.Controls.Add(Me.blacklistButton)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.jobButton)
         Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.jobTypeTextBox)
         Me.Controls.Add(Me.printButton)
         Me.Controls.Add(Me.produceButton)
         Me.Controls.Add(Me.Label5)
@@ -269,10 +286,11 @@ Partial Class Form1
         Me.Controls.Add(Me.jobNumberTextBox)
         Me.Controls.Add(Me.unshippedJobsListBox)
         Me.Controls.Add(Me.getDocButton)
+        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MainMenuStrip = Me.MenuStrip1
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "Form1"
         Me.Text = "Quick Shipper"
-        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -295,12 +313,10 @@ Partial Class Form1
     Friend WithEvents produceButton As Button
     Friend WithEvents printButton As Button
     Friend WithEvents Label6 As Label
-    Friend WithEvents jobTypeTextBox As TextBox
     Friend WithEvents jobButton As Button
-    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
-    Friend WithEvents EditConfigToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents blacklistButton As Button
+    Friend WithEvents jobTypeComboBox As ComboBox
 End Class
