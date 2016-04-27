@@ -1,4 +1,6 @@
-﻿Public Class Settings
+﻿Imports Microsoft.Office.Interop
+
+Public Class Settings
 
     'Color to make textbox background and label colours when invalid input
     Dim errorColor As Color = Color.FromArgb(112, 44, 43)
@@ -13,6 +15,7 @@
 
         Dim missingField As Boolean
 
+        'checks all text boxes have some text in them
         For Each item In tuples
             If String.IsNullOrEmpty(item.Item1.Text) Then
                 item.Item1.BackColor = errorColor
@@ -26,23 +29,19 @@
         'if all fields are completed
         If Not missingField Then
             My.Settings.Name = nameTextBox.Text
-            My.Settings.Folder = folderTextBox.Text
             My.Settings.DeleteOnPrint = deleteCheckBox.Checked
             My.Settings.NewPartKeyword = newTextBox.Text
             My.Settings.FaultyPartKeyword = faultyTextBox.Text
             My.Settings.ToSiteTimeKeyword = toTextBox.Text
+            My.Settings.OnsiteTimeKeyword = onsiteTextBox.Text
             My.Settings.AwaySiteTimeKeyword = awayTextBox.Text
             My.Settings.ShippingKeyword = shippingTextBox.Text
             My.Settings.EmailLayout.Clear()
             My.Settings.EmailLayout.AddRange(emailLayoutListBox.Items.Cast(Of String).ToArray)
             My.Settings.WeeksToCheck = weeksNumericUpDown.Value
-            My.Settings.BlackList.Clear()
-            For Each item In blacklistListBox.Items
-                My.Settings.BlackList.Add(item)
-            Next
             My.Settings.Save()
 
-            DialogResult = System.Windows.Forms.DialogResult.OK
+            DialogResult = DialogResult.OK
         End If
     End Sub
 
@@ -78,38 +77,30 @@
             Tuple.Create(newTextBox, newLabel),
             Tuple.Create(faultyTextBox, faultyLabel),
             Tuple.Create(toTextBox, toLabel),
+            Tuple.Create(onsiteTextBox, onsiteLabel),
             Tuple.Create(awayTextBox, awayLabel),
             Tuple.Create(shippingTextBox, shippingLabel)
         }
 
-        If Not String.IsNullOrEmpty(My.Settings.Name) Then
-            nameTextBox.Text = My.Settings.Name
-        End If
-        If Not String.IsNullOrEmpty(My.Settings.Folder) Then
-            folderTextBox.Text = My.Settings.Folder
-        End If
-        If Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) Then
-            newTextBox.Text = My.Settings.NewPartKeyword
-        End If
-        If Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Then
-            faultyTextBox.Text = My.Settings.FaultyPartKeyword
-        End If
-        If Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) Then
-            toTextBox.Text = My.Settings.ToSiteTimeKeyword
-        End If
-        If Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) Then
-            awayTextBox.Text = My.Settings.AwaySiteTimeKeyword
-        End If
-        If Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) Then
-            shippingTextBox.Text = My.Settings.ShippingKeyword
-        End If
+        If Not String.IsNullOrEmpty(My.Settings.Name) Then nameTextBox.Text = My.Settings.Name
+        If Not String.IsNullOrEmpty(My.Settings.Folder) Then folderTextBox.Text = Form1.olNs.GetFolderFromID(My.Settings.Folder).Name
+        If Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) Then newTextBox.Text = My.Settings.NewPartKeyword
+        If Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Then faultyTextBox.Text = My.Settings.FaultyPartKeyword
+        If Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) Then toTextBox.Text = My.Settings.ToSiteTimeKeyword
+        If Not String.IsNullOrEmpty(My.Settings.OnsiteTimeKeyword) Then onsiteTextBox.Text = My.Settings.OnsiteTimeKeyword
+        If Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) Then awayTextBox.Text = My.Settings.AwaySiteTimeKeyword
+        If Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) Then shippingTextBox.Text = My.Settings.ShippingKeyword
 
         emailLayoutListBox.Items.Clear()
 
-        If Not (String.IsNullOrEmpty(My.Settings.EmailLayout(0)) Or String.IsNullOrEmpty(My.Settings.EmailLayout(1)) Or String.IsNullOrEmpty(My.Settings.EmailLayout(2))) Then
+        If My.Settings.EmailLayout.Count = 3 Then
             emailLayoutListBox.Items.Add(My.Settings.EmailLayout(0))
             emailLayoutListBox.Items.Add(My.Settings.EmailLayout(1))
             emailLayoutListBox.Items.Add(My.Settings.EmailLayout(2))
+        Else
+            emailLayoutListBox.Items.Add("Times")
+            emailLayoutListBox.Items.Add("Parts")
+            emailLayoutListBox.Items.Add("Update")
         End If
 
         deleteCheckBox.Checked = My.Settings.DeleteOnPrint
@@ -177,11 +168,20 @@
 
         'sets checkbox to default
         deleteCheckBox.Checked = False
+
     End Sub
 
     Private Sub deleteBlacklistButton_Click(sender As Object, e As EventArgs) Handles deleteBlacklistButton.Click
         If blacklistListBox.SelectedIndex <> -1 Then
+            My.Settings.BlackList.Remove(blacklistListBox.SelectedItem)
+            My.Settings.Save()
             blacklistListBox.Items.Remove(blacklistListBox.SelectedItem)
         End If
+    End Sub
+
+    Private Sub folderTextBox_Click(sender As Object, e As EventArgs) Handles folderTextBox.Click
+        Dim folder = Form1.olNs.PickFolder()
+        folderTextBox.Text = folder.Name
+        My.Settings.Folder = folder.EntryID
     End Sub
 End Class

@@ -1,0 +1,12 @@
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Release\Auto Shipper.exe.config
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Release\Auto Shipper.exe
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Release\Auto Shipper.pdb
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Release\Auto Shipper.xml
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick Shipping.vbproj.ResolveComReference.cache
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Auto_Shipper.Settings.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Auto_Shipper.Form1.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Auto_Shipper.Resources.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick Shipping.vbproj.GenerateResource.Cache
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Auto Shipper.exe
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Auto Shipper.xml
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Auto Shipper.pdb

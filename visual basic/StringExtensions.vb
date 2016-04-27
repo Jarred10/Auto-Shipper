@@ -3,8 +3,8 @@
 Public Module StringExtensions
 
     <Extension()>
-    Public Function Contains(ByVal source As String, ByVal value As String, ByVal comparisonType As StringComparison) As Boolean
-        Return source.IndexOf(value, comparisonType) >= 0
+    Public Function ContainsIgnoreCase(ByVal source As String, ByVal value As String) As Boolean
+        Return source.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0
     End Function
 
 End Module

@@ -1,5 +1,0 @@
-name=Jarred
-folder=Shipping Docs
-deleteOnPrint=False
-ingoingPartsTerm=in: 
-outgoingPartsTerm=out: 

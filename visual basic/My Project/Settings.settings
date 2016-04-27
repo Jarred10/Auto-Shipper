@@ -17,6 +17,9 @@
     <Setting Name="ToSiteTimeKeyword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="OnsiteTimeKeyword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
     <Setting Name="AwaySiteTimeKeyword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

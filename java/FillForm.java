@@ -43,27 +43,17 @@ public class FillForm {
 
 			BufferedReader br = null;
 			String line = "";
-			
-			//reads in name of user from config text file
-			br = new BufferedReader(new FileReader("config.txt"));
-			while ((line = br.readLine()) != null) {
-
-				// use comma as separator
-				String[] lineSplit = line.split(":");
-				if (lineSplit[0].equalsIgnoreCase("name"))
-					name = lineSplit[1];
-
-			}
-			
-			br.close();
-			
+						
 			br = new BufferedReader(new FileReader("data.txt"));
+			name = br.readLine();
 			jobType = br.readLine();
 			jobNo = br.readLine();
 			inSerial = br.readLine();
 			outSerial = br.readLine();
 			site = br.readLine();
-			fault = br.readLine();
+			while((line = br.readLine()) != null){
+				fault += line;
+			}
 
 			br.close();
 			

@@ -1,19 +1,24 @@
-﻿Imports Auto_Shipper
+﻿Imports System.Text.RegularExpressions
+Imports Auto_Shipper
 Imports Microsoft.Office.Interop
 
 Public Class Form1
 
     'basic outlook objects
-    Dim olApp As Outlook.Application
-    Dim olNs As Outlook.NameSpace
+    Public olApp As Outlook.Application
+    Public olNs As Outlook.NameSpace
 
     'folder where shipping docs are held
-    Dim shipDocFolder As Outlook.MAPIFolder
+    Public shipDocFolder As Outlook.MAPIFolder
 
     'variables for searching outlook folders
-    Dim shipDocSearch As Outlook.Search
-    Dim sentItemsSearch As Outlook.Search
-    Dim calendarSearch As Outlook.Search
+    Public shipDocSearch As Outlook.Search
+    Public partsItemsSearch As Outlook.Search
+    Public shippedItemsSearch As Outlook.Search
+    Public calendarSearch As Outlook.Search
+
+    Dim sentItems As New List(Of Object)
+    Dim calendarItems As New List(Of Object)
 
     'objects used to store items while looping
     Dim shipDocItem As Object
@@ -23,49 +28,82 @@ Public Class Form1
     Dim calendarItem As Object
 
     'list of jobs that arent shipped
-    Dim unshippedJobs As New List(Of Item)
+    Dim unshippedJobs As New SortedSet(Of Item)
 
     'Regular expression to find SV numbers. Pattern = SV followed by 10 digits
-    Dim jobNumberRegex = New System.Text.RegularExpressions.Regex("SV\d{10}")
+    Dim jobNumberRegex As Regex = New Regex("SV\d{10}", RegexOptions.IgnoreCase)
 
     'finds unshipped jobs
     Private Sub jobButton_Click(sender As Object, e As EventArgs) Handles jobButton.Click
 
-        clear()
+        Dim activeBlackList = My.Settings.BlackList.Count > 0
+        Dim modifiedDate = DateTime.Now.AddDays(-7 * My.Settings.WeeksToCheck)
+
+        clearControls()
         unshippedJobsListBox.Items.Clear()
         unshippedJobs.Clear()
 
-        ' Loops through all sent mail in last three weeks that contain "SV"
-        For Each sentItem In sentItemsSearch.Results
-            Dim sentItemJobNo As String = findJobNumber(sentItem.Subject)
-            ' Checks if update was for a job that used parts, and not in the blacklist
-            If sentItem.Body.ToString.Contains(My.Settings.NewPartKeyword, StringComparison.OrdinalIgnoreCase) AndAlso sentItem.Body.ToString.Contains(My.Settings.FaultyPartKeyword, StringComparison.OrdinalIgnoreCase) Then
-                If Not unshippedJobs.Contains(New Item(sentItem, sentItemJobNo)) AndAlso Not My.Settings.BlackList.Contains(sentItemJobNo) Then
-                    ' Adds mail item to a list of unshipped jobs.
-                    unshippedJobs.Add(New Item(sentItem, sentItemJobNo))
-                End If
-                ' If update wasnt for job that used parts, checks if update was for shipping parts
-            ElseIf sentItem.Subject.ToString.Contains(My.Settings.ShippingKeyword, StringComparison.OrdinalIgnoreCase) Or sentItem.Body.ToString.Contains(My.Settings.ShippingKeyword, StringComparison.OrdinalIgnoreCase) Then
-                ' Removes shipped updates from list of unshipped updates by looping through all current unshipped jobs and comparing job number
-                For Each unshippedJob In unshippedJobs
-                    If sentItemJobNo.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) Then
-                        unshippedJobs.Remove(unshippedJob)
-                        Exit For
+        setName("Searching for jobs.")
+
+        partsItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
+        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' 
+        AND urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.NewPartKeyword + "%' 
+        AND urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.FaultyPartKeyword + "%' 
+        AND urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.OnsiteTimeKeyword + "%' 
+        AND urn:schemas:httpmail:datereceived >= '" + Format(modifiedDate, "Short Date") + "'", False)
+
+        shippedItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
+        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' 
+        AND (urn:schemas:httpmail:subject LIKE '%" + My.Settings.ShippingKeyword + "%' 
+        OR urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.ShippingKeyword + "%') 
+        AND urn:schemas:httpmail:datereceived >= '" + Format(modifiedDate, "Short Date") + "'", False)
+
+
+        partsItemsSearch.Results.Sort("[SentOn]")
+        shippedItemsSearch.Results.Sort("[SentOn]")
+
+        ' Loops through results of search for sent mail with SV in subject
+        For Each partItem In partsItemsSearch.Results
+            Dim jobNumberMatch As Match = findJobNumber(partItem.Subject)
+            If jobNumberMatch.Success Then
+                Dim job As Item = New Item(partItem, jobNumberMatch.Value)
+                If activeBlackList Then
+                    If Not My.Settings.BlackList.Contains(job.jobNumber) Then
+                        ' Adds mail item to a list of unshipped jobs.
+                        unshippedJobs.Add(job)
                     End If
-                Next
+                Else
+                    unshippedJobs.Add(job)
+                End If
             End If
         Next
+
+        setName("Removing shipped jobs.")
+
+        For Each shippedItem In shippedItemsSearch.Results
+            Dim jobNumberMatch As Match = findJobNumber(shippedItem.Subject)
+            If jobNumberMatch.Success Then
+                unshippedJobs.Remove(New Item(shippedItem, jobNumberMatch.Value))
+            End If
+        Next
+
+        setName("Parsing found jobs.")
+
+        calendarSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).FolderPath _
+        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' 
+        AND urn:schemas:calendar:dtstart >= '" + Format(modifiedDate, "Short Date") + "'", False)
+        calendarSearch.Results.Sort("[Start]")
 
         'Loops through all unshipped jobs, determining the customer of the job and sets variables based on customer
         For Each unshippedJob In unshippedJobs
             For Each calendarItem In calendarSearch.Results
-                If findJobNumber(calendarItem.Subject).ToString.Contains(unshippedJob.jobNumber, StringComparison.OrdinalIgnoreCase) Then
+                If calendarItem.Subject.ToString.ContainsIgnoreCase(unshippedJob.jobNumber) Then
                     unshippedJob.calendarSubject = calendarItem.Subject
                     unshippedJobsListBox.Items.Add(unshippedJob)
                     unshippedJobsListBox.Refresh()
                     Dim siteIndex As Integer
                     Dim secondIndex As Integer
-                    If calendarItem.Body.ToString.Contains("foodstuffs", StringComparison.OrdinalIgnoreCase) Then
+                    If calendarItem.Body.ToString.ContainsIgnoreCase("foodstuffs") Then
                         'Determines if job is for foodstuffs
                         siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
                         secondIndex = calendarItem.Body.IndexOf("contact name ::", StringComparison.OrdinalIgnoreCase)
@@ -75,7 +113,7 @@ Public Class Form1
                             unshippedJob.jobType = jobTypes.Foodstuffs
                         End If
 
-                    ElseIf calendarItem.Body.ToString.Contains("nzlotteries", StringComparison.OrdinalIgnoreCase) Then
+                    ElseIf calendarItem.Body.ToString.ContainsIgnoreCase("nzlotteries") Then
                         'Determines if job is for Lotto
                         siteIndex = calendarItem.Body.IndexOf("retailer name:", StringComparison.OrdinalIgnoreCase)
                         secondIndex = calendarItem.Body.IndexOf("address:", StringComparison.OrdinalIgnoreCase)
@@ -92,64 +130,96 @@ Public Class Form1
                 End If
             Next
         Next
+
+        setName("Job search complete.")
     End Sub
 
     'When user selects a job from the list, populate the text boxes with relevant information so they can edit or choose what to be added to form.
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles unshippedJobsListBox.SelectedIndexChanged
-        For Each unshippedJob In unshippedJobs
-            'if selected items job number matches a job number from list of unshipped jobs
-            If unshippedJob.jobNumber.Contains(unshippedJobsListBox.SelectedItem.jobNumber, StringComparison.OrdinalIgnoreCase) Then
-                'sets textboxes to already stored values
-                jobNumberTextBox.Text = unshippedJob.jobNumber
-                siteTextBox.Text = unshippedJob.site
-                jobTypeComboBox.Text = unshippedJob.jobType.ToString
-                faultTextBox.Clear()
+        If unshippedJobsListBox.SelectedIndex > -1 Then
+            For Each unshippedJob In unshippedJobs
+                'if selected items job number matches a job number from list of unshipped jobs
+                If unshippedJob.jobNumber.ContainsIgnoreCase(unshippedJobsListBox.SelectedItem.jobNumber) Then
+                    'sets textboxes to already stored values
+                    jobNumberTextBox.Text = unshippedJob.jobNumber
+                    siteTextBox.Text = unshippedJob.site
+                    jobTypeComboBox.Text = unshippedJob.jobType.ToString
+                    faultTextBox.Clear()
 
-                Dim index = 0
-                Dim contents() As String = Split(unshippedJob.item.Body, vbCrLf)
+                    Dim index = 0
+                    Dim contents() As String = unshippedJob.item.Body.Split(vbCrLf.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
 
-                For i = 0 To My.Settings.EmailLayout.Count - 1
-                    If My.Settings.EmailLayout(i) = "Times" Then
-                        While Not contents(index).Contains(My.Settings.AwaySiteTimeKeyword)
+                    For i = 0 To My.Settings.EmailLayout.Count - 1
+                        If index = contents.Length Then
+                            MsgBox("Unable to parse job. Could not find " + My.Settings.EmailLayout(i) + ".")
+                            Exit For
+                        End If
+                        If My.Settings.EmailLayout(i) = "Times" Then
+                            While Not contents(index).Contains(My.Settings.OnsiteTimeKeyword)
+                                index += 1
+                            End While
                             index += 1
-                        End While
-                        index += 1
-                    ElseIf My.Settings.EmailLayout(i) = "Parts" Then
-                        While Not contents(index).Contains(My.Settings.FaultyPartKeyword)
-                            If contents(index).Contains(My.Settings.NewPartKeyword) Then
-                                serialInTextBox.Text = contents(index).Substring(My.Settings.NewPartKeyword.Length).Trim()
+                            If index = contents.Length Then
+                                MsgBox("Unable to parse job. Could not find onsite time keyword: " + My.Settings.OnsiteTimeKeyword)
+                                Exit For
                             End If
-                            index += 1
-                        End While
-                        serialOutTextBox.Text = contents(index).Substring(My.Settings.FaultyPartKeyword.Length).Trim()
-                        index += 1
-                    ElseIf My.Settings.EmailLayout(i) = "Update" Then
-                        If i < 2 Then
+                            If contents(index).Contains(My.Settings.AwaySiteTimeKeyword) Then
+                                index += 1
+                            ElseIf contents(index + 1).Contains(My.Settings.AwaySiteTimeKeyword) Then
+                                index += 2
+                            End If
+                        ElseIf My.Settings.EmailLayout(i) = "Parts" Then
+                            While Not contents(index).Contains(My.Settings.FaultyPartKeyword)
+                                If contents(index).Contains(My.Settings.NewPartKeyword) Then
+                                    serialInTextBox.Text = contents(index).Substring(My.Settings.NewPartKeyword.Length).Trim()
+                                End If
+                                index += 1
+                                If index = contents.Length Then
+                                    MsgBox("Unable to parse job. Could not find faulty part keyword: " + My.Settings.FaultyPartKeyword)
+                                    Exit For
+                                End If
 
-                            If My.Settings.EmailLayout(i + 1) = "Parts" Then
-                                While Not contents(index).Contains(My.Settings.NewPartKeyword)
-                                    faultTextBox.Text += contents(index)
-                                    index += 1
-                                End While
-                            ElseIf My.Settings.EmailLayout(i + 1) = "Time" Then
-                                While Not contents(index).Contains(My.Settings.ToSiteTimeKeyword)
-                                    faultTextBox.Text += contents(index)
+                            End While
+                            serialOutTextBox.Text = contents(index).Substring(My.Settings.FaultyPartKeyword.Length).Trim()
+                            index += 1
+                        ElseIf My.Settings.EmailLayout(i) = "Update" Then
+                            'if the fault text is not at the end of the update
+                            If i < 2 Then
+                                'check what follows the fault text, if parts
+                                If My.Settings.EmailLayout(i + 1) = "Parts" Then
+                                    While Not contents(index).Contains(My.Settings.NewPartKeyword)
+                                        faultTextBox.Text += contents(index)
+                                        index += 1
+                                        If index = contents.Length Then
+                                            MsgBox("Unable to parse job. Could not find new part keyword: " + My.Settings.NewPartKeyword)
+                                            Exit For
+                                        End If
+                                    End While
+                                    'if times
+                                ElseIf My.Settings.EmailLayout(i + 1) = "Time" Then
+                                    While Not contents(index).Contains(My.Settings.OnsiteTimeKeyword) Or Not contents(index).Contains(My.Settings.ToSiteTimeKeyword)
+                                        faultTextBox.Text += contents(index) + Environment.NewLine
+                                        index += 1
+                                        If index = contents.Length Then
+                                            MsgBox("Unable to parse job. Could not find onsite time keyword: " + My.Settings.OnsiteTimeKeyword)
+                                            Exit For
+                                        End If
+                                    End While
+                                End If
+                            Else
+                                While index < contents.Length
+                                    faultTextBox.Text += contents(index) + Environment.NewLine
                                     index += 1
                                 End While
                             End If
                         Else
-                            While index < contents.Length
-                                faultTextBox.Text += contents(index)
-                                index += 1
-                            End While
+                            MsgBox("Invalid email layout settings.")
                         End If
-                    Else
-                        MsgBox("Invalid email layout settings.")
-                    End If
-                Next
-                Exit For
-            End If
-        Next
+                    Next
+                    Exit For
+                End If
+            Next
+        End If
     End Sub
 
     ' Searches for email with subject that contains the chosen job to ship. Searches all matching emails for one with attachments.
@@ -193,7 +263,6 @@ Public Class Form1
 
 
     Private Sub produceButton_Click(sender As Object, e As EventArgs) Handles produceButton.Click
-
         If IsNothing(unshippedJob) Then
             MsgBox("No job selected.")
 
@@ -205,6 +274,7 @@ Public Class Form1
 
             'Creates object to store data on job, which java will read to fill form.
             Dim objWriter As New System.IO.StreamWriter("data.txt")
+            objWriter.WriteLine(My.Settings.Name)
             objWriter.WriteLine(unshippedJob.jobType.ToString)
             objWriter.WriteLine(unshippedJob.jobNumber)
             objWriter.WriteLine(serialInTextBox.Text)
@@ -246,10 +316,10 @@ Public Class Form1
         If IsNothing(unshippedJob) Then
             MsgBox("No job selected.")
         Else
-            If unshippedJobsListBox.SelectedIndex <> -1 AndAlso Not My.Settings.BlackList.Contains(unshippedJobsListBox.SelectedItem.jobNumber) Then
-                My.Settings.BlackList.Add(unshippedJobsListBox.SelectedItem.jobNumber)
-                unshippedJobsListBox.Items.Remove(unshippedJobsListBox.SelectedItem)
-                clear()
+            If unshippedJobsListBox.SelectedIndex > -1 AndAlso Not My.Settings.BlackList.Contains(unshippedJob.jobNumber) Then
+                My.Settings.BlackList.Add(unshippedJob.jobNumber)
+                unshippedJobsListBox.Items.RemoveAt(unshippedJobsListBox.SelectedIndex)
+                clearControls()
                 My.Settings.Save()
             End If
         End If
@@ -259,105 +329,65 @@ Public Class Form1
     'Initialise all the needed outlook items when form is loaded.
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        setName("Loading form.")
+
         ' Start Outlook.
-        ' If it is already running, you'll use the same instance.
+        ' If it is already running, use the same instance.
         olApp = CreateObject("Outlook.Application")
 
         ' Logon. Doesn't hurt if you are already running and logged on.
         olNs = olApp.GetNamespace("MAPI")
         olNs.Logon()
 
-        If My.Settings.EmailLayout Is Nothing Then
-            My.Settings.EmailLayout = New System.Collections.Specialized.StringCollection
-        End If
-
-        If My.Settings.BlackList Is Nothing Then
-            My.Settings.BlackList = New System.Collections.Specialized.StringCollection
-        End If
-
+        'initializes both string collections in settings if they are not already
+        If My.Settings.EmailLayout Is Nothing Then My.Settings.EmailLayout = New Specialized.StringCollection
+        If My.Settings.BlackList Is Nothing Then My.Settings.BlackList = New Specialized.StringCollection
         My.Settings.Save()
-        checkSettings()
+
+        'when first opening form, checks settings are valid
+        checkSettings(False)
 
     End Sub
 
-    ' Function that returns the job number of an update if the argument contains it.
-    Public Function findJobNumber(jobName As String)
-        Dim jobNumberMatch = jobNumberRegex.Match(jobName.ToUpper)
-        If jobNumberMatch.Success Then Return jobName.Substring(jobNumberMatch.Index, 12).ToUpper
-        Return vbNullString
-    End Function
-
     ' Checks if all settings are present. If not, open settings menu.
-    Public Sub checkSettings()
-        If Not allSettingsFound() Then
-            SettingsToolStripMenuItem_Click(SettingsToolStripMenuItem, New EventArgs())
+    Public Sub checkSettings(incorrectSetting As Boolean)
+        If incorrectSetting Or Not allSettingsFound() Then
+            If Settings.ShowDialog() = DialogResult.OK Then
+                initializeSettings()
+                setName("Settings saved.")
+            Else
+                MsgBox("Application cannot function without settings. Please re-open and fill in settings page.")
+                Environment.Exit(0)
+            End If
         Else
             initializeSettings()
-            Text = "Quick Shipper - Settings found and loaded."
+            setName("Settings found and loaded.")
         End If
     End Sub
 
 
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
-        If Settings.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+        'opens the settings form. if form returns ok, settings were saved
+        If Settings.ShowDialog() = DialogResult.OK Then
             initializeSettings()
-            Text = "Quick Shipper - Settings saved."
+            setName("Settings saved.")
+        Else
+            setName("Settings not saved.")
         End If
     End Sub
 
     Public Sub initializeSettings()
-
-        ' Restrict to last three weeks.
-        sentItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
-        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:httpmail:datereceived >= '" + Format(DateAdd("d", -(7 * My.Settings.WeeksToCheck), Now), "Short Date") + "'", False)
-        calendarSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).FolderPath _
-        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' AND urn:schemas:calendar:dtstart >= '" + Format(DateAdd("d", -(7 * My.Settings.WeeksToCheck), Now), "Short Date") + "'", False)
-
-
-        ' Sort by oldest items first. This is to try and find the original update/appointment before finding replies/further appointments
-        sentItemsSearch.Results.Sort("[ReceivedTime]")
-        calendarSearch.Results.Sort("[Start]")
-
-        Dim objFolder = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox)
-        Dim folderExists As Boolean
-        If My.Settings.Folder = "Inbox" Then
-            shipDocFolder = objFolder
-        Else 'if key is some custom value and not inbox or empty
-            'loop through all subfolders of inbox, checking if any match the given value
-            For x = 1 To objFolder.Folders.Count
-                If objFolder.Folders.Item(x).Name = My.Settings.Folder Then
-                    folderExists = True
-                    shipDocFolder = objFolder.Folders(x)
-                    Exit For
-                End If
-            Next
-            'if we havent already found it, loops through all folders of the mailbox
-            If Not folderExists Then
-                objFolder = objFolder.Parent.Folder
-                For x = 1 To objFolder.Folders.Count
-                    If objFolder.Folders.Item(x).Name = My.Settings.Folder Then
-                        shipDocFolder = objFolder.Folders(x)
-                        Exit For
-                    End If
-                Next
-                MsgBox("Unable to find " + My.Settings.Folder + " in your outlook folders.")
-                Environment.Exit(0)
-            End If
-        End If
+        setName("Finding shipping documents folder.")
+        Try
+            shipDocFolder = olNs.GetFolderFromID(My.Settings.Folder)
+        Catch
+            MsgBox("Invalid folder selected. Please choose different folder.")
+            checkSettings(True)
+        End Try
     End Sub
 
-    Public Function allSettingsFound()
-        Return Not String.IsNullOrEmpty(My.Settings.Name) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.Folder) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) AndAlso
-            Not My.Settings.EmailLayout.Count = 0
-    End Function
-
-    Public Sub clear()
+    'clears all set variables and all controls on form
+    Public Sub clearControls()
         shipDocItem = Nothing
         sentItem = Nothing
         shippedJob = Nothing
@@ -371,4 +401,32 @@ Public Class Form1
         siteTextBox.Clear()
         faultTextBox.Clear()
     End Sub
+
+    'sets the name of form
+    Sub setName(value As String)
+        If String.IsNullOrEmpty(value) Then
+            Text = "Quick Shipper"
+        Else
+            Text = "Quick Shipper - " + value
+        End If
+    End Sub
+
+    'checks that all settings have a value
+    Public Function allSettingsFound()
+        Return Not String.IsNullOrEmpty(My.Settings.Name) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.Folder) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.OnsiteTimeKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) AndAlso
+            My.Settings.EmailLayout.Count = 3
+    End Function
+
+    ' Function that returns the job number of an update if the argument contains it.
+    Public Function findJobNumber(jobName As String)
+        Return jobNumberRegex.Match(jobName)
+    End Function
+
 End Class

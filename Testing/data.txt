@@ -1,6 +1,8 @@
-Lotto
-SV1604040006
-000195 + lotto tc psu
-000957 + lotto tc psu
-Challenge Putaruru
-Ticket checker not reading tickets. Replaced ticket checker and PSU and tested. All working. 
+Jarred
+Foodstuffs
+SV1604190058
+1x display port cable
+1x display port cable
+NW Hillcrest
+Cable head broken.
+
