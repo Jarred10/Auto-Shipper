@@ -51,6 +51,7 @@ Partial Class Settings
         Me.deleteBlacklistButton = New System.Windows.Forms.Button()
         Me.onsiteTextBox = New System.Windows.Forms.TextBox()
         Me.onsiteLabel = New System.Windows.Forms.Label()
+        Me.browseFolderButton = New System.Windows.Forms.Button()
         CType(Me.weeksNumericUpDown, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -58,7 +59,7 @@ Partial Class Settings
         '
         Me.folderLabel.AutoSize = True
         Me.folderLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.folderLabel.Location = New System.Drawing.Point(13, 62)
+        Me.folderLabel.Location = New System.Drawing.Point(300, 327)
         Me.folderLabel.Name = "folderLabel"
         Me.folderLabel.Size = New System.Drawing.Size(61, 20)
         Me.folderLabel.TabIndex = 1
@@ -68,7 +69,7 @@ Partial Class Settings
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(11, 553)
+        Me.Label5.Location = New System.Drawing.Point(10, 500)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(130, 20)
         Me.Label5.TabIndex = 2
@@ -78,7 +79,7 @@ Partial Class Settings
         '
         Me.newLabel.AutoSize = True
         Me.newLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.newLabel.Location = New System.Drawing.Point(13, 115)
+        Me.newLabel.Location = New System.Drawing.Point(12, 62)
         Me.newLabel.Name = "newLabel"
         Me.newLabel.Size = New System.Drawing.Size(161, 20)
         Me.newLabel.TabIndex = 3
@@ -88,7 +89,7 @@ Partial Class Settings
         '
         Me.faultyLabel.AutoSize = True
         Me.faultyLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.faultyLabel.Location = New System.Drawing.Point(13, 168)
+        Me.faultyLabel.Location = New System.Drawing.Point(12, 115)
         Me.faultyLabel.Name = "faultyLabel"
         Me.faultyLabel.Size = New System.Drawing.Size(173, 20)
         Me.faultyLabel.TabIndex = 4
@@ -97,9 +98,11 @@ Partial Class Settings
         'folderTextBox
         '
         Me.folderTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.folderTextBox.Enabled = False
         Me.folderTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.folderTextBox.Location = New System.Drawing.Point(17, 85)
+        Me.folderTextBox.Location = New System.Drawing.Point(304, 350)
         Me.folderTextBox.Name = "folderTextBox"
+        Me.folderTextBox.ReadOnly = True
         Me.folderTextBox.Size = New System.Drawing.Size(238, 27)
         Me.folderTextBox.TabIndex = 6
         '
@@ -107,7 +110,7 @@ Partial Class Settings
         '
         Me.newTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.newTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.newTextBox.Location = New System.Drawing.Point(17, 138)
+        Me.newTextBox.Location = New System.Drawing.Point(16, 85)
         Me.newTextBox.Name = "newTextBox"
         Me.newTextBox.Size = New System.Drawing.Size(239, 27)
         Me.newTextBox.TabIndex = 8
@@ -116,7 +119,7 @@ Partial Class Settings
         '
         Me.faultyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.faultyTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.faultyTextBox.Location = New System.Drawing.Point(17, 191)
+        Me.faultyTextBox.Location = New System.Drawing.Point(16, 138)
         Me.faultyTextBox.Name = "faultyTextBox"
         Me.faultyTextBox.Size = New System.Drawing.Size(239, 27)
         Me.faultyTextBox.TabIndex = 9
@@ -124,9 +127,9 @@ Partial Class Settings
         'saveSettingsButton
         '
         Me.saveSettingsButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.saveSettingsButton.Location = New System.Drawing.Point(15, 580)
+        Me.saveSettingsButton.Location = New System.Drawing.Point(14, 527)
         Me.saveSettingsButton.Name = "saveSettingsButton"
-        Me.saveSettingsButton.Size = New System.Drawing.Size(139, 40)
+        Me.saveSettingsButton.Size = New System.Drawing.Size(139, 32)
         Me.saveSettingsButton.TabIndex = 10
         Me.saveSettingsButton.Text = "Save Settings"
         Me.saveSettingsButton.UseVisualStyleBackColor = True
@@ -134,9 +137,9 @@ Partial Class Settings
         'resetButton
         '
         Me.resetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.resetButton.Location = New System.Drawing.Point(168, 580)
+        Me.resetButton.Location = New System.Drawing.Point(167, 527)
         Me.resetButton.Name = "resetButton"
-        Me.resetButton.Size = New System.Drawing.Size(75, 40)
+        Me.resetButton.Size = New System.Drawing.Size(75, 32)
         Me.resetButton.TabIndex = 11
         Me.resetButton.Text = "Reset"
         Me.resetButton.UseVisualStyleBackColor = True
@@ -144,7 +147,7 @@ Partial Class Settings
         'deleteCheckBox
         '
         Me.deleteCheckBox.AutoSize = True
-        Me.deleteCheckBox.Location = New System.Drawing.Point(148, 557)
+        Me.deleteCheckBox.Location = New System.Drawing.Point(147, 504)
         Me.deleteCheckBox.Name = "deleteCheckBox"
         Me.deleteCheckBox.Size = New System.Drawing.Size(18, 17)
         Me.deleteCheckBox.TabIndex = 12
@@ -174,7 +177,7 @@ Partial Class Settings
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(11, 436)
+        Me.Label7.Location = New System.Drawing.Point(10, 383)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(111, 20)
         Me.Label7.TabIndex = 14
@@ -183,7 +186,7 @@ Partial Class Settings
         'upButton
         '
         Me.upButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.upButton.Location = New System.Drawing.Point(129, 459)
+        Me.upButton.Location = New System.Drawing.Point(128, 406)
         Me.upButton.Name = "upButton"
         Me.upButton.Size = New System.Drawing.Size(72, 29)
         Me.upButton.TabIndex = 16
@@ -193,7 +196,7 @@ Partial Class Settings
         'downButton
         '
         Me.downButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.downButton.Location = New System.Drawing.Point(129, 494)
+        Me.downButton.Location = New System.Drawing.Point(128, 441)
         Me.downButton.Name = "downButton"
         Me.downButton.Size = New System.Drawing.Size(72, 29)
         Me.downButton.TabIndex = 17
@@ -205,7 +208,7 @@ Partial Class Settings
         Me.emailLayoutListBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.emailLayoutListBox.FormattingEnabled = True
         Me.emailLayoutListBox.ItemHeight = 20
-        Me.emailLayoutListBox.Location = New System.Drawing.Point(15, 459)
+        Me.emailLayoutListBox.Location = New System.Drawing.Point(14, 406)
         Me.emailLayoutListBox.Name = "emailLayoutListBox"
         Me.emailLayoutListBox.Size = New System.Drawing.Size(107, 64)
         Me.emailLayoutListBox.TabIndex = 18
@@ -214,7 +217,7 @@ Partial Class Settings
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(12, 529)
+        Me.Label6.Location = New System.Drawing.Point(11, 476)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(179, 20)
         Me.Label6.TabIndex = 20
@@ -222,7 +225,7 @@ Partial Class Settings
         '
         'weeksNumericUpDown
         '
-        Me.weeksNumericUpDown.Location = New System.Drawing.Point(197, 529)
+        Me.weeksNumericUpDown.Location = New System.Drawing.Point(196, 476)
         Me.weeksNumericUpDown.Name = "weeksNumericUpDown"
         Me.weeksNumericUpDown.Size = New System.Drawing.Size(46, 22)
         Me.weeksNumericUpDown.TabIndex = 21
@@ -232,7 +235,7 @@ Partial Class Settings
         '
         Me.toTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.toTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.toTextBox.Location = New System.Drawing.Point(17, 244)
+        Me.toTextBox.Location = New System.Drawing.Point(16, 191)
         Me.toTextBox.Name = "toTextBox"
         Me.toTextBox.Size = New System.Drawing.Size(239, 27)
         Me.toTextBox.TabIndex = 23
@@ -241,7 +244,7 @@ Partial Class Settings
         '
         Me.toLabel.AutoSize = True
         Me.toLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.toLabel.Location = New System.Drawing.Point(13, 221)
+        Me.toLabel.Location = New System.Drawing.Point(12, 168)
         Me.toLabel.Name = "toLabel"
         Me.toLabel.Size = New System.Drawing.Size(178, 20)
         Me.toLabel.TabIndex = 22
@@ -251,7 +254,7 @@ Partial Class Settings
         '
         Me.awayTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.awayTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.awayTextBox.Location = New System.Drawing.Point(16, 350)
+        Me.awayTextBox.Location = New System.Drawing.Point(15, 297)
         Me.awayTextBox.Name = "awayTextBox"
         Me.awayTextBox.Size = New System.Drawing.Size(239, 27)
         Me.awayTextBox.TabIndex = 25
@@ -260,7 +263,7 @@ Partial Class Settings
         '
         Me.awayLabel.AutoSize = True
         Me.awayLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.awayLabel.Location = New System.Drawing.Point(12, 327)
+        Me.awayLabel.Location = New System.Drawing.Point(11, 274)
         Me.awayLabel.Name = "awayLabel"
         Me.awayLabel.Size = New System.Drawing.Size(243, 20)
         Me.awayLabel.TabIndex = 24
@@ -270,7 +273,7 @@ Partial Class Settings
         '
         Me.shippingTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.shippingTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.shippingTextBox.Location = New System.Drawing.Point(16, 403)
+        Me.shippingTextBox.Location = New System.Drawing.Point(15, 350)
         Me.shippingTextBox.Name = "shippingTextBox"
         Me.shippingTextBox.Size = New System.Drawing.Size(239, 27)
         Me.shippingTextBox.TabIndex = 27
@@ -279,7 +282,7 @@ Partial Class Settings
         '
         Me.shippingLabel.AutoSize = True
         Me.shippingLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.shippingLabel.Location = New System.Drawing.Point(12, 380)
+        Me.shippingLabel.Location = New System.Drawing.Point(11, 327)
         Me.shippingLabel.Name = "shippingLabel"
         Me.shippingLabel.Size = New System.Drawing.Size(205, 20)
         Me.shippingLabel.TabIndex = 26
@@ -291,7 +294,7 @@ Partial Class Settings
         Me.blacklistListBox.ItemHeight = 16
         Me.blacklistListBox.Location = New System.Drawing.Point(304, 30)
         Me.blacklistListBox.Name = "blacklistListBox"
-        Me.blacklistListBox.Size = New System.Drawing.Size(362, 356)
+        Me.blacklistListBox.Size = New System.Drawing.Size(362, 244)
         Me.blacklistListBox.TabIndex = 28
         '
         'Label1
@@ -307,9 +310,9 @@ Partial Class Settings
         'deleteBlacklistButton
         '
         Me.deleteBlacklistButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.deleteBlacklistButton.Location = New System.Drawing.Point(378, 392)
+        Me.deleteBlacklistButton.Location = New System.Drawing.Point(304, 280)
         Me.deleteBlacklistButton.Name = "deleteBlacklistButton"
-        Me.deleteBlacklistButton.Size = New System.Drawing.Size(189, 40)
+        Me.deleteBlacklistButton.Size = New System.Drawing.Size(189, 33)
         Me.deleteBlacklistButton.TabIndex = 30
         Me.deleteBlacklistButton.Text = "Delete Blacklist Item"
         Me.deleteBlacklistButton.UseVisualStyleBackColor = True
@@ -318,7 +321,7 @@ Partial Class Settings
         '
         Me.onsiteTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.onsiteTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.onsiteTextBox.Location = New System.Drawing.Point(17, 297)
+        Me.onsiteTextBox.Location = New System.Drawing.Point(16, 244)
         Me.onsiteTextBox.Name = "onsiteTextBox"
         Me.onsiteTextBox.Size = New System.Drawing.Size(239, 27)
         Me.onsiteTextBox.TabIndex = 32
@@ -327,17 +330,28 @@ Partial Class Settings
         '
         Me.onsiteLabel.AutoSize = True
         Me.onsiteLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.onsiteLabel.Location = New System.Drawing.Point(13, 274)
+        Me.onsiteLabel.Location = New System.Drawing.Point(12, 221)
         Me.onsiteLabel.Name = "onsiteLabel"
         Me.onsiteLabel.Size = New System.Drawing.Size(174, 20)
         Me.onsiteLabel.TabIndex = 31
         Me.onsiteLabel.Text = "Onsite Time Keyword:"
         '
+        'browseFolderButton
+        '
+        Me.browseFolderButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.browseFolderButton.Location = New System.Drawing.Point(559, 347)
+        Me.browseFolderButton.Name = "browseFolderButton"
+        Me.browseFolderButton.Size = New System.Drawing.Size(94, 31)
+        Me.browseFolderButton.TabIndex = 33
+        Me.browseFolderButton.Text = "Browse..."
+        Me.browseFolderButton.UseVisualStyleBackColor = True
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(678, 630)
+        Me.ClientSize = New System.Drawing.Size(678, 580)
+        Me.Controls.Add(Me.browseFolderButton)
         Me.Controls.Add(Me.onsiteTextBox)
         Me.Controls.Add(Me.onsiteLabel)
         Me.Controls.Add(Me.deleteBlacklistButton)
@@ -403,4 +417,5 @@ Partial Class Settings
     Friend WithEvents deleteBlacklistButton As Button
     Friend WithEvents onsiteTextBox As TextBox
     Friend WithEvents onsiteLabel As Label
+    Friend WithEvents browseFolderButton As Button
 End Class

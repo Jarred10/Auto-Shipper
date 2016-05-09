@@ -136,6 +136,7 @@ Public Class Form1
 
     'When user selects a job from the list, populate the text boxes with relevant information so they can edit or choose what to be added to form.
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles unshippedJobsListBox.SelectedIndexChanged
+        clearControls()
         If unshippedJobsListBox.SelectedIndex > -1 Then
             For Each unshippedJob In unshippedJobs
                 'if selected items job number matches a job number from list of unshipped jobs
@@ -230,7 +231,8 @@ Public Class Form1
             unshippedJob.shipDocFound = False
 
             'Performs outlook seearch for emails in the shipping document folder with the job number in the subject line
-            shipDocSearch = olApp.AdvancedSearch("'" + shipDocFolder.FolderPath + "'", "urn:schemas:httpmail:subject LIKE '%" + unshippedJob.jobNumber + "%'")
+            shipDocSearch = olApp.AdvancedSearch("'" + shipDocFolder.FolderPath + "'", "urn:schemas:httpmail:subject LIKE '%" + unshippedJob.jobNumber + "%'
+            AND urn:schemas:httpmail:hasattachment = True")
 
             'If the results of the search turn up nothing, throw error
             If shipDocSearch.Results.Count = 0 Then

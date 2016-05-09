@@ -4,6 +4,7 @@ Public Class Settings
 
     'Color to make textbox background and label colours when invalid input
     Dim errorColor As Color = Color.FromArgb(112, 44, 43)
+    Dim folderID As String
 
     'List of tuples to match textboxes with their labels, for colouring purposes
     Dim tuples As New List(Of Tuple(Of TextBox, Label))
@@ -29,6 +30,7 @@ Public Class Settings
         'if all fields are completed
         If Not missingField Then
             My.Settings.Name = nameTextBox.Text
+            My.Settings.Folder = folderID
             My.Settings.DeleteOnPrint = deleteCheckBox.Checked
             My.Settings.NewPartKeyword = newTextBox.Text
             My.Settings.FaultyPartKeyword = faultyTextBox.Text
@@ -83,7 +85,10 @@ Public Class Settings
         }
 
         If Not String.IsNullOrEmpty(My.Settings.Name) Then nameTextBox.Text = My.Settings.Name
-        If Not String.IsNullOrEmpty(My.Settings.Folder) Then folderTextBox.Text = Form1.olNs.GetFolderFromID(My.Settings.Folder).Name
+        If Not String.IsNullOrEmpty(My.Settings.Folder) Then
+            folderID = My.Settings.Folder
+            folderTextBox.Text = Form1.olNs.GetFolderFromID(folderID).Name
+        End If
         If Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) Then newTextBox.Text = My.Settings.NewPartKeyword
         If Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Then faultyTextBox.Text = My.Settings.FaultyPartKeyword
         If Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) Then toTextBox.Text = My.Settings.ToSiteTimeKeyword
@@ -179,9 +184,9 @@ Public Class Settings
         End If
     End Sub
 
-    Private Sub folderTextBox_Click(sender As Object, e As EventArgs) Handles folderTextBox.Click
-        Dim folder = Form1.olNs.PickFolder()
+    Private Sub browseFolderButton_Click(sender As Object, e As EventArgs) Handles browseFolderButton.Click
+        Dim folder As Outlook.MAPIFolder = Form1.olNs.PickFolder()
         folderTextBox.Text = folder.Name
-        My.Settings.Folder = folder.EntryID
+        folderID = folder.EntryID
     End Sub
 End Class
