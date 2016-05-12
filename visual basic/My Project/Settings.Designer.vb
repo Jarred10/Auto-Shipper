@@ -117,6 +117,18 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property OnsiteTimeKeyword() As String
+            Get
+                Return CType(Me("OnsiteTimeKeyword"),String)
+            End Get
+            Set
+                Me("OnsiteTimeKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property AwaySiteTimeKeyword() As String
             Get
                 Return CType(Me("AwaySiteTimeKeyword"),String)
@@ -183,18 +195,6 @@ Namespace My
                 Me("BlackList") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property OnsiteTimeKeyword() As String
-            Get
-                Return CType(Me("OnsiteTimeKeyword"),String)
-            End Get
-            Set
-                Me("OnsiteTimeKeyword") = value
-            End Set
-        End Property
     End Class
 End Namespace
 
@@ -206,9 +206,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Auto_Shipper.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Quick_Shipping.My.MySettings
             Get
-                Return Global.Auto_Shipper.My.MySettings.Default
+                Return Global.Quick_Shipping.My.MySettings.Default
             End Get
         End Property
     End Module

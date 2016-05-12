@@ -1,12 +1,14 @@
-﻿Public Class Item
+﻿Imports Microsoft.Office.Interop
+
+Public Class Item
     Implements IComparable
 
     'unique identifier, the number for the job
     Public Property jobNumber As String
     'the outlook object that stores all data about the email
-    Public Property item As Object
-    'the subject line of the calendar appointment for the job. used to display job
-    Public Property calendarSubject As String
+    Public Property item As Outlook.MailItem
+    'the outlook object that stores all data about the calendar appointment
+    Public WithEvents appointment As Outlook.AppointmentItem
     'the location the job took place
     Public Property site As String
     'enum of job type, either foodstuffs, lotto or other
@@ -38,7 +40,12 @@
     End Function
 
     Public Overrides Function ToString() As String
-        If Not String.IsNullOrEmpty(calendarSubject) Then Return calendarSubject
+        If Not String.IsNullOrEmpty(appointment.Subject) Then Return appointment.Subject
         Return jobNumber
     End Function
+
+    Private Sub appointment_close(Cancel As Boolean)
+
+        MsgBox(" The item was saved.")
+    End Sub
 End Class
