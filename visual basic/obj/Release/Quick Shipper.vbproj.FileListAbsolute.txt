@@ -10,3 +10,4 @@ C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick_Shipping.C
 C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick_Shipping.main.resources
 C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick_Shipping.Resources.resources
 C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick Shipper.vbproj.GenerateResource.Cache
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Release\Quick Shipper.vbprojResolveAssemblyReference.cache

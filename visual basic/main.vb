@@ -205,7 +205,7 @@ Public Class main
                                         End If
                                     End While
                                     'if times
-                                ElseIf My.Settings.EmailLayout(i + 1) = "Time" Then
+                                ElseIf My.Settings.EmailLayout(i + 1) = "Times" Then
                                     While Not contents(index).Contains(My.Settings.OnsiteTimeKeyword) Or Not contents(index).Contains(My.Settings.ToSiteTimeKeyword)
                                         faultTextBox.Text += contents(index) + Environment.NewLine
                                         index += 1
@@ -404,9 +404,9 @@ Public Class main
     'sets the name of form
     Sub setName(value As String)
         If String.IsNullOrEmpty(value) Then
-            Text = "Quick Shipper"
+            Text = "OneShipper"
         Else
-            Text = "Quick Shipper - " + value
+            Text = "OneShipper - " + value
         End If
     End Sub
 

@@ -88,7 +88,7 @@ Partial Class Configuration
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(317, 493)
+        Me.Label5.Location = New System.Drawing.Point(317, 494)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(130, 20)
         Me.Label5.TabIndex = 2
@@ -122,7 +122,8 @@ Partial Class Configuration
         Me.folderTextBox.Name = "folderTextBox"
         Me.folderTextBox.ReadOnly = True
         Me.folderTextBox.Size = New System.Drawing.Size(240, 27)
-        Me.folderTextBox.TabIndex = 6
+        Me.folderTextBox.TabIndex = 15
+        Me.folderTextBox.TabStop = False
         '
         'newTextBox
         '
@@ -145,9 +146,9 @@ Partial Class Configuration
         'saveSettingsButton
         '
         Me.saveSettingsButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.saveSettingsButton.Location = New System.Drawing.Point(159, 527)
+        Me.saveSettingsButton.Location = New System.Drawing.Point(100, 527)
         Me.saveSettingsButton.Name = "saveSettingsButton"
-        Me.saveSettingsButton.Size = New System.Drawing.Size(139, 32)
+        Me.saveSettingsButton.Size = New System.Drawing.Size(156, 32)
         Me.saveSettingsButton.TabIndex = 15
         Me.saveSettingsButton.Text = "Save Settings"
         Me.saveSettingsButton.UseVisualStyleBackColor = True
@@ -155,7 +156,7 @@ Partial Class Configuration
         'clearButton
         '
         Me.clearButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.clearButton.Location = New System.Drawing.Point(321, 527)
+        Me.clearButton.Location = New System.Drawing.Point(319, 527)
         Me.clearButton.Name = "clearButton"
         Me.clearButton.Size = New System.Drawing.Size(75, 32)
         Me.clearButton.TabIndex = 16
@@ -196,7 +197,7 @@ Partial Class Configuration
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(315, 350)
+        Me.Label7.Location = New System.Drawing.Point(317, 327)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(111, 20)
         Me.Label7.TabIndex = 14
@@ -205,7 +206,7 @@ Partial Class Configuration
         'upButton
         '
         Me.upButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.upButton.Location = New System.Drawing.Point(432, 371)
+        Me.upButton.Location = New System.Drawing.Point(432, 353)
         Me.upButton.Name = "upButton"
         Me.upButton.Size = New System.Drawing.Size(72, 29)
         Me.upButton.TabIndex = 11
@@ -215,7 +216,7 @@ Partial Class Configuration
         'downButton
         '
         Me.downButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.downButton.Location = New System.Drawing.Point(432, 408)
+        Me.downButton.Location = New System.Drawing.Point(432, 388)
         Me.downButton.Name = "downButton"
         Me.downButton.Size = New System.Drawing.Size(72, 29)
         Me.downButton.TabIndex = 12
@@ -227,16 +228,16 @@ Partial Class Configuration
         Me.emailLayoutListBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.emailLayoutListBox.FormattingEnabled = True
         Me.emailLayoutListBox.ItemHeight = 20
-        Me.emailLayoutListBox.Location = New System.Drawing.Point(319, 373)
+        Me.emailLayoutListBox.Location = New System.Drawing.Point(321, 353)
         Me.emailLayoutListBox.Name = "emailLayoutListBox"
-        Me.emailLayoutListBox.Size = New System.Drawing.Size(107, 84)
+        Me.emailLayoutListBox.Size = New System.Drawing.Size(107, 24)
         Me.emailLayoutListBox.TabIndex = 10
         '
         'Label6
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(315, 462)
+        Me.Label6.Location = New System.Drawing.Point(317, 460)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(179, 20)
         Me.Label6.TabIndex = 20
@@ -314,7 +315,7 @@ Partial Class Configuration
         Me.blacklistListBox.ItemHeight = 16
         Me.blacklistListBox.Location = New System.Drawing.Point(319, 30)
         Me.blacklistListBox.Name = "blacklistListBox"
-        Me.blacklistListBox.Size = New System.Drawing.Size(347, 308)
+        Me.blacklistListBox.Size = New System.Drawing.Size(347, 292)
         Me.blacklistListBox.TabIndex = 28
         Me.blacklistListBox.TabStop = False
         '
@@ -350,7 +351,7 @@ Partial Class Configuration
         'browseFolderButton
         '
         Me.browseFolderButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.browseFolderButton.Location = New System.Drawing.Point(98, 436)
+        Me.browseFolderButton.Location = New System.Drawing.Point(100, 436)
         Me.browseFolderButton.Name = "browseFolderButton"
         Me.browseFolderButton.Size = New System.Drawing.Size(156, 31)
         Me.browseFolderButton.TabIndex = 8
@@ -359,7 +360,7 @@ Partial Class Configuration
         '
         'nameError
         '
-        Me.nameError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.nameError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.nameError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.nameError.Location = New System.Drawing.Point(262, 32)
         Me.nameError.Name = "nameError"
@@ -370,7 +371,7 @@ Partial Class Configuration
         '
         'newPartError
         '
-        Me.newPartError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.newPartError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.newPartError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.newPartError.Location = New System.Drawing.Point(262, 85)
         Me.newPartError.Name = "newPartError"
@@ -381,7 +382,7 @@ Partial Class Configuration
         '
         'faultyPartError
         '
-        Me.faultyPartError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.faultyPartError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.faultyPartError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.faultyPartError.Location = New System.Drawing.Point(262, 138)
         Me.faultyPartError.Name = "faultyPartError"
@@ -392,7 +393,7 @@ Partial Class Configuration
         '
         'toSiteError
         '
-        Me.toSiteError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.toSiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.toSiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.toSiteError.Location = New System.Drawing.Point(262, 191)
         Me.toSiteError.Name = "toSiteError"
@@ -403,7 +404,7 @@ Partial Class Configuration
         '
         'onsiteError
         '
-        Me.onsiteError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.onsiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.onsiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.onsiteError.Location = New System.Drawing.Point(262, 244)
         Me.onsiteError.Name = "onsiteError"
@@ -414,7 +415,7 @@ Partial Class Configuration
         '
         'awaySiteError
         '
-        Me.awaySiteError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.awaySiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.awaySiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.awaySiteError.Location = New System.Drawing.Point(262, 297)
         Me.awaySiteError.Name = "awaySiteError"
@@ -425,7 +426,7 @@ Partial Class Configuration
         '
         'shippingError
         '
-        Me.shippingError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.shippingError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.shippingError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.shippingError.Location = New System.Drawing.Point(262, 350)
         Me.shippingError.Name = "shippingError"
@@ -449,7 +450,7 @@ Partial Class Configuration
         '
         'folderError
         '
-        Me.folderError.BackgroundImage = Global.Quick_Shipping.My.Resources.Resources._error
+        Me.folderError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.folderError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.folderError.Location = New System.Drawing.Point(262, 403)
         Me.folderError.Name = "folderError"

@@ -1,0 +1,13 @@
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.vbproj.ResolveComReference.cache
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Testing\OneShipper.exe.config
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.vbprojResolveAssemblyReference.cache
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.Configuration.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.main.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.Resources.resources
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.vbproj.GenerateResource.Cache
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.xml
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Testing\OneShipper.exe
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Testing\OneShipper.pdb
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\bin\Testing\OneShipper.xml
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.exe
+C:\Users\Jarred\Desktop\Quick Shipping\visual basic\obj\Debug\OneShipper.pdb

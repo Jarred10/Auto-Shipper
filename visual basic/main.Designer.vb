@@ -46,7 +46,6 @@ Partial Class main
         Me.itemsContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddToBlacklistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenUpdateEmailToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OpenShippingDocumentEmailToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenCalendarAppointmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.itemsContextMenu.SuspendLayout()
@@ -259,32 +258,26 @@ Partial Class main
         'itemsContextMenu
         '
         Me.itemsContextMenu.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.itemsContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddToBlacklistToolStripMenuItem, Me.OpenUpdateEmailToolStripMenuItem, Me.OpenShippingDocumentEmailToolStripMenuItem, Me.OpenCalendarAppointmentToolStripMenuItem})
+        Me.itemsContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddToBlacklistToolStripMenuItem, Me.OpenUpdateEmailToolStripMenuItem, Me.OpenCalendarAppointmentToolStripMenuItem})
         Me.itemsContextMenu.Name = "ContextMenuStrip1"
-        Me.itemsContextMenu.Size = New System.Drawing.Size(298, 108)
+        Me.itemsContextMenu.Size = New System.Drawing.Size(276, 110)
         '
         'AddToBlacklistToolStripMenuItem
         '
         Me.AddToBlacklistToolStripMenuItem.Name = "AddToBlacklistToolStripMenuItem"
-        Me.AddToBlacklistToolStripMenuItem.Size = New System.Drawing.Size(297, 26)
+        Me.AddToBlacklistToolStripMenuItem.Size = New System.Drawing.Size(275, 26)
         Me.AddToBlacklistToolStripMenuItem.Text = "Add To Blacklist"
         '
         'OpenUpdateEmailToolStripMenuItem
         '
         Me.OpenUpdateEmailToolStripMenuItem.Name = "OpenUpdateEmailToolStripMenuItem"
-        Me.OpenUpdateEmailToolStripMenuItem.Size = New System.Drawing.Size(297, 26)
+        Me.OpenUpdateEmailToolStripMenuItem.Size = New System.Drawing.Size(275, 26)
         Me.OpenUpdateEmailToolStripMenuItem.Text = "Open Update Email"
-        '
-        'OpenShippingDocumentEmailToolStripMenuItem
-        '
-        Me.OpenShippingDocumentEmailToolStripMenuItem.Name = "OpenShippingDocumentEmailToolStripMenuItem"
-        Me.OpenShippingDocumentEmailToolStripMenuItem.Size = New System.Drawing.Size(297, 26)
-        Me.OpenShippingDocumentEmailToolStripMenuItem.Text = "Open Shipping Document Email"
         '
         'OpenCalendarAppointmentToolStripMenuItem
         '
         Me.OpenCalendarAppointmentToolStripMenuItem.Name = "OpenCalendarAppointmentToolStripMenuItem"
-        Me.OpenCalendarAppointmentToolStripMenuItem.Size = New System.Drawing.Size(297, 26)
+        Me.OpenCalendarAppointmentToolStripMenuItem.Size = New System.Drawing.Size(275, 26)
         Me.OpenCalendarAppointmentToolStripMenuItem.Text = "Open Calendar Appointment"
         '
         'main
@@ -347,6 +340,5 @@ Partial Class main
     Friend WithEvents itemsContextMenu As ContextMenuStrip
     Friend WithEvents AddToBlacklistToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenUpdateEmailToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents OpenShippingDocumentEmailToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenCalendarAppointmentToolStripMenuItem As ToolStripMenuItem
 End Class

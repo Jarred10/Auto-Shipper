@@ -51,6 +51,8 @@ Public Class Configuration
 
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        emailLayoutListBox.AutoSize = True
+
         tuples = New List(Of Tuple(Of TextBox, PictureBox)) From
         {
             Tuple.Create(nameTextBox, nameError),
