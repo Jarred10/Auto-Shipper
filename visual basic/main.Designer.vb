@@ -260,7 +260,7 @@ Partial Class main
         Me.itemsContextMenu.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.itemsContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddToBlacklistToolStripMenuItem, Me.OpenUpdateEmailToolStripMenuItem, Me.OpenCalendarAppointmentToolStripMenuItem})
         Me.itemsContextMenu.Name = "ContextMenuStrip1"
-        Me.itemsContextMenu.Size = New System.Drawing.Size(276, 110)
+        Me.itemsContextMenu.Size = New System.Drawing.Size(276, 82)
         '
         'AddToBlacklistToolStripMenuItem
         '
@@ -308,7 +308,7 @@ Partial Class main
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "main"
-        Me.Text = "Quick Shipping"
+        Me.Text = "OneShipper"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.itemsContextMenu.ResumeLayout(False)

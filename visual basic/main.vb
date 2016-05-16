@@ -11,17 +11,7 @@ Public Class main
     'folder where shipping docs are held
     Public shipDocFolder As Outlook.MAPIFolder
 
-    'variables for searching outlook folders
-    Public shipDocSearch As Outlook.Search
-    Public partsItemsSearch As Outlook.Search
-    Public shippedItemsSearch As Outlook.Search
-    Public calendarSearch As Outlook.Search
-
-    Dim sentItems As New List(Of Object)
-    Dim calendarItems As New List(Of Object)
-
     'objects used to store items while looping
-    Dim shipDocItem As Object
     Dim sentItem As Object
     Dim shippedJob As Object
     Dim selectedJob As Item
@@ -43,23 +33,23 @@ Public Class main
         unshippedJobsListBox.Items.Clear()
         unshippedJobs.Clear()
 
-        setName("Searching for jobs.")
+        setStatus("Searching for jobs.")
 
-        partsItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
-        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' 
-        AND urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.NewPartKeyword + "%' 
-        AND urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.FaultyPartKeyword + "%' 
-        AND urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.OnsiteTimeKeyword + "%' 
-        AND urn:schemas:httpmail:datereceived >= '" + Format(modifiedDate, "Short Date") + "'", False)
+        Dim partsItemsSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).Items
+        partsItemsSearch = partsItemsSearch.Restrict("[SentOn] >= '" + modifiedDate.ToShortDateString + "'")
+        partsItemsSearch = partsItemsSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%' AND " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.NewPartKeyword + "%' AND " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.FaultyPartKeyword + "%' AND " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.OnsiteTimeKeyword + "%'")
 
-        shippedItemsSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).FolderPath _
-        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' 
-        AND (urn:schemas:httpmail:subject LIKE '%" + My.Settings.ShippingKeyword + "%' 
-        OR urn:schemas:httpmail:textdescription LIKE '%" + My.Settings.ShippingKeyword + "%') 
-        AND urn:schemas:httpmail:datereceived >= '" + Format(modifiedDate, "Short Date") + "'", False)
+        partsItemsSearch.Sort("[SentOn]")
 
-        partsItemsSearch.Results.Sort("[SentOn]")
-        shippedItemsSearch.Results.Sort("[SentOn]")
+        Dim shippedItemsSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).Items
+        shippedItemsSearch = shippedItemsSearch.Restrict("[SentOn] >= '" + modifiedDate.ToShortDateString + "'")
+
+        shippedItemsSearch = shippedItemsSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%' AND (" _
+            + quote("urn:schemas:httpmail:subject") + " LIKE '%" + My.Settings.ShippingKeyword + "%' OR " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.ShippingKeyword + "%')")
 
         Dim checkNewPart = ContainsNonAlphaChars(My.Settings.NewPartKeyword)
         Dim checkFaultyPart = ContainsNonAlphaChars(My.Settings.FaultyPartKeyword)
@@ -67,7 +57,7 @@ Public Class main
         Dim checkShipping = ContainsNonAlphaChars(My.Settings.ShippingKeyword)
 
         ' Loops through results of search for sent mail with SV in subject
-        For Each partItem As Outlook.MailItem In partsItemsSearch.Results
+        For Each partItem As Outlook.MailItem In partsItemsSearch
             Dim jobNumberMatch As Match = findJobNumber(partItem.Subject)
             If jobNumberMatch.Success Then
                 If Not checkNewPart Or (checkNewPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.NewPartKeyword)) Then
@@ -84,9 +74,9 @@ Public Class main
             End If
         Next
 
-        setName("Removing shipped jobs.")
+        setStatus("Removing shipped jobs.")
 
-        For Each shippedItem As Outlook.MailItem In shippedItemsSearch.Results
+        For Each shippedItem As Outlook.MailItem In shippedItemsSearch
             Dim jobNumberMatch As Match = findJobNumber(shippedItem.Subject)
             If jobNumberMatch.Success Then
                 If Not checkShipping Or (checkShipping AndAlso (shippedItem.Subject.ContainsIgnoreCase(My.Settings.ShippingKeyword) Or shippedItem.Body.ToString.ContainsIgnoreCase(My.Settings.ShippingKeyword))) Then
@@ -95,16 +85,16 @@ Public Class main
             End If
         Next
 
-        setName("Parsing found jobs.")
+        setStatus("Parsing found jobs.")
 
-        calendarSearch = olApp.AdvancedSearch("'" + olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).FolderPath _
-        + "'", "urn:schemas:httpmail:subject LIKE '%SV%' 
-        AND urn:schemas:calendar:dtstart >= '" + Format(modifiedDate, "Short Date") + "'", False)
-        calendarSearch.Results.Sort("[Start]")
+        Dim calendarSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).Items
+        calendarSearch = calendarSearch.Restrict("[Start] >= '" + modifiedDate.ToShortDateString + "'")
+        calendarSearch = calendarSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%'")
+        calendarSearch.Sort("[Start]")
 
         'Loops through all unshipped jobs, determining the customer of the job and sets variables based on customer
         For Each unshippedJob As Item In unshippedJobs
-            For Each calendarItem As Outlook.AppointmentItem In calendarSearch.Results
+            For Each calendarItem As Outlook.AppointmentItem In calendarSearch
                 If calendarItem.Subject.ToString.ContainsIgnoreCase(unshippedJob.jobNumber) Then
                     unshippedJob.appointment = calendarItem
                     unshippedJobsListBox.Items.Add(unshippedJob)
@@ -139,7 +129,7 @@ Public Class main
             Next
         Next
 
-        setName("Job search complete.")
+        setStatus("Job search complete.")
     End Sub
 
     'When user selects a job from the list, populate the text boxes with relevant information so they can edit or choose what to be added to form.
@@ -238,17 +228,18 @@ Public Class main
         Else
             selectedJob.shipDocFound = False
 
-            'Performs outlook seearch for emails in the shipping document folder with the job number in the subject line
-            shipDocSearch = olApp.AdvancedSearch("'" + shipDocFolder.FolderPath + "'", "urn:schemas:httpmail:subject LIKE '%" + selectedJob.jobNumber + "%'
-            AND urn:schemas:httpmail:hasattachment = True")
+            Dim shipDocSearch = shipDocFolder.Items
+            shipDocSearch = shipDocSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%" + selectedJob.jobNumber + "%'")
+            shipDocSearch = shipDocSearch.Restrict("[Attachment] > 0")
 
             'If the results of the search turn up nothing, throw error
-            If shipDocSearch.Results.Count = 0 Then
+            If shipDocSearch.Count = 0 Then
                 MsgBox("No shipping document email found for selected job in folder: " + shipDocFolder.Name + ".")
             Else
+                Dim shipDocItem As Outlook.MailItem
                 'Loop through all results
-                For i = 1 To shipDocSearch.Results.Count
-                    shipDocItem = shipDocSearch.Results.Item(i)
+                For i = 1 To shipDocSearch.Count
+                    shipDocItem = shipDocSearch.Item(i)
                     'Checks if email has any attachments, and either the subject or body of email contain ship doc in some form
                     If shipDocItem.Attachments.Count > 0 AndAlso (LCase(shipDocItem.Subject) Like "*ship*doc*" Or LCase(shipDocItem.Body) Like "*ship*doc*") Then
                         'Loops through all attachments, in most cases this will be only one file
@@ -325,7 +316,7 @@ Public Class main
     'Initialise all the needed outlook items when form is loaded.
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        setName("Loading form.")
+        setStatus("Loading form.")
 
         ' Start Outlook.
         ' If it is already running, use the same instance.
@@ -353,14 +344,14 @@ Public Class main
         If incorrectSetting Or Not allSettingsFound() Then
             If Configuration.ShowDialog() = DialogResult.OK Then
                 initializeSettings()
-                setName("Settings saved.")
+                setStatus("Settings saved.")
             Else
                 MsgBox("Application cannot function without settings. Please re-open and fill in settings page.")
                 Environment.Exit(0)
             End If
         Else
             initializeSettings()
-            setName("Settings found and loaded.")
+            setStatus("Settings found and loaded.")
         End If
     End Sub
 
@@ -369,14 +360,14 @@ Public Class main
         'opens the settings form. if form returns ok, settings were saved
         If Configuration.ShowDialog() = DialogResult.OK Then
             initializeSettings()
-            setName("Settings saved.")
+            setStatus("Settings saved.")
         Else
-            setName("Settings not saved.")
+            setStatus("Settings not saved.")
         End If
     End Sub
 
     Public Sub initializeSettings()
-        setName("Finding shipping documents folder.")
+        setStatus("Finding shipping documents folder.")
         Try
             shipDocFolder = olNs.GetFolderFromID(My.Settings.Folder)
         Catch
@@ -402,7 +393,7 @@ Public Class main
     End Sub
 
     'sets the name of form
-    Sub setName(value As String)
+    Sub setStatus(value As String)
         If String.IsNullOrEmpty(value) Then
             Text = "OneShipper"
         Else
@@ -447,6 +438,10 @@ Public Class main
         Return False
     End Function
 
+    Function quote(toQuote As String)
+        Return Chr(34) + toQuote + Chr(34)
+    End Function
+
     Private Sub AddToBlacklistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddToBlacklistToolStripMenuItem.Click
         If IsNothing(selectedJob) Then
             MsgBox("No job selected.")
@@ -483,4 +478,6 @@ Public Class main
     Private Sub main_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         olApp.Quit()
     End Sub
+
+
 End Class
