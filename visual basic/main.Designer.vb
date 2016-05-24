@@ -47,6 +47,8 @@ Partial Class main
         Me.AddToBlacklistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenUpdateEmailToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenCalendarAppointmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AttachShipDocToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.fd = New System.Windows.Forms.OpenFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.itemsContextMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -57,14 +59,13 @@ Partial Class main
         Me.getDocButton.Location = New System.Drawing.Point(195, 331)
         Me.getDocButton.Margin = New System.Windows.Forms.Padding(4)
         Me.getDocButton.Name = "getDocButton"
-        Me.getDocButton.Size = New System.Drawing.Size(199, 38)
+        Me.getDocButton.Size = New System.Drawing.Size(134, 38)
         Me.getDocButton.TabIndex = 19
-        Me.getDocButton.Text = "Get Shipping Document"
+        Me.getDocButton.Text = "Find Ship Doc"
         Me.getDocButton.UseVisualStyleBackColor = True
         '
         'unshippedJobsListBox
         '
-        Me.unshippedJobsListBox.DisplayMember = "calendarSubject"
         Me.unshippedJobsListBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.HorizontalScrollbar = True
@@ -179,7 +180,7 @@ Partial Class main
         'produceButton
         '
         Me.produceButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.produceButton.Location = New System.Drawing.Point(402, 331)
+        Me.produceButton.Location = New System.Drawing.Point(337, 331)
         Me.produceButton.Margin = New System.Windows.Forms.Padding(4)
         Me.produceButton.Name = "produceButton"
         Me.produceButton.Size = New System.Drawing.Size(120, 38)
@@ -190,7 +191,7 @@ Partial Class main
         'printButton
         '
         Me.printButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.printButton.Location = New System.Drawing.Point(530, 331)
+        Me.printButton.Location = New System.Drawing.Point(465, 331)
         Me.printButton.Margin = New System.Windows.Forms.Padding(4)
         Me.printButton.Name = "printButton"
         Me.printButton.Size = New System.Drawing.Size(106, 38)
@@ -241,13 +242,15 @@ Partial Class main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(137, 26)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'jobTypeComboBox
         '
+        Me.jobTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.jobTypeComboBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.jobTypeComboBox.FormattingEnabled = True
+        Me.jobTypeComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.jobTypeComboBox.Items.AddRange(New Object() {"Foodstuffs", "Lotto", "Other"})
         Me.jobTypeComboBox.Location = New System.Drawing.Point(419, 405)
         Me.jobTypeComboBox.Margin = New System.Windows.Forms.Padding(4)
@@ -258,9 +261,9 @@ Partial Class main
         'itemsContextMenu
         '
         Me.itemsContextMenu.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.itemsContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddToBlacklistToolStripMenuItem, Me.OpenUpdateEmailToolStripMenuItem, Me.OpenCalendarAppointmentToolStripMenuItem})
+        Me.itemsContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddToBlacklistToolStripMenuItem, Me.OpenUpdateEmailToolStripMenuItem, Me.OpenCalendarAppointmentToolStripMenuItem, Me.AttachShipDocToolStripMenuItem})
         Me.itemsContextMenu.Name = "ContextMenuStrip1"
-        Me.itemsContextMenu.Size = New System.Drawing.Size(276, 82)
+        Me.itemsContextMenu.Size = New System.Drawing.Size(276, 108)
         '
         'AddToBlacklistToolStripMenuItem
         '
@@ -279,6 +282,12 @@ Partial Class main
         Me.OpenCalendarAppointmentToolStripMenuItem.Name = "OpenCalendarAppointmentToolStripMenuItem"
         Me.OpenCalendarAppointmentToolStripMenuItem.Size = New System.Drawing.Size(275, 26)
         Me.OpenCalendarAppointmentToolStripMenuItem.Text = "Open Calendar Appointment"
+        '
+        'AttachShipDocToolStripMenuItem
+        '
+        Me.AttachShipDocToolStripMenuItem.Name = "AttachShipDocToolStripMenuItem"
+        Me.AttachShipDocToolStripMenuItem.Size = New System.Drawing.Size(275, 26)
+        Me.AttachShipDocToolStripMenuItem.Text = "Attach Ship Doc"
         '
         'main
         '
@@ -341,4 +350,6 @@ Partial Class main
     Friend WithEvents AddToBlacklistToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenUpdateEmailToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenCalendarAppointmentToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AttachShipDocToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents fd As OpenFileDialog
 End Class

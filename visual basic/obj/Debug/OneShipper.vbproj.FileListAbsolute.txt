@@ -11,3 +11,7 @@ C:\Users\Jarred\Desktop\OneShipper\visual basic\obj\Debug\OneShipper.Configurati
 C:\Users\Jarred\Desktop\OneShipper\visual basic\obj\Debug\OneShipper.main.resources
 C:\Users\Jarred\Desktop\OneShipper\visual basic\obj\Debug\OneShipper.Resources.resources
 C:\Users\Jarred\Desktop\OneShipper\visual basic\obj\Debug\OneShipper.vbproj.GenerateResource.Cache
+C:\Users\Jarred\Desktop\OneShipper\Testing\OneShipper.exe.config
+C:\Users\Jarred\Desktop\OneShipper\Testing\OneShipper.exe
+C:\Users\Jarred\Desktop\OneShipper\Testing\OneShipper.pdb
+C:\Users\Jarred\Desktop\OneShipper\Testing\OneShipper.xml

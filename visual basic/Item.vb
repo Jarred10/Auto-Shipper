@@ -41,6 +41,7 @@ Public Class Item
 
     Public Overrides Function ToString() As String
         If Not String.IsNullOrEmpty(appointment.Subject) Then Return appointment.Subject
+        If Not String.IsNullOrEmpty(item.Subject) Then Return item.Subject
         Return jobNumber
     End Function
 

@@ -241,7 +241,7 @@ Public Class main
                 For i = 1 To shipDocSearch.Count
                     shipDocItem = shipDocSearch.Item(i)
                     'Checks if email has any attachments, and either the subject or body of email contain ship doc in some form
-                    If shipDocItem.Attachments.Count > 0 AndAlso (LCase(shipDocItem.Subject) Like "*ship*doc*" Or LCase(shipDocItem.Body) Like "*ship*doc*") Then
+                    If shipDocItem.Attachments.Count > 0 AndAlso (LCase(shipDocItem.Subject) Like "*ship*doc*" Or LCase(shipDocItem.Body) Like "*ship*doc*" Or LCase(shipDocItem.Subject) Like "*ship*list*" Or LCase(shipDocItem.Body) Like "*ship*list*") Then
                         'Loops through all attachments, in most cases this will be only one file
                         For a = 1 To shipDocItem.Attachments.Count
                             'Checks if the name of attachment indicates that it is a shipping document
@@ -274,15 +274,16 @@ Public Class main
         Else
 
             'Creates object to store data on job, which java will read to fill form.
-            Dim objWriter As New System.IO.StreamWriter("data.txt")
-            objWriter.WriteLine(My.Settings.Name)
-            objWriter.WriteLine(selectedJob.jobType.ToString)
-            objWriter.WriteLine(selectedJob.jobNumber)
-            objWriter.WriteLine(serialInTextBox.Text)
-            objWriter.WriteLine(serialOutTextBox.Text)
-            objWriter.WriteLine(selectedJob.site)
-            objWriter.WriteLine(faultTextBox.Text)
-            objWriter.Close()
+            Dim writer As New IO.StreamWriter("data.txt")
+            writer.WriteLine(My.Settings.Name)
+            writer.WriteLine(jobTypeComboBox.Text)
+            writer.WriteLine(jobNumberTextBox.Text)
+            writer.WriteLine(serialInTextBox.Text)
+            writer.WriteLine(serialOutTextBox.Text)
+            writer.WriteLine(siteTextBox.Text)
+            writer.WriteLine(faultTextBox.Text)
+            writer.Flush()
+            writer.Close()
 
             'Code to execute the java, which fills the form
             Process.Start("cmd", "/C java -jar fillForm.jar")
@@ -324,7 +325,12 @@ Public Class main
 
         ' Logon. Doesn't hurt if you are already running and logged on.
         olNs = olApp.GetNamespace("MAPI")
-        olNs.Logon()
+        Try
+            olNs.Logon()
+        Catch
+            MsgBox("Unable to open an outlook window.")
+            Environment.Exit(0)
+        End Try
 
         ' Keeps a reference to an explorer window. Outlook closes if there are 0 open windows detected, so this will keep outlook open after user closes any windows.
         olExplorer = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox).GetExplorer()
@@ -378,7 +384,6 @@ Public Class main
 
     'clears all set variables and all controls on form
     Public Sub clearControls()
-        shipDocItem = Nothing
         sentItem = Nothing
         shippedJob = Nothing
         selectedJob = Nothing
@@ -479,5 +484,14 @@ Public Class main
         olApp.Quit()
     End Sub
 
-
+    Private Sub AttachShipDocToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AttachShipDocToolStripMenuItem.Click
+        fd.InitialDirectory = IO.Directory.GetParent(Application.ExecutablePath).FullName
+        fd.Filter = "PDF files (*.pdf)|*.pdf"
+        If fd.ShowDialog() = DialogResult.OK Then
+            My.Computer.FileSystem.CopyFile(fd.FileName, IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"), True)
+            selectedJob.shipDocFound = True
+        Else
+            MsgBox("Unable to copy selected Ship Doc.")
+        End If
+    End Sub
 End Class
