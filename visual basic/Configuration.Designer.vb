@@ -28,17 +28,13 @@ Partial Class Configuration
         Me.newLabel = New System.Windows.Forms.Label()
         Me.faultyLabel = New System.Windows.Forms.Label()
         Me.folderTextBox = New System.Windows.Forms.TextBox()
-        Me.newTextBox = New System.Windows.Forms.TextBox()
-        Me.faultyTextBox = New System.Windows.Forms.TextBox()
+        Me.installedSerialTextBox = New System.Windows.Forms.TextBox()
+        Me.installedAssetTextBox = New System.Windows.Forms.TextBox()
         Me.saveSettingsButton = New System.Windows.Forms.Button()
         Me.clearButton = New System.Windows.Forms.Button()
         Me.deleteCheckBox = New System.Windows.Forms.CheckBox()
         Me.nameTextBox = New System.Windows.Forms.TextBox()
         Me.nameLabel = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.upButton = New System.Windows.Forms.Button()
-        Me.downButton = New System.Windows.Forms.Button()
-        Me.emailLayoutListBox = New System.Windows.Forms.ListBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.weeksNumericUpDown = New System.Windows.Forms.NumericUpDown()
         Me.toTextBox = New System.Windows.Forms.TextBox()
@@ -53,8 +49,8 @@ Partial Class Configuration
         Me.onsiteLabel = New System.Windows.Forms.Label()
         Me.browseFolderButton = New System.Windows.Forms.Button()
         Me.nameError = New System.Windows.Forms.PictureBox()
-        Me.newPartError = New System.Windows.Forms.PictureBox()
-        Me.faultyPartError = New System.Windows.Forms.PictureBox()
+        Me.installedSerialError = New System.Windows.Forms.PictureBox()
+        Me.installedAssetError = New System.Windows.Forms.PictureBox()
         Me.toSiteError = New System.Windows.Forms.PictureBox()
         Me.onsiteError = New System.Windows.Forms.PictureBox()
         Me.awaySiteError = New System.Windows.Forms.PictureBox()
@@ -62,23 +58,39 @@ Partial Class Configuration
         Me.blackListContextMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.DeleteBlacklistedItemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.folderError = New System.Windows.Forms.PictureBox()
+        Me.faultySerialError = New System.Windows.Forms.PictureBox()
+        Me.faultySerialTextBox = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.faultyAssetError = New System.Windows.Forms.PictureBox()
+        Me.faultyAssetTextBox = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.offsiteError = New System.Windows.Forms.PictureBox()
+        Me.offsiteTextBox = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.faultError = New System.Windows.Forms.PictureBox()
+        Me.faultTextBox = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
         CType(Me.weeksNumericUpDown, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nameError, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.newPartError, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.faultyPartError, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.installedSerialError, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.installedAssetError, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.toSiteError, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.onsiteError, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.awaySiteError, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.shippingError, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.blackListContextMenuStrip.SuspendLayout()
         CType(Me.folderError, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.faultySerialError, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.faultyAssetError, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.offsiteError, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.faultError, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'folderLabel
         '
         Me.folderLabel.AutoSize = True
         Me.folderLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.folderLabel.Location = New System.Drawing.Point(13, 380)
+        Me.folderLabel.Location = New System.Drawing.Point(318, 398)
         Me.folderLabel.Name = "folderLabel"
         Me.folderLabel.Size = New System.Drawing.Size(221, 20)
         Me.folderLabel.TabIndex = 1
@@ -88,7 +100,7 @@ Partial Class Configuration
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(317, 494)
+        Me.Label5.Location = New System.Drawing.Point(317, 364)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(130, 20)
         Me.Label5.TabIndex = 2
@@ -100,9 +112,9 @@ Partial Class Configuration
         Me.newLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.newLabel.Location = New System.Drawing.Point(12, 62)
         Me.newLabel.Name = "newLabel"
-        Me.newLabel.Size = New System.Drawing.Size(161, 20)
+        Me.newLabel.Size = New System.Drawing.Size(257, 20)
         Me.newLabel.TabIndex = 3
-        Me.newLabel.Text = "New Parts Keyword:"
+        Me.newLabel.Text = "Installed Serial Number Keyword:"
         '
         'faultyLabel
         '
@@ -110,43 +122,43 @@ Partial Class Configuration
         Me.faultyLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.faultyLabel.Location = New System.Drawing.Point(12, 115)
         Me.faultyLabel.Name = "faultyLabel"
-        Me.faultyLabel.Size = New System.Drawing.Size(173, 20)
+        Me.faultyLabel.Size = New System.Drawing.Size(226, 20)
         Me.faultyLabel.TabIndex = 4
-        Me.faultyLabel.Text = "Faulty Parts Keyword:"
+        Me.faultyLabel.Text = "Installed Asset Tag Keyword:"
         '
         'folderTextBox
         '
         Me.folderTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.folderTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.folderTextBox.Location = New System.Drawing.Point(16, 403)
+        Me.folderTextBox.Location = New System.Drawing.Point(321, 421)
         Me.folderTextBox.Name = "folderTextBox"
         Me.folderTextBox.ReadOnly = True
         Me.folderTextBox.Size = New System.Drawing.Size(240, 27)
         Me.folderTextBox.TabIndex = 15
         Me.folderTextBox.TabStop = False
         '
-        'newTextBox
+        'installedSerialTextBox
         '
-        Me.newTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.newTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.newTextBox.Location = New System.Drawing.Point(16, 85)
-        Me.newTextBox.Name = "newTextBox"
-        Me.newTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.newTextBox.TabIndex = 2
+        Me.installedSerialTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.installedSerialTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.installedSerialTextBox.Location = New System.Drawing.Point(16, 85)
+        Me.installedSerialTextBox.Name = "installedSerialTextBox"
+        Me.installedSerialTextBox.Size = New System.Drawing.Size(239, 27)
+        Me.installedSerialTextBox.TabIndex = 2
         '
-        'faultyTextBox
+        'installedAssetTextBox
         '
-        Me.faultyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.faultyTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.faultyTextBox.Location = New System.Drawing.Point(16, 138)
-        Me.faultyTextBox.Name = "faultyTextBox"
-        Me.faultyTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.faultyTextBox.TabIndex = 3
+        Me.installedAssetTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.installedAssetTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.installedAssetTextBox.Location = New System.Drawing.Point(16, 138)
+        Me.installedAssetTextBox.Name = "installedAssetTextBox"
+        Me.installedAssetTextBox.Size = New System.Drawing.Size(239, 27)
+        Me.installedAssetTextBox.TabIndex = 3
         '
         'saveSettingsButton
         '
         Me.saveSettingsButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.saveSettingsButton.Location = New System.Drawing.Point(100, 527)
+        Me.saveSettingsButton.Location = New System.Drawing.Point(102, 683)
         Me.saveSettingsButton.Name = "saveSettingsButton"
         Me.saveSettingsButton.Size = New System.Drawing.Size(156, 32)
         Me.saveSettingsButton.TabIndex = 15
@@ -156,7 +168,7 @@ Partial Class Configuration
         'clearButton
         '
         Me.clearButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.clearButton.Location = New System.Drawing.Point(319, 527)
+        Me.clearButton.Location = New System.Drawing.Point(319, 683)
         Me.clearButton.Name = "clearButton"
         Me.clearButton.Size = New System.Drawing.Size(75, 32)
         Me.clearButton.TabIndex = 16
@@ -167,7 +179,7 @@ Partial Class Configuration
         '
         Me.deleteCheckBox.AutoSize = True
         Me.deleteCheckBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.deleteCheckBox.Location = New System.Drawing.Point(453, 497)
+        Me.deleteCheckBox.Location = New System.Drawing.Point(453, 367)
         Me.deleteCheckBox.Name = "deleteCheckBox"
         Me.deleteCheckBox.Size = New System.Drawing.Size(18, 17)
         Me.deleteCheckBox.TabIndex = 14
@@ -193,51 +205,11 @@ Partial Class Configuration
         Me.nameLabel.TabIndex = 0
         Me.nameLabel.Text = "Name:"
         '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(317, 327)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(111, 20)
-        Me.Label7.TabIndex = 14
-        Me.Label7.Text = "Email Layout:"
-        '
-        'upButton
-        '
-        Me.upButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.upButton.Location = New System.Drawing.Point(432, 353)
-        Me.upButton.Name = "upButton"
-        Me.upButton.Size = New System.Drawing.Size(72, 29)
-        Me.upButton.TabIndex = 11
-        Me.upButton.Text = "Up"
-        Me.upButton.UseVisualStyleBackColor = True
-        '
-        'downButton
-        '
-        Me.downButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.downButton.Location = New System.Drawing.Point(432, 388)
-        Me.downButton.Name = "downButton"
-        Me.downButton.Size = New System.Drawing.Size(72, 29)
-        Me.downButton.TabIndex = 12
-        Me.downButton.Text = "Down"
-        Me.downButton.UseVisualStyleBackColor = True
-        '
-        'emailLayoutListBox
-        '
-        Me.emailLayoutListBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.emailLayoutListBox.FormattingEnabled = True
-        Me.emailLayoutListBox.ItemHeight = 20
-        Me.emailLayoutListBox.Location = New System.Drawing.Point(321, 353)
-        Me.emailLayoutListBox.Name = "emailLayoutListBox"
-        Me.emailLayoutListBox.Size = New System.Drawing.Size(107, 24)
-        Me.emailLayoutListBox.TabIndex = 10
-        '
         'Label6
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(317, 460)
+        Me.Label6.Location = New System.Drawing.Point(317, 330)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(179, 20)
         Me.Label6.TabIndex = 20
@@ -246,7 +218,7 @@ Partial Class Configuration
         'weeksNumericUpDown
         '
         Me.weeksNumericUpDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.weeksNumericUpDown.Location = New System.Drawing.Point(500, 458)
+        Me.weeksNumericUpDown.Location = New System.Drawing.Point(500, 328)
         Me.weeksNumericUpDown.Name = "weeksNumericUpDown"
         Me.weeksNumericUpDown.Size = New System.Drawing.Size(53, 27)
         Me.weeksNumericUpDown.TabIndex = 13
@@ -256,7 +228,7 @@ Partial Class Configuration
         '
         Me.toTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.toTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.toTextBox.Location = New System.Drawing.Point(16, 191)
+        Me.toTextBox.Location = New System.Drawing.Point(17, 305)
         Me.toTextBox.Name = "toTextBox"
         Me.toTextBox.Size = New System.Drawing.Size(239, 27)
         Me.toTextBox.TabIndex = 4
@@ -265,17 +237,17 @@ Partial Class Configuration
         '
         Me.toLabel.AutoSize = True
         Me.toLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.toLabel.Location = New System.Drawing.Point(12, 168)
+        Me.toLabel.Location = New System.Drawing.Point(13, 282)
         Me.toLabel.Name = "toLabel"
-        Me.toLabel.Size = New System.Drawing.Size(178, 20)
+        Me.toLabel.Size = New System.Drawing.Size(187, 20)
         Me.toLabel.TabIndex = 22
-        Me.toLabel.Text = "To Site Time Keyword:"
+        Me.toLabel.Text = "Travel To Site Keyword:"
         '
         'awayTextBox
         '
         Me.awayTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.awayTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.awayTextBox.Location = New System.Drawing.Point(15, 297)
+        Me.awayTextBox.Location = New System.Drawing.Point(19, 463)
         Me.awayTextBox.Name = "awayTextBox"
         Me.awayTextBox.Size = New System.Drawing.Size(239, 27)
         Me.awayTextBox.TabIndex = 6
@@ -284,17 +256,17 @@ Partial Class Configuration
         '
         Me.awayLabel.AutoSize = True
         Me.awayLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.awayLabel.Location = New System.Drawing.Point(11, 274)
+        Me.awayLabel.Location = New System.Drawing.Point(15, 440)
         Me.awayLabel.Name = "awayLabel"
-        Me.awayLabel.Size = New System.Drawing.Size(243, 20)
+        Me.awayLabel.Size = New System.Drawing.Size(252, 20)
         Me.awayLabel.TabIndex = 24
-        Me.awayLabel.Text = "Away From Site Time Keyword:"
+        Me.awayLabel.Text = "Travel Away From Site Keyword:"
         '
         'shippingTextBox
         '
         Me.shippingTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.shippingTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.shippingTextBox.Location = New System.Drawing.Point(15, 350)
+        Me.shippingTextBox.Location = New System.Drawing.Point(19, 569)
         Me.shippingTextBox.Name = "shippingTextBox"
         Me.shippingTextBox.Size = New System.Drawing.Size(239, 27)
         Me.shippingTextBox.TabIndex = 7
@@ -303,7 +275,7 @@ Partial Class Configuration
         '
         Me.shippingLabel.AutoSize = True
         Me.shippingLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.shippingLabel.Location = New System.Drawing.Point(11, 327)
+        Me.shippingLabel.Location = New System.Drawing.Point(15, 546)
         Me.shippingLabel.Name = "shippingLabel"
         Me.shippingLabel.Size = New System.Drawing.Size(205, 20)
         Me.shippingLabel.TabIndex = 26
@@ -333,7 +305,7 @@ Partial Class Configuration
         '
         Me.onsiteTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.onsiteTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.onsiteTextBox.Location = New System.Drawing.Point(16, 244)
+        Me.onsiteTextBox.Location = New System.Drawing.Point(19, 357)
         Me.onsiteTextBox.Name = "onsiteTextBox"
         Me.onsiteTextBox.Size = New System.Drawing.Size(239, 27)
         Me.onsiteTextBox.TabIndex = 5
@@ -342,7 +314,7 @@ Partial Class Configuration
         '
         Me.onsiteLabel.AutoSize = True
         Me.onsiteLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.onsiteLabel.Location = New System.Drawing.Point(12, 221)
+        Me.onsiteLabel.Location = New System.Drawing.Point(15, 334)
         Me.onsiteLabel.Name = "onsiteLabel"
         Me.onsiteLabel.Size = New System.Drawing.Size(174, 20)
         Me.onsiteLabel.TabIndex = 31
@@ -351,7 +323,7 @@ Partial Class Configuration
         'browseFolderButton
         '
         Me.browseFolderButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.browseFolderButton.Location = New System.Drawing.Point(100, 436)
+        Me.browseFolderButton.Location = New System.Drawing.Point(104, 602)
         Me.browseFolderButton.Name = "browseFolderButton"
         Me.browseFolderButton.Size = New System.Drawing.Size(156, 31)
         Me.browseFolderButton.TabIndex = 8
@@ -369,33 +341,33 @@ Partial Class Configuration
         Me.nameError.TabStop = False
         Me.nameError.Visible = False
         '
-        'newPartError
+        'installedSerialError
         '
-        Me.newPartError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
-        Me.newPartError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.newPartError.Location = New System.Drawing.Point(262, 85)
-        Me.newPartError.Name = "newPartError"
-        Me.newPartError.Size = New System.Drawing.Size(36, 27)
-        Me.newPartError.TabIndex = 35
-        Me.newPartError.TabStop = False
-        Me.newPartError.Visible = False
+        Me.installedSerialError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
+        Me.installedSerialError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.installedSerialError.Location = New System.Drawing.Point(262, 85)
+        Me.installedSerialError.Name = "installedSerialError"
+        Me.installedSerialError.Size = New System.Drawing.Size(36, 27)
+        Me.installedSerialError.TabIndex = 35
+        Me.installedSerialError.TabStop = False
+        Me.installedSerialError.Visible = False
         '
-        'faultyPartError
+        'installedAssetError
         '
-        Me.faultyPartError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
-        Me.faultyPartError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.faultyPartError.Location = New System.Drawing.Point(262, 138)
-        Me.faultyPartError.Name = "faultyPartError"
-        Me.faultyPartError.Size = New System.Drawing.Size(36, 27)
-        Me.faultyPartError.TabIndex = 36
-        Me.faultyPartError.TabStop = False
-        Me.faultyPartError.Visible = False
+        Me.installedAssetError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
+        Me.installedAssetError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.installedAssetError.Location = New System.Drawing.Point(262, 138)
+        Me.installedAssetError.Name = "installedAssetError"
+        Me.installedAssetError.Size = New System.Drawing.Size(36, 27)
+        Me.installedAssetError.TabIndex = 36
+        Me.installedAssetError.TabStop = False
+        Me.installedAssetError.Visible = False
         '
         'toSiteError
         '
         Me.toSiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.toSiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.toSiteError.Location = New System.Drawing.Point(262, 191)
+        Me.toSiteError.Location = New System.Drawing.Point(263, 305)
         Me.toSiteError.Name = "toSiteError"
         Me.toSiteError.Size = New System.Drawing.Size(36, 27)
         Me.toSiteError.TabIndex = 37
@@ -406,7 +378,7 @@ Partial Class Configuration
         '
         Me.onsiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.onsiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.onsiteError.Location = New System.Drawing.Point(262, 244)
+        Me.onsiteError.Location = New System.Drawing.Point(265, 357)
         Me.onsiteError.Name = "onsiteError"
         Me.onsiteError.Size = New System.Drawing.Size(36, 27)
         Me.onsiteError.TabIndex = 38
@@ -417,7 +389,7 @@ Partial Class Configuration
         '
         Me.awaySiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.awaySiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.awaySiteError.Location = New System.Drawing.Point(262, 297)
+        Me.awaySiteError.Location = New System.Drawing.Point(266, 463)
         Me.awaySiteError.Name = "awaySiteError"
         Me.awaySiteError.Size = New System.Drawing.Size(36, 27)
         Me.awaySiteError.TabIndex = 39
@@ -428,7 +400,7 @@ Partial Class Configuration
         '
         Me.shippingError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.shippingError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.shippingError.Location = New System.Drawing.Point(262, 350)
+        Me.shippingError.Location = New System.Drawing.Point(266, 569)
         Me.shippingError.Name = "shippingError"
         Me.shippingError.Size = New System.Drawing.Size(36, 27)
         Me.shippingError.TabIndex = 40
@@ -452,25 +424,157 @@ Partial Class Configuration
         '
         Me.folderError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
         Me.folderError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.folderError.Location = New System.Drawing.Point(262, 403)
+        Me.folderError.Location = New System.Drawing.Point(567, 421)
         Me.folderError.Name = "folderError"
         Me.folderError.Size = New System.Drawing.Size(36, 27)
         Me.folderError.TabIndex = 41
         Me.folderError.TabStop = False
         Me.folderError.Visible = False
         '
+        'faultySerialError
+        '
+        Me.faultySerialError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
+        Me.faultySerialError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.faultySerialError.Location = New System.Drawing.Point(262, 193)
+        Me.faultySerialError.Name = "faultySerialError"
+        Me.faultySerialError.Size = New System.Drawing.Size(36, 27)
+        Me.faultySerialError.TabIndex = 44
+        Me.faultySerialError.TabStop = False
+        Me.faultySerialError.Visible = False
+        '
+        'faultySerialTextBox
+        '
+        Me.faultySerialTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.faultySerialTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultySerialTextBox.Location = New System.Drawing.Point(16, 193)
+        Me.faultySerialTextBox.Name = "faultySerialTextBox"
+        Me.faultySerialTextBox.Size = New System.Drawing.Size(239, 27)
+        Me.faultySerialTextBox.TabIndex = 42
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(12, 170)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(235, 20)
+        Me.Label2.TabIndex = 43
+        Me.Label2.Text = "Fauly Serial Number Keyword:"
+        '
+        'faultyAssetError
+        '
+        Me.faultyAssetError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
+        Me.faultyAssetError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.faultyAssetError.Location = New System.Drawing.Point(262, 247)
+        Me.faultyAssetError.Name = "faultyAssetError"
+        Me.faultyAssetError.Size = New System.Drawing.Size(36, 27)
+        Me.faultyAssetError.TabIndex = 47
+        Me.faultyAssetError.TabStop = False
+        Me.faultyAssetError.Visible = False
+        '
+        'faultyAssetTextBox
+        '
+        Me.faultyAssetTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.faultyAssetTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultyAssetTextBox.Location = New System.Drawing.Point(16, 247)
+        Me.faultyAssetTextBox.Name = "faultyAssetTextBox"
+        Me.faultyAssetTextBox.Size = New System.Drawing.Size(239, 27)
+        Me.faultyAssetTextBox.TabIndex = 45
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(12, 224)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(206, 20)
+        Me.Label3.TabIndex = 46
+        Me.Label3.Text = "Faulty Asset Tag Ketword:"
+        '
+        'offsiteError
+        '
+        Me.offsiteError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
+        Me.offsiteError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.offsiteError.Location = New System.Drawing.Point(265, 409)
+        Me.offsiteError.Name = "offsiteError"
+        Me.offsiteError.Size = New System.Drawing.Size(36, 27)
+        Me.offsiteError.TabIndex = 50
+        Me.offsiteError.TabStop = False
+        Me.offsiteError.Visible = False
+        '
+        'offsiteTextBox
+        '
+        Me.offsiteTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.offsiteTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.offsiteTextBox.Location = New System.Drawing.Point(19, 409)
+        Me.offsiteTextBox.Name = "offsiteTextBox"
+        Me.offsiteTextBox.Size = New System.Drawing.Size(239, 27)
+        Me.offsiteTextBox.TabIndex = 48
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(15, 386)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(175, 20)
+        Me.Label4.TabIndex = 49
+        Me.Label4.Text = "Offsite Time Keyword:"
+        '
+        'faultError
+        '
+        Me.faultError.BackgroundImage = Global.OneShipper.My.Resources.Resources._error
+        Me.faultError.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.faultError.Location = New System.Drawing.Point(268, 516)
+        Me.faultError.Name = "faultError"
+        Me.faultError.Size = New System.Drawing.Size(36, 27)
+        Me.faultError.TabIndex = 53
+        Me.faultError.TabStop = False
+        Me.faultError.Visible = False
+        '
+        'faultTextBox
+        '
+        Me.faultTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.faultTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultTextBox.Location = New System.Drawing.Point(21, 516)
+        Me.faultTextBox.Name = "faultTextBox"
+        Me.faultTextBox.Size = New System.Drawing.Size(239, 27)
+        Me.faultTextBox.TabIndex = 51
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(17, 493)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(211, 20)
+        Me.Label7.TabIndex = 52
+        Me.Label7.Text = "Fault Description Keyword:"
+        '
         'Configuration
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(678, 580)
+        Me.ClientSize = New System.Drawing.Size(678, 735)
+        Me.Controls.Add(Me.faultError)
+        Me.Controls.Add(Me.faultTextBox)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.offsiteError)
+        Me.Controls.Add(Me.offsiteTextBox)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.faultyAssetError)
+        Me.Controls.Add(Me.faultyAssetTextBox)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.faultySerialError)
+        Me.Controls.Add(Me.faultySerialTextBox)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.folderError)
         Me.Controls.Add(Me.shippingError)
         Me.Controls.Add(Me.awaySiteError)
         Me.Controls.Add(Me.onsiteError)
         Me.Controls.Add(Me.toSiteError)
-        Me.Controls.Add(Me.faultyPartError)
-        Me.Controls.Add(Me.newPartError)
+        Me.Controls.Add(Me.installedAssetError)
+        Me.Controls.Add(Me.installedSerialError)
         Me.Controls.Add(Me.nameError)
         Me.Controls.Add(Me.browseFolderButton)
         Me.Controls.Add(Me.onsiteTextBox)
@@ -485,17 +589,13 @@ Partial Class Configuration
         Me.Controls.Add(Me.toLabel)
         Me.Controls.Add(Me.weeksNumericUpDown)
         Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.emailLayoutListBox)
-        Me.Controls.Add(Me.downButton)
-        Me.Controls.Add(Me.upButton)
-        Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.nameTextBox)
         Me.Controls.Add(Me.nameLabel)
         Me.Controls.Add(Me.deleteCheckBox)
         Me.Controls.Add(Me.clearButton)
         Me.Controls.Add(Me.saveSettingsButton)
-        Me.Controls.Add(Me.faultyTextBox)
-        Me.Controls.Add(Me.newTextBox)
+        Me.Controls.Add(Me.installedAssetTextBox)
+        Me.Controls.Add(Me.installedSerialTextBox)
         Me.Controls.Add(Me.folderTextBox)
         Me.Controls.Add(Me.faultyLabel)
         Me.Controls.Add(Me.newLabel)
@@ -505,14 +605,18 @@ Partial Class Configuration
         Me.Text = "Configuration"
         CType(Me.weeksNumericUpDown, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nameError, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.newPartError, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.faultyPartError, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.installedSerialError, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.installedAssetError, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.toSiteError, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.onsiteError, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.awaySiteError, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.shippingError, System.ComponentModel.ISupportInitialize).EndInit()
         Me.blackListContextMenuStrip.ResumeLayout(False)
         CType(Me.folderError, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.faultySerialError, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.faultyAssetError, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.offsiteError, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.faultError, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -522,17 +626,13 @@ Partial Class Configuration
     Friend WithEvents newLabel As Label
     Friend WithEvents faultyLabel As Label
     Friend WithEvents folderTextBox As TextBox
-    Friend WithEvents newTextBox As TextBox
-    Friend WithEvents faultyTextBox As TextBox
+    Friend WithEvents installedSerialTextBox As TextBox
+    Friend WithEvents installedAssetTextBox As TextBox
     Friend WithEvents saveSettingsButton As Button
     Friend WithEvents clearButton As Button
     Friend WithEvents deleteCheckBox As CheckBox
     Friend WithEvents nameTextBox As TextBox
     Friend WithEvents nameLabel As Label
-    Friend WithEvents Label7 As Label
-    Friend WithEvents upButton As Button
-    Friend WithEvents downButton As Button
-    Friend WithEvents emailLayoutListBox As ListBox
     Friend WithEvents Label6 As Label
     Friend WithEvents weeksNumericUpDown As NumericUpDown
     Friend WithEvents toTextBox As TextBox
@@ -547,8 +647,8 @@ Partial Class Configuration
     Friend WithEvents onsiteLabel As Label
     Friend WithEvents browseFolderButton As Button
     Friend WithEvents nameError As PictureBox
-    Friend WithEvents newPartError As PictureBox
-    Friend WithEvents faultyPartError As PictureBox
+    Friend WithEvents installedSerialError As PictureBox
+    Friend WithEvents installedAssetError As PictureBox
     Friend WithEvents toSiteError As PictureBox
     Friend WithEvents onsiteError As PictureBox
     Friend WithEvents awaySiteError As PictureBox
@@ -556,4 +656,16 @@ Partial Class Configuration
     Friend WithEvents blackListContextMenuStrip As ContextMenuStrip
     Friend WithEvents DeleteBlacklistedItemToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents folderError As PictureBox
+    Friend WithEvents faultySerialError As PictureBox
+    Friend WithEvents faultySerialTextBox As TextBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents faultyAssetError As PictureBox
+    Friend WithEvents faultyAssetTextBox As TextBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents offsiteError As PictureBox
+    Friend WithEvents offsiteTextBox As TextBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents faultError As PictureBox
+    Friend WithEvents faultTextBox As TextBox
+    Friend WithEvents Label7 As Label
 End Class

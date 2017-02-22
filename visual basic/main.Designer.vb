@@ -26,8 +26,8 @@ Partial Class main
         Me.getDocButton = New System.Windows.Forms.Button()
         Me.unshippedJobsListBox = New System.Windows.Forms.ListBox()
         Me.jobNumberTextBox = New System.Windows.Forms.TextBox()
-        Me.serialInTextBox = New System.Windows.Forms.TextBox()
-        Me.serialOutTextBox = New System.Windows.Forms.TextBox()
+        Me.installedSerialTextBox = New System.Windows.Forms.TextBox()
+        Me.faultySerialTextBox = New System.Windows.Forms.TextBox()
         Me.faultTextBox = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -48,6 +48,10 @@ Partial Class main
         Me.OpenUpdateEmailToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenCalendarAppointmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AttachShipDocToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.installedAssetTextBox = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.faultyAssetTextBox = New System.Windows.Forms.TextBox()
         Me.fd = New System.Windows.Forms.OpenFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.itemsContextMenu.SuspendLayout()
@@ -66,6 +70,7 @@ Partial Class main
         '
         'unshippedJobsListBox
         '
+        Me.unshippedJobsListBox.ColumnWidth = 60
         Me.unshippedJobsListBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.unshippedJobsListBox.FormattingEnabled = True
         Me.unshippedJobsListBox.HorizontalScrollbar = True
@@ -85,23 +90,23 @@ Partial Class main
         Me.jobNumberTextBox.Size = New System.Drawing.Size(366, 27)
         Me.jobNumberTextBox.TabIndex = 2
         '
-        'serialInTextBox
+        'installedSerialTextBox
         '
-        Me.serialInTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.serialInTextBox.Location = New System.Drawing.Point(13, 460)
-        Me.serialInTextBox.Margin = New System.Windows.Forms.Padding(4)
-        Me.serialInTextBox.Name = "serialInTextBox"
-        Me.serialInTextBox.Size = New System.Drawing.Size(366, 27)
-        Me.serialInTextBox.TabIndex = 3
+        Me.installedSerialTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.installedSerialTextBox.Location = New System.Drawing.Point(13, 460)
+        Me.installedSerialTextBox.Margin = New System.Windows.Forms.Padding(4)
+        Me.installedSerialTextBox.Name = "installedSerialTextBox"
+        Me.installedSerialTextBox.Size = New System.Drawing.Size(366, 27)
+        Me.installedSerialTextBox.TabIndex = 3
         '
-        'serialOutTextBox
+        'faultySerialTextBox
         '
-        Me.serialOutTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.serialOutTextBox.Location = New System.Drawing.Point(419, 461)
-        Me.serialOutTextBox.Margin = New System.Windows.Forms.Padding(4)
-        Me.serialOutTextBox.Name = "serialOutTextBox"
-        Me.serialOutTextBox.Size = New System.Drawing.Size(370, 27)
-        Me.serialOutTextBox.TabIndex = 4
+        Me.faultySerialTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultySerialTextBox.Location = New System.Drawing.Point(419, 461)
+        Me.faultySerialTextBox.Margin = New System.Windows.Forms.Padding(4)
+        Me.faultySerialTextBox.Name = "faultySerialTextBox"
+        Me.faultySerialTextBox.Size = New System.Drawing.Size(370, 27)
+        Me.faultySerialTextBox.TabIndex = 4
         '
         'faultTextBox
         '
@@ -120,9 +125,9 @@ Partial Class main
         Me.Label1.Location = New System.Drawing.Point(9, 381)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(126, 20)
+        Me.Label1.Size = New System.Drawing.Size(105, 20)
         Me.Label1.TabIndex = 7
-        Me.Label1.Text = "JOB NUMBER:"
+        Me.Label1.Text = "Job Number:"
         '
         'Label2
         '
@@ -131,9 +136,9 @@ Partial Class main
         Me.Label2.Location = New System.Drawing.Point(9, 437)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(94, 20)
+        Me.Label2.Size = New System.Drawing.Size(188, 20)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "SERIAL IN:"
+        Me.Label2.Text = "Installed Serial Number:"
         '
         'Label3
         '
@@ -142,9 +147,9 @@ Partial Class main
         Me.Label3.Location = New System.Drawing.Point(415, 437)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(113, 20)
+        Me.Label3.Size = New System.Drawing.Size(171, 20)
         Me.Label3.TabIndex = 9
-        Me.Label3.Text = "SERIAL OUT:"
+        Me.Label3.Text = "Faulty Serial Number:"
         '
         'Label4
         '
@@ -153,25 +158,25 @@ Partial Class main
         Me.Label4.Location = New System.Drawing.Point(9, 546)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(67, 20)
+        Me.Label4.Size = New System.Drawing.Size(142, 20)
         Me.Label4.TabIndex = 10
-        Me.Label4.Text = "FAULT:"
+        Me.Label4.Text = "Fault Description:"
         '
         'Label5
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(9, 491)
+        Me.Label5.Location = New System.Drawing.Point(415, 381)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(50, 20)
+        Me.Label5.Size = New System.Drawing.Size(43, 20)
         Me.Label5.TabIndex = 12
-        Me.Label5.Text = "SITE:"
+        Me.Label5.Text = "Site:"
         '
         'siteTextBox
         '
         Me.siteTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.siteTextBox.Location = New System.Drawing.Point(13, 515)
+        Me.siteTextBox.Location = New System.Drawing.Point(419, 405)
         Me.siteTextBox.Margin = New System.Windows.Forms.Padding(4)
         Me.siteTextBox.Name = "siteTextBox"
         Me.siteTextBox.Size = New System.Drawing.Size(366, 27)
@@ -203,12 +208,12 @@ Partial Class main
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(415, 381)
+        Me.Label6.Location = New System.Drawing.Point(579, 331)
         Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(95, 20)
+        Me.Label6.Size = New System.Drawing.Size(82, 20)
         Me.Label6.TabIndex = 18
-        Me.Label6.Text = "JOB TYPE:"
+        Me.Label6.Text = "Job Type:"
         '
         'jobButton
         '
@@ -242,7 +247,7 @@ Partial Class main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(137, 26)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'jobTypeComboBox
@@ -251,11 +256,11 @@ Partial Class main
         Me.jobTypeComboBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.jobTypeComboBox.FormattingEnabled = True
         Me.jobTypeComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.jobTypeComboBox.Items.AddRange(New Object() {"Foodstuffs", "Lotto", "Other"})
-        Me.jobTypeComboBox.Location = New System.Drawing.Point(419, 405)
+        Me.jobTypeComboBox.Items.AddRange(New Object() {"Foodstuffs", "Lotto", "NZPost", "Other"})
+        Me.jobTypeComboBox.Location = New System.Drawing.Point(583, 355)
         Me.jobTypeComboBox.Margin = New System.Windows.Forms.Padding(4)
         Me.jobTypeComboBox.Name = "jobTypeComboBox"
-        Me.jobTypeComboBox.Size = New System.Drawing.Size(370, 28)
+        Me.jobTypeComboBox.Size = New System.Drawing.Size(206, 28)
         Me.jobTypeComboBox.TabIndex = 23
         '
         'itemsContextMenu
@@ -289,12 +294,56 @@ Partial Class main
         Me.AttachShipDocToolStripMenuItem.Size = New System.Drawing.Size(275, 26)
         Me.AttachShipDocToolStripMenuItem.Text = "Attach Ship Doc"
         '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(9, 492)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(157, 20)
+        Me.Label7.TabIndex = 25
+        Me.Label7.Text = "Installed Asset Tag:"
+        '
+        'installedAssetTextBox
+        '
+        Me.installedAssetTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.installedAssetTextBox.Location = New System.Drawing.Point(13, 515)
+        Me.installedAssetTextBox.Margin = New System.Windows.Forms.Padding(4)
+        Me.installedAssetTextBox.Name = "installedAssetTextBox"
+        Me.installedAssetTextBox.Size = New System.Drawing.Size(366, 27)
+        Me.installedAssetTextBox.TabIndex = 24
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(415, 492)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(140, 20)
+        Me.Label8.TabIndex = 27
+        Me.Label8.Text = "Faulty Asset Tag:"
+        '
+        'faultyAssetTextBox
+        '
+        Me.faultyAssetTextBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.faultyAssetTextBox.Location = New System.Drawing.Point(419, 515)
+        Me.faultyAssetTextBox.Margin = New System.Windows.Forms.Padding(4)
+        Me.faultyAssetTextBox.Name = "faultyAssetTextBox"
+        Me.faultyAssetTextBox.Size = New System.Drawing.Size(366, 27)
+        Me.faultyAssetTextBox.TabIndex = 26
+        '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(805, 827)
+        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.faultyAssetTextBox)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.installedAssetTextBox)
         Me.Controls.Add(Me.jobTypeComboBox)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.jobButton)
@@ -308,8 +357,8 @@ Partial Class main
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.faultTextBox)
-        Me.Controls.Add(Me.serialOutTextBox)
-        Me.Controls.Add(Me.serialInTextBox)
+        Me.Controls.Add(Me.faultySerialTextBox)
+        Me.Controls.Add(Me.installedSerialTextBox)
         Me.Controls.Add(Me.jobNumberTextBox)
         Me.Controls.Add(Me.unshippedJobsListBox)
         Me.Controls.Add(Me.getDocButton)
@@ -329,8 +378,8 @@ Partial Class main
     Friend WithEvents getDocButton As Button
     Friend WithEvents unshippedJobsListBox As ListBox
     Friend WithEvents jobNumberTextBox As TextBox
-    Friend WithEvents serialInTextBox As TextBox
-    Friend WithEvents serialOutTextBox As TextBox
+    Friend WithEvents installedSerialTextBox As TextBox
+    Friend WithEvents faultySerialTextBox As TextBox
     Friend WithEvents faultTextBox As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
@@ -351,5 +400,9 @@ Partial Class main
     Friend WithEvents OpenUpdateEmailToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenCalendarAppointmentToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AttachShipDocToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents Label7 As Label
+    Friend WithEvents installedAssetTextBox As TextBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents faultyAssetTextBox As TextBox
     Friend WithEvents fd As OpenFileDialog
 End Class

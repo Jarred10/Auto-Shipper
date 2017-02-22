@@ -81,24 +81,24 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property NewPartKeyword() As String
+        Public Property InstalledSerialKeyword() As String
             Get
-                Return CType(Me("NewPartKeyword"),String)
+                Return CType(Me("InstalledSerialKeyword"),String)
             End Get
             Set
-                Me("NewPartKeyword") = value
+                Me("InstalledSerialKeyword") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property FaultyPartKeyword() As String
+        Public Property FaultySerialKeyword() As String
             Get
-                Return CType(Me("FaultyPartKeyword"),String)
+                Return CType(Me("FaultySerialKeyword"),String)
             End Get
             Set
-                Me("FaultyPartKeyword") = value
+                Me("FaultySerialKeyword") = value
             End Set
         End Property
         
@@ -176,23 +176,60 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property EmailLayout() As Global.System.Collections.Specialized.StringCollection
-            Get
-                Return CType(Me("EmailLayout"),Global.System.Collections.Specialized.StringCollection)
-            End Get
-            Set
-                Me("EmailLayout") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
         Public Property BlackList() As Global.System.Collections.Specialized.StringCollection
             Get
                 Return CType(Me("BlackList"),Global.System.Collections.Specialized.StringCollection)
             End Get
             Set
                 Me("BlackList") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property InstalledAssetKeyword() As String
+            Get
+                Return CType(Me("InstalledAssetKeyword"),String)
+            End Get
+            Set
+                Me("InstalledAssetKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property FaultyAssetKeyword() As String
+            Get
+                Return CType(Me("FaultyAssetKeyword"),String)
+            End Get
+            Set
+                Me("FaultyAssetKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property OffsiteTimeKeyword() As String
+            Get
+                Return CType(Me("OffsiteTimeKeyword"),String)
+            End Get
+            Set
+                Me("OffsiteTimeKeyword") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property FaultDescriptionKeyword() As String
+            Get
+                Return CType(Me("FaultDescriptionKeyword"),String)
+            End Get
+            Set
+                Me("FaultDescriptionKeyword") = value
             End Set
         End Property
     End Class

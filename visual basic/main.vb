@@ -22,28 +22,34 @@ Public Class main
 
     'Regular expression to find SV numbers. Pattern = SV followed by 10 digits
     Dim jobNumberRegex As Regex = New Regex("SV\d{10}", RegexOptions.IgnoreCase)
+    Dim restrictiveJobNumberRegex As Regex = New Regex("SV\d{6}\d+0\d{3}", RegexOptions.IgnoreCase)
 
     'finds unshipped jobs
     Private Sub jobButton_Click(sender As Object, e As EventArgs) Handles jobButton.Click
 
+        'checks if any items on blacklist
         Dim activeBlackList = My.Settings.BlackList.Count > 0
+
+        'calculates the date to search back to for job updates
         Dim modifiedDate = DateTime.Now.AddDays(-7 * My.Settings.WeeksToCheck)
 
+        'clears all things that might need clearing
         clearControls()
         unshippedJobsListBox.Items.Clear()
-        unshippedJobs.Clear()
 
         setStatus("Searching for jobs.")
 
+        'seaches for jobs that have in and out parts aswell as onsite time
         Dim partsItemsSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).Items
         partsItemsSearch = partsItemsSearch.Restrict("[SentOn] >= '" + modifiedDate.ToShortDateString + "'")
         partsItemsSearch = partsItemsSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%' AND " _
-            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.NewPartKeyword + "%' AND " _
-            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.FaultyPartKeyword + "%' AND " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.InstalledSerialKeyword + "%' AND " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.FaultySerialKeyword + "%' AND " _
             + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.OnsiteTimeKeyword + "%'")
 
         partsItemsSearch.Sort("[SentOn]")
 
+        'searches for updates that are within timeframe and contain the shipping keyword in the subject or body
         Dim shippedItemsSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).Items
         shippedItemsSearch = shippedItemsSearch.Restrict("[SentOn] >= '" + modifiedDate.ToShortDateString + "'")
 
@@ -51,8 +57,8 @@ Public Class main
             + quote("urn:schemas:httpmail:subject") + " LIKE '%" + My.Settings.ShippingKeyword + "%' OR " _
             + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.ShippingKeyword + "%')")
 
-        Dim checkNewPart = ContainsNonAlphaChars(My.Settings.NewPartKeyword)
-        Dim checkFaultyPart = ContainsNonAlphaChars(My.Settings.FaultyPartKeyword)
+        Dim checkNewPart = ContainsNonAlphaChars(My.Settings.InstalledSerialKeyword)
+        Dim checkFaultyPart = ContainsNonAlphaChars(My.Settings.FaultySerialKeyword)
         Dim checkOnsite = ContainsNonAlphaChars(My.Settings.OnsiteTimeKeyword)
         Dim checkShipping = ContainsNonAlphaChars(My.Settings.ShippingKeyword)
 
@@ -60,8 +66,8 @@ Public Class main
         For Each partItem As Outlook.MailItem In partsItemsSearch
             Dim jobNumberMatch As Match = findJobNumber(partItem.Subject)
             If jobNumberMatch.Success Then
-                If Not checkNewPart Or (checkNewPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.NewPartKeyword)) Then
-                    If Not checkFaultyPart Or (checkFaultyPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.FaultyPartKeyword)) Then
+                If Not checkNewPart Or (checkNewPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.InstalledSerialKeyword)) Then
+                    If Not checkFaultyPart Or (checkFaultyPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.FaultySerialKeyword)) Then
                         If Not checkOnsite Or (checkOnsite AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.OnsiteTimeKeyword)) Then
                             Dim job As Item = New Item(partItem, jobNumberMatch.Value)
                             If Not activeBlackList Or (activeBlackList AndAlso Not My.Settings.BlackList.Contains(job.jobNumber)) Then
@@ -87,46 +93,54 @@ Public Class main
 
         setStatus("Parsing found jobs.")
 
-        Dim calendarSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).Items
-        calendarSearch = calendarSearch.Restrict("[Start] >= '" + modifiedDate.ToShortDateString + "'")
+        Dim calendarSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).Items.Restrict("[Start] >= '" + modifiedDate.ToShortDateString + "'")
         calendarSearch = calendarSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%'")
         calendarSearch.Sort("[Start]")
 
         'Loops through all unshipped jobs, determining the customer of the job and sets variables based on customer
         For Each unshippedJob As Item In unshippedJobs
-            For Each calendarItem As Outlook.AppointmentItem In calendarSearch
-                If calendarItem.Subject.ToString.ContainsIgnoreCase(unshippedJob.jobNumber) Then
-                    unshippedJob.appointment = calendarItem
-                    unshippedJobsListBox.Items.Add(unshippedJob)
-                    unshippedJobsListBox.Refresh()
-                    Dim siteIndex As Integer
-                    Dim secondIndex As Integer
-                    If calendarItem.Body.ToString.ContainsIgnoreCase("foodstuffs") Then
-                        'Determines if job is for foodstuffs
-                        siteIndex = calendarItem.Body.IndexOf("site ::", StringComparison.OrdinalIgnoreCase)
-                        secondIndex = calendarItem.Body.IndexOf("contact name ::", StringComparison.OrdinalIgnoreCase)
-                        If siteIndex <> -1 And secondIndex <> -1 Then
-                            siteIndex += 8
-                            unshippedJob.site = Trim(calendarItem.Body.Substring(siteIndex, secondIndex - siteIndex - 2))
-                            unshippedJob.jobType = jobTypes.Foodstuffs
-                        End If
-
-                    ElseIf calendarItem.Body.ToString.ContainsIgnoreCase("nzlotteries") Then
-                        'Determines if job is for Lotto
-                        siteIndex = calendarItem.Body.IndexOf("retailer name:", StringComparison.OrdinalIgnoreCase)
-                        secondIndex = calendarItem.Body.IndexOf("address:", StringComparison.OrdinalIgnoreCase)
-                        If siteIndex <> -1 And secondIndex <> -1 Then
-                            siteIndex += 15
-                            unshippedJob.site = Trim(calendarItem.Body.Substring(siteIndex, secondIndex - siteIndex - 2))
-                            unshippedJob.jobType = jobTypes.Lotto
-                        End If
-                    Else
-                        'If job is not for foodstuffs or lotto, no additional forms required
-                        unshippedJob.jobType = jobTypes.Other
+            Dim jobCalendarSearch = calendarSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%" + unshippedJob.jobNumber + "%'")
+            For Each calendarItem As Outlook.AppointmentItem In jobCalendarSearch
+                Dim itemString = calendarItem.Body.ToLower
+                If itemString.ContainsIgnoreCase("1639") Then
+                    'Determines if job is for foodstuffs
+                    If itemString.Contains("site :: ") Then
+                        unshippedJob.site = parseLine(calendarItem.Body, "site ::")
+                        unshippedJob.jobType = jobTypes.Foodstuffs
+                        unshippedJob.appointment = calendarItem
+                        Exit For
+                    ElseIf itemString.Contains("site name:") Then
+                        unshippedJob.site = parseLine(calendarItem.Body, "site name:")
+                        unshippedJob.jobType = jobTypes.Foodstuffs
+                        unshippedJob.appointment = calendarItem
+                        Exit For
+                    ElseIf itemString.Contains("location:") Then
+                        unshippedJob.site = parseLine(calendarItem.Body, "location:")
+                        unshippedJob.jobType = jobTypes.Foodstuffs
+                        unshippedJob.appointment = calendarItem
+                        Exit For
                     End If
+                ElseIf itemString.Contains("nzlotteries") Then
+                    'Determines if job is for Lotto
+                    unshippedJob.site = parseLine(calendarItem.Body, "retailer name:")
+                    unshippedJob.jobType = jobTypes.Lotto
+                    unshippedJob.appointment = calendarItem
                     Exit For
+                ElseIf itemString.Contains("4611nzptwncorp") Then
+                    'Determines if job is for post
+                    unshippedJob.site = parseLine(calendarItem.Body, "customer contact at site:")
+                    unshippedJob.jobType = jobTypes.NZPost
+                    unshippedJob.appointment = calendarItem
+                    Exit For
+                Else
+                    unshippedJob.site = ""
+                    unshippedJob.jobType = jobTypes.Other
+                    unshippedJob.appointment = calendarItem
                 End If
             Next
+
+            unshippedJobsListBox.Items.Add(unshippedJob)
+            unshippedJobsListBox.Refresh()
         Next
 
         setStatus("Job search complete.")
@@ -148,72 +162,12 @@ Public Class main
                     Dim index = 0
                     Dim contents() As String = selectedJob.item.Body.Split(vbCrLf.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
 
-                    For i = 0 To My.Settings.EmailLayout.Count - 1
-                        If index = contents.Length Then
-                            MsgBox("Unable to parse job. Could not find " + My.Settings.EmailLayout(i) + ".")
-                            Exit For
-                        End If
-                        If My.Settings.EmailLayout(i) = "Times" Then
-                            While Not contents(index).Contains(My.Settings.OnsiteTimeKeyword)
-                                index += 1
-                            End While
-                            index += 1
-                            If index = contents.Length Then
-                                MsgBox("Unable to parse job. Could not find onsite time keyword: " + My.Settings.OnsiteTimeKeyword)
-                                Exit For
-                            End If
-                            If contents(index).Contains(My.Settings.AwaySiteTimeKeyword) Then
-                                index += 1
-                            ElseIf contents(index + 1).Contains(My.Settings.AwaySiteTimeKeyword) Then
-                                index += 2
-                            End If
-                        ElseIf My.Settings.EmailLayout(i) = "Parts" Then
-                            While Not contents(index).Contains(My.Settings.FaultyPartKeyword)
-                                If contents(index).Contains(My.Settings.NewPartKeyword) Then
-                                    serialInTextBox.Text = contents(index).Substring(My.Settings.NewPartKeyword.Length).Trim()
-                                End If
-                                index += 1
-                                If index = contents.Length Then
-                                    MsgBox("Unable to parse job. Could not find faulty part keyword: " + My.Settings.FaultyPartKeyword)
-                                    Exit For
-                                End If
-
-                            End While
-                            serialOutTextBox.Text = contents(index).Substring(My.Settings.FaultyPartKeyword.Length).Trim()
-                            index += 1
-                        ElseIf My.Settings.EmailLayout(i) = "Update" Then
-                            'if the fault text is not at the end of the update
-                            If i < 2 Then
-                                'check what follows the fault text, if parts
-                                If My.Settings.EmailLayout(i + 1) = "Parts" Then
-                                    While Not contents(index).Contains(My.Settings.NewPartKeyword)
-                                        faultTextBox.Text += contents(index)
-                                        index += 1
-                                        If index = contents.Length Then
-                                            MsgBox("Unable to parse job. Could not find new part keyword: " + My.Settings.NewPartKeyword)
-                                            Exit For
-                                        End If
-                                    End While
-                                    'if times
-                                ElseIf My.Settings.EmailLayout(i + 1) = "Times" Then
-                                    While Not contents(index).Contains(My.Settings.OnsiteTimeKeyword) Or Not contents(index).Contains(My.Settings.ToSiteTimeKeyword)
-                                        faultTextBox.Text += contents(index) + Environment.NewLine
-                                        index += 1
-                                        If index = contents.Length Then
-                                            MsgBox("Unable to parse job. Could not find onsite time keyword: " + My.Settings.OnsiteTimeKeyword)
-                                            Exit For
-                                        End If
-                                    End While
-                                End If
-                            Else
-                                While index < contents.Length
-                                    faultTextBox.Text += contents(index) + Environment.NewLine
-                                    index += 1
-                                End While
-                            End If
-                        Else
-                            MsgBox("Invalid email layout settings.")
-                        End If
+                    For Each line As String In contents
+                        If line.StartsWith(My.Settings.InstalledSerialKeyword) Then installedSerialTextBox.Text = parseLine(line, My.Settings.InstalledSerialKeyword)
+                        If line.StartsWith(My.Settings.InstalledAssetKeyword) Then installedAssetTextBox.Text = parseLine(line, My.Settings.InstalledAssetKeyword)
+                        If line.StartsWith(My.Settings.FaultySerialKeyword) Then faultySerialTextBox.Text = parseLine(line, My.Settings.FaultySerialKeyword)
+                        If line.StartsWith(My.Settings.FaultyAssetKeyword) Then faultyAssetTextBox.Text = parseLine(line, My.Settings.FaultyAssetKeyword)
+                        If line.StartsWith(My.Settings.FaultDescriptionKeyword) Then faultTextBox.Text = parseLine(line, My.Settings.FaultDescriptionKeyword)
                     Next
                     Exit For
                 End If
@@ -227,7 +181,7 @@ Public Class main
             MsgBox("No job selected.")
         Else
             selectedJob.shipDocFound = False
-
+            setStatus("Searching for shipping document.")
             Dim shipDocSearch = shipDocFolder.Items
             shipDocSearch = shipDocSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%" + selectedJob.jobNumber + "%'")
             shipDocSearch = shipDocSearch.Restrict("[Attachment] > 0")
@@ -236,6 +190,7 @@ Public Class main
             If shipDocSearch.Count = 0 Then
                 MsgBox("No shipping document email found for selected job in folder: " + shipDocFolder.Name + ".")
             Else
+                setStatus("Parsing found shipping documents.")
                 Dim shipDocItem As Outlook.MailItem
                 'Loop through all results
                 For i = 1 To shipDocSearch.Count
@@ -249,6 +204,7 @@ Public Class main
                                 'Saves attachment and sets flag on item that it has an appropriate shipping document downloaded for it
                                 shipDocItem.Attachments(a).SaveAsFile(IO.Path.Combine(IO.Directory.GetParent(Application.ExecutablePath).FullName, "shipDoc.pdf"))
                                 selectedJob.shipDocFound = True
+                                setStatus("Finished retrieving shipping document.")
                                 Exit For
                             End If
                         Next
@@ -278,8 +234,10 @@ Public Class main
             writer.WriteLine(My.Settings.Name)
             writer.WriteLine(jobTypeComboBox.Text)
             writer.WriteLine(jobNumberTextBox.Text)
-            writer.WriteLine(serialInTextBox.Text)
-            writer.WriteLine(serialOutTextBox.Text)
+            writer.WriteLine(installedSerialTextBox.Text)
+            writer.WriteLine(faultySerialTextBox.Text)
+            writer.WriteLine(installedAssetTextBox.Text)
+            writer.WriteLine(faultyAssetTextBox.Text)
             writer.WriteLine(siteTextBox.Text)
             writer.WriteLine(faultTextBox.Text)
             writer.Flush()
@@ -335,8 +293,7 @@ Public Class main
         ' Keeps a reference to an explorer window. Outlook closes if there are 0 open windows detected, so this will keep outlook open after user closes any windows.
         olExplorer = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox).GetExplorer()
 
-        'initializes both string collections in settings if they are not already
-        If My.Settings.EmailLayout Is Nothing Then My.Settings.EmailLayout = New Specialized.StringCollection
+        'initializes black list if it doesnt exist
         If My.Settings.BlackList Is Nothing Then My.Settings.BlackList = New Specialized.StringCollection
         My.Settings.Save()
 
@@ -390,8 +347,8 @@ Public Class main
         calendarItem = Nothing
 
         jobNumberTextBox.Clear()
-        serialInTextBox.Clear()
-        serialOutTextBox.Clear()
+        installedSerialTextBox.Clear()
+        faultySerialTextBox.Clear()
         jobTypeComboBox.SelectedIndex = -1
         siteTextBox.Clear()
         faultTextBox.Clear()
@@ -410,17 +367,20 @@ Public Class main
     Public Function allSettingsFound()
         Return Not String.IsNullOrEmpty(My.Settings.Name) AndAlso
             Not String.IsNullOrEmpty(My.Settings.Folder) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.InstalledSerialKeyword) AndAlso
+            Not String.IsNullOrEmpty(My.Settings.FaultySerialKeyword) AndAlso
             Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) AndAlso
             Not String.IsNullOrEmpty(My.Settings.OnsiteTimeKeyword) AndAlso
             Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) AndAlso
-            Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) AndAlso
-            My.Settings.EmailLayout.Count = 3
+            Not String.IsNullOrEmpty(My.Settings.ShippingKeyword)
     End Function
 
     ' Function that returns the job number of an update if the argument contains it.
     Public Function findJobNumber(jobName As String)
+        Dim errorMatch = restrictiveJobNumberRegex.Match(jobName)
+        If errorMatch.Success Then
+            jobName = errorMatch.Value.Substring(0, 8) + errorMatch.Value.Substring(errorMatch.Value.Length - 4, 4)
+        End If
         Return jobNumberRegex.Match(jobName)
     End Function
 
@@ -480,10 +440,6 @@ Public Class main
         End If
     End Sub
 
-    Private Sub main_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        olApp.Quit()
-    End Sub
-
     Private Sub AttachShipDocToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AttachShipDocToolStripMenuItem.Click
         fd.InitialDirectory = IO.Directory.GetParent(Application.ExecutablePath).FullName
         fd.Filter = "PDF files (*.pdf)|*.pdf"
@@ -494,4 +450,20 @@ Public Class main
             MsgBox("Unable to copy selected Ship Doc.")
         End If
     End Sub
+
+    Function parseLine(line As String, token As String) As String
+        Dim site = ""
+        Dim index = line.IndexOf(token, StringComparison.CurrentCultureIgnoreCase)
+        If index > -1 Then
+            For i = token.Length + 1 To line.Length - 1
+                Dim currentChar = line(index + i)
+                If currentChar <> vbCr And currentChar <> vbLf Then
+                    site += currentChar
+                Else
+                    Exit For
+                End If
+            Next
+        End If
+        Return Trim(site)
+    End Function
 End Class

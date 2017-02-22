@@ -8,10 +8,10 @@
     <Setting Name="Folder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="NewPartKeyword" Type="System.String" Scope="User">
+    <Setting Name="InstalledSerialKeyword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="FaultyPartKeyword" Type="System.String" Scope="User">
+    <Setting Name="FaultySerialKeyword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ToSiteTimeKeyword" Type="System.String" Scope="User">
@@ -32,10 +32,19 @@
     <Setting Name="WeeksToCheck" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">4</Value>
     </Setting>
-    <Setting Name="EmailLayout" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="BlackList" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="BlackList" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="InstalledAssetKeyword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FaultyAssetKeyword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="OffsiteTimeKeyword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FaultDescriptionKeyword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

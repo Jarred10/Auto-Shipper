@@ -1,9 +1,9 @@
 Jarred Green
 Foodstuffs
-SV1604190058
-1x display port cable
-dfghfgh
-NW Hillcrest
-Cable head broken. Replaced and reconfigured screen. Tested and working. 
-Resolved. 
-
+SV1606220059
+G14M91831
+MJ0049368
+110467
+900004369
+PAK'nSAVE Mill Street
+failed calibration. Replaced and tested weight and scanning items. Working fine. Told staff to get calibrated.

@@ -12,8 +12,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.ddf.EscherChildAnchorRecord;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import com.itextpdf.text.BaseColor;
@@ -26,6 +30,7 @@ import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
 
 /**
  * @author Jarred Uses iTextPDF to fill in shipping forms.
@@ -34,8 +39,8 @@ public class FillForm {
 	public static void main(String[] args) {
 		
 		//declare variables for fields of form
-		String jobType, jobNo, site, inSerial, outSerial, fault;
-		jobType = jobNo = site = inSerial = outSerial = fault = "";
+		String jobType, jobNo, site, inSerial, outSerial, inAsset, outAsset, fault;
+		jobType = jobNo = site = inSerial = outSerial = inAsset = outAsset = fault = "";
 		
 		try {
 			//name of user
@@ -50,6 +55,8 @@ public class FillForm {
 			jobNo = br.readLine();
 			inSerial = br.readLine();
 			outSerial = br.readLine();
+			inAsset = br.readLine();
+			outAsset = br.readLine();
 			site = br.readLine();
 			while((line = br.readLine()) != null){
 				fault += line;
@@ -65,7 +72,7 @@ public class FillForm {
 			// create a calendar object to get the current day, month and year.
 			Calendar cal = Calendar.getInstance();
 			// creates the string used to insert date with correct spacing
-			String paddedDate = String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) + String.format("%13s", "")
+			String paddedDate = String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) + String.format("%14s", "")
 					+ String.valueOf(cal.get(Calendar.MONTH) + 1) + String.format("%14s", "")
 					+ String.valueOf(cal.get(Calendar.YEAR));
 			
@@ -83,12 +90,12 @@ public class FillForm {
 			// adds text to PDF
 			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(name, fnt), 98, 380, 0);
 			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(paddedDate, fnt), 404, 380, 0);
-			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Out: " + outSerial, fnt), 50, 300, 0);
-			canvas.setTextMatrix(60, 280);
+			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Faulty Serial: " + outSerial, fnt), 50, 280, 0);
+			ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase("Faulty Asset: " + outAsset, fnt), 50, 265, 0);
 			
 			//adds word-wrapped text for fault as this can be multi-line
 			ColumnText ct = new ColumnText(canvas);
-			ct.setSimpleColumn(new Phrase("Fault: " + fault, fnt), 50, 150, 570, 300, 15,
+			ct.setSimpleColumn(new Phrase("Fault Description: " + fault, fnt), 50, 150, 570, 265, 15,
 					Element.ALIGN_LEFT | Element.ALIGN_TOP);
 			ct.go();
 
@@ -98,28 +105,35 @@ public class FillForm {
 
 			//checks if job is for foodstuffs
 			if (jobType.equals("Foodstuffs")) {
+				
 
-				// reads in the existing source PDF document and creates new PDF document of filled form
-				pdfReader = new PdfReader("fsDoc.pdf");
-				pdfStamper = new PdfStamper(pdfReader, new FileOutputStream("fsDoc-Filled.pdf"));
-				canvas = pdfStamper.getUnderContent(1);
+				
+		        String fileName = "fsDoc-testing.docx";
+		        InputStream fis = new FileInputStream(fileName);
+		        
+		        XWPFDocument document = new XWPFDocument(fis);
 
-				// adds text to PDF
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(name, fnt), 220, 658, 0);
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(dateInString, fnt), 220, 632, 0);
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(jobNo, fnt), 220, 606, 0);
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(site, fnt), 220, 580, 0);
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(inSerial, fnt), 220, 412, 0);
-				ColumnText.showTextAligned(canvas, Element.ALIGN_LEFT, new Phrase(outSerial, fnt), 220, 260, 0);
+		        List<XWPFTable> tablesList = document.getTables();
+		        
+		        setRun(tablesList.get(0).getRow(2).getCell(2), name);
+		        setRun(tablesList.get(0).getRow(4).getCell(2), dateInString);
+		        setRun(tablesList.get(0).getRow(6).getCell(2), jobNo);
+		        setRun(tablesList.get(0).getRow(8).getCell(2), site);
 
-				//adds word-wrapped text for fault as this can be multi-line
-				ct = new ColumnText(canvas);
-				ct.setSimpleColumn(new Phrase(fault, fnt), 55, 10, 530, 190, 27,
-						Element.ALIGN_LEFT | Element.ALIGN_TOP);
-				ct.go();
 
-				// saves new PDF
-				pdfStamper.close();
+		        setRun(tablesList.get(1).getRow(5).getCell(1), inSerial);
+		        setRun(tablesList.get(1).getRow(7).getCell(1), inAsset);
+		        
+		        setRun(tablesList.get(2).getRow(4).getCell(1), outSerial);
+		        setRun(tablesList.get(2).getRow(6).getCell(1), outAsset);
+		        		        
+		        setRun(tablesList.get(3).getRow(0).getCell(0), fault);	        
+		        
+		        OutputStream out = new FileOutputStream("fsDoc-Filled.docx");
+		        document.write(out);
+		        out.close();
+		        
+		        document.close();
 			}
 			else if(jobType.equals("Lotto")){
 
@@ -169,5 +183,11 @@ public class FillForm {
 		catch (IOException | DocumentException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static void setRun (XWPFTableCell cell, String text){
+		if(cell.getParagraphs().size() > 0) cell.removeParagraph(0);
+		XWPFRun run = cell.addParagraph().createRun();
+        run.setFontFamily("Arial"); run.setFontSize(12); run.setText(text);	
 	}
 }

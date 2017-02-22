@@ -30,14 +30,16 @@ Public Class Configuration
             My.Settings.Name = nameTextBox.Text
             My.Settings.Folder = folderID
             My.Settings.DeleteOnPrint = deleteCheckBox.Checked
-            My.Settings.NewPartKeyword = newTextBox.Text
-            My.Settings.FaultyPartKeyword = faultyTextBox.Text
+            My.Settings.InstalledSerialKeyword = installedSerialTextBox.Text
+            My.Settings.InstalledAssetKeyword = installedAssetTextBox.Text
+            My.Settings.FaultySerialKeyword = faultySerialTextBox.Text
+            My.Settings.FaultyAssetKeyword = faultyAssetTextBox.Text
             My.Settings.ToSiteTimeKeyword = toTextBox.Text
             My.Settings.OnsiteTimeKeyword = onsiteTextBox.Text
+            My.Settings.OffsiteTimeKeyword = offsiteTextBox.Text
             My.Settings.AwaySiteTimeKeyword = awayTextBox.Text
+            My.Settings.FaultDescriptionKeyword = faultTextBox.Text
             My.Settings.ShippingKeyword = shippingTextBox.Text
-            My.Settings.EmailLayout.Clear()
-            My.Settings.EmailLayout.AddRange(emailLayoutListBox.Items.Cast(Of String).ToArray)
             My.Settings.WeeksToCheck = weeksNumericUpDown.Value
             My.Settings.Save()
 
@@ -45,22 +47,24 @@ Public Class Configuration
         End If
     End Sub
 
-    Private Sub textBox_Enter(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, newTextBox.Leave, faultyTextBox.Leave, toTextBox.Leave, awayTextBox.Leave, shippingTextBox.Leave
+    Private Sub textBox_Enter(sender As Object, e As EventArgs) Handles nameTextBox.Leave, folderTextBox.Leave, installedSerialTextBox.Leave, installedAssetTextBox.Leave, toTextBox.Leave, awayTextBox.Leave, shippingTextBox.Leave
         sender.BackColor = SystemColors.Window
     End Sub
 
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        emailLayoutListBox.AutoSize = True
-
         tuples = New List(Of Tuple(Of TextBox, PictureBox)) From
         {
             Tuple.Create(nameTextBox, nameError),
-            Tuple.Create(newTextBox, newPartError),
-            Tuple.Create(faultyTextBox, faultyPartError),
+            Tuple.Create(installedSerialTextBox, installedSerialError),
+            Tuple.Create(installedAssetTextBox, installedAssetError),
+            Tuple.Create(faultySerialTextBox, faultySerialError),
+            Tuple.Create(faultyAssetTextBox, faultyAssetError),
             Tuple.Create(toTextBox, toSiteError),
             Tuple.Create(onsiteTextBox, onsiteError),
+            Tuple.Create(offsiteTextBox, offsiteError),
             Tuple.Create(awayTextBox, awaySiteError),
+            Tuple.Create(faultTextBox, faultError),
             Tuple.Create(shippingTextBox, shippingError),
             Tuple.Create(folderTextBox, folderError)
         }
@@ -73,24 +77,16 @@ Public Class Configuration
                 folderTextBox.Text = folder.Name
             End If
         End If
-        If Not String.IsNullOrEmpty(My.Settings.NewPartKeyword) Then newTextBox.Text = My.Settings.NewPartKeyword
-        If Not String.IsNullOrEmpty(My.Settings.FaultyPartKeyword) Then faultyTextBox.Text = My.Settings.FaultyPartKeyword
+        If Not String.IsNullOrEmpty(My.Settings.InstalledSerialKeyword) Then installedSerialTextBox.Text = My.Settings.InstalledSerialKeyword
+        If Not String.IsNullOrEmpty(My.Settings.InstalledAssetKeyword) Then installedAssetTextBox.Text = My.Settings.InstalledAssetKeyword
+        If Not String.IsNullOrEmpty(My.Settings.FaultySerialKeyword) Then faultySerialTextBox.Text = My.Settings.FaultySerialKeyword
+        If Not String.IsNullOrEmpty(My.Settings.FaultyAssetKeyword) Then faultyAssetTextBox.Text = My.Settings.FaultyAssetKeyword
         If Not String.IsNullOrEmpty(My.Settings.ToSiteTimeKeyword) Then toTextBox.Text = My.Settings.ToSiteTimeKeyword
         If Not String.IsNullOrEmpty(My.Settings.OnsiteTimeKeyword) Then onsiteTextBox.Text = My.Settings.OnsiteTimeKeyword
+        If Not String.IsNullOrEmpty(My.Settings.OffsiteTimeKeyword) Then offsiteTextBox.Text = My.Settings.OffsiteTimeKeyword
         If Not String.IsNullOrEmpty(My.Settings.AwaySiteTimeKeyword) Then awayTextBox.Text = My.Settings.AwaySiteTimeKeyword
+        If Not String.IsNullOrEmpty(My.Settings.FaultDescriptionKeyword) Then faultTextBox.Text = My.Settings.FaultDescriptionKeyword
         If Not String.IsNullOrEmpty(My.Settings.ShippingKeyword) Then shippingTextBox.Text = My.Settings.ShippingKeyword
-
-        emailLayoutListBox.Items.Clear()
-
-        If My.Settings.EmailLayout.Count = 3 Then
-            emailLayoutListBox.Items.Add(My.Settings.EmailLayout(0))
-            emailLayoutListBox.Items.Add(My.Settings.EmailLayout(1))
-            emailLayoutListBox.Items.Add(My.Settings.EmailLayout(2))
-        Else
-            emailLayoutListBox.Items.Add("Times")
-            emailLayoutListBox.Items.Add("Parts")
-            emailLayoutListBox.Items.Add("Update")
-        End If
 
         deleteCheckBox.Checked = My.Settings.DeleteOnPrint
         weeksNumericUpDown.Value = My.Settings.WeeksToCheck
@@ -108,52 +104,12 @@ Public Class Configuration
 
     End Sub
 
-    Private Sub upButton_Click(sender As Object, e As EventArgs) Handles upButton.Click
-        If emailLayoutListBox.SelectedIndex > 0 Then
-            Dim index = emailLayoutListBox.SelectedIndex
-            Dim item = emailLayoutListBox.SelectedItem
-            emailLayoutListBox.Items(index) = emailLayoutListBox.Items(index - 1)
-            emailLayoutListBox.Items(index - 1) = item
-            emailLayoutListBox.SelectedIndex = index - 1
-        End If
-    End Sub
-
-    Private Sub downButton_Click(sender As Object, e As EventArgs) Handles downButton.Click
-        If emailLayoutListBox.SelectedIndex > -1 AndAlso emailLayoutListBox.SelectedIndex < 2 Then
-            Dim index = emailLayoutListBox.SelectedIndex
-            Dim item = emailLayoutListBox.SelectedItem
-            emailLayoutListBox.Items(index) = emailLayoutListBox.Items(index + 1)
-            emailLayoutListBox.Items(index + 1) = item
-            emailLayoutListBox.SelectedIndex = index + 1
-        End If
-    End Sub
-
-    Private Sub ListDragSource_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs) Handles emailLayoutListBox.MouseDown
-        ' Get the index of the item the mouse is below.
-        indexOfItemUnderMouseToDrag = emailLayoutListBox.SelectedIndex
-    End Sub
-
-    Private Sub emailLayoutListBox_MouseUp(sender As Object, e As MouseEventArgs) Handles emailLayoutListBox.MouseUp
-        'when user stops dragging item, swaps it with selected item
-        If indexOfItemUnderMouseToDrag <> -1 AndAlso emailLayoutListBox.SelectedIndex <> -1 Then
-            Dim item As Object = emailLayoutListBox.Items(indexOfItemUnderMouseToDrag)
-            emailLayoutListBox.Items(indexOfItemUnderMouseToDrag) = emailLayoutListBox.Items(emailLayoutListBox.SelectedIndex)
-            emailLayoutListBox.Items(emailLayoutListBox.SelectedIndex) = item
-        End If
-    End Sub
-
     Private Sub clearButton_Click(sender As Object, e As EventArgs) Handles clearButton.Click
         'loops through all textboxes and labels, reseting them to default
         For Each item In tuples
             item.Item1.Text = ""
             item.Item2.Visible = False
         Next
-
-        'returns listbox to default
-        emailLayoutListBox.Items.Clear()
-        emailLayoutListBox.Items.Add("Times")
-        emailLayoutListBox.Items.Add("Parts")
-        emailLayoutListBox.Items.Add("Update")
 
         'sets week to check back number to 4
         weeksNumericUpDown.Value = 4
