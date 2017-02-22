@@ -256,7 +256,7 @@ Public Class main
         ElseIf Not selectedJob.shipDocFound Then
             MsgBox("No shipping document has been downloaded for the selected job.")
         Else
-            If selectedJob.jobType = jobTypes.Foodstuffs Then Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default fsDoc-Filled.pdf")
+            If selectedJob.jobType = jobTypes.Foodstuffs Then Process.Start("cmd", "/C start wordpad.exe /p fsDoc-Filled.docx")
             If selectedJob.jobType = jobTypes.Lotto Then Process.Start("cmd", "/C start wordpad.exe /p lottoDoc-Filled.docx")
             Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default shipDoc-Filled.pdf")
 
@@ -265,7 +265,7 @@ Public Class main
                 With My.Computer.FileSystem
                     If .FileExists("shipDoc.pdf") Then .DeleteFile("shipDoc.pdf")
                     If .FileExists("shipDoc-Filled.pdf") Then .DeleteFile("shipDoc-Filled.pdf")
-                    If .FileExists("fsDoc-Filled.pdf") Then .DeleteFile("fsDoc-Filled.pdf")
+                    If .FileExists("fsDoc-Filled.docx") Then .DeleteFile("fsDoc-Filled.docx")
                     If .FileExists("lottoDoc-Filled.docx") Then .DeleteFile("lottoDoc-Filled.docx")
                 End With
             End If

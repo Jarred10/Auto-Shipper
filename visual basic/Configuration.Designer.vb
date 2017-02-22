@@ -134,7 +134,7 @@ Partial Class Configuration
         Me.folderTextBox.Name = "folderTextBox"
         Me.folderTextBox.ReadOnly = True
         Me.folderTextBox.Size = New System.Drawing.Size(240, 27)
-        Me.folderTextBox.TabIndex = 15
+        Me.folderTextBox.TabIndex = 0
         Me.folderTextBox.TabStop = False
         '
         'installedSerialTextBox
@@ -182,7 +182,7 @@ Partial Class Configuration
         Me.deleteCheckBox.Location = New System.Drawing.Point(453, 367)
         Me.deleteCheckBox.Name = "deleteCheckBox"
         Me.deleteCheckBox.Size = New System.Drawing.Size(18, 17)
-        Me.deleteCheckBox.TabIndex = 14
+        Me.deleteCheckBox.TabIndex = 13
         Me.deleteCheckBox.UseVisualStyleBackColor = True
         '
         'nameTextBox
@@ -221,7 +221,7 @@ Partial Class Configuration
         Me.weeksNumericUpDown.Location = New System.Drawing.Point(500, 328)
         Me.weeksNumericUpDown.Name = "weeksNumericUpDown"
         Me.weeksNumericUpDown.Size = New System.Drawing.Size(53, 27)
-        Me.weeksNumericUpDown.TabIndex = 13
+        Me.weeksNumericUpDown.TabIndex = 12
         Me.weeksNumericUpDown.Value = New Decimal(New Integer() {4, 0, 0, 0})
         '
         'toTextBox
@@ -231,7 +231,7 @@ Partial Class Configuration
         Me.toTextBox.Location = New System.Drawing.Point(17, 305)
         Me.toTextBox.Name = "toTextBox"
         Me.toTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.toTextBox.TabIndex = 4
+        Me.toTextBox.TabIndex = 6
         '
         'toLabel
         '
@@ -250,7 +250,7 @@ Partial Class Configuration
         Me.awayTextBox.Location = New System.Drawing.Point(19, 463)
         Me.awayTextBox.Name = "awayTextBox"
         Me.awayTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.awayTextBox.TabIndex = 6
+        Me.awayTextBox.TabIndex = 9
         '
         'awayLabel
         '
@@ -269,7 +269,7 @@ Partial Class Configuration
         Me.shippingTextBox.Location = New System.Drawing.Point(19, 569)
         Me.shippingTextBox.Name = "shippingTextBox"
         Me.shippingTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.shippingTextBox.TabIndex = 7
+        Me.shippingTextBox.TabIndex = 11
         '
         'shippingLabel
         '
@@ -308,7 +308,7 @@ Partial Class Configuration
         Me.onsiteTextBox.Location = New System.Drawing.Point(19, 357)
         Me.onsiteTextBox.Name = "onsiteTextBox"
         Me.onsiteTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.onsiteTextBox.TabIndex = 5
+        Me.onsiteTextBox.TabIndex = 7
         '
         'onsiteLabel
         '
@@ -323,10 +323,10 @@ Partial Class Configuration
         'browseFolderButton
         '
         Me.browseFolderButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.browseFolderButton.Location = New System.Drawing.Point(104, 602)
+        Me.browseFolderButton.Location = New System.Drawing.Point(405, 459)
         Me.browseFolderButton.Name = "browseFolderButton"
         Me.browseFolderButton.Size = New System.Drawing.Size(156, 31)
-        Me.browseFolderButton.TabIndex = 8
+        Me.browseFolderButton.TabIndex = 14
         Me.browseFolderButton.Text = "Browse Folders..."
         Me.browseFolderButton.UseVisualStyleBackColor = True
         '
@@ -449,7 +449,7 @@ Partial Class Configuration
         Me.faultySerialTextBox.Location = New System.Drawing.Point(16, 193)
         Me.faultySerialTextBox.Name = "faultySerialTextBox"
         Me.faultySerialTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.faultySerialTextBox.TabIndex = 42
+        Me.faultySerialTextBox.TabIndex = 4
         '
         'Label2
         '
@@ -457,9 +457,9 @@ Partial Class Configuration
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(12, 170)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(235, 20)
+        Me.Label2.Size = New System.Drawing.Size(240, 20)
         Me.Label2.TabIndex = 43
-        Me.Label2.Text = "Fauly Serial Number Keyword:"
+        Me.Label2.Text = "Faulty Serial Number Keyword:"
         '
         'faultyAssetError
         '
@@ -479,7 +479,7 @@ Partial Class Configuration
         Me.faultyAssetTextBox.Location = New System.Drawing.Point(16, 247)
         Me.faultyAssetTextBox.Name = "faultyAssetTextBox"
         Me.faultyAssetTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.faultyAssetTextBox.TabIndex = 45
+        Me.faultyAssetTextBox.TabIndex = 5
         '
         'Label3
         '
@@ -509,7 +509,7 @@ Partial Class Configuration
         Me.offsiteTextBox.Location = New System.Drawing.Point(19, 409)
         Me.offsiteTextBox.Name = "offsiteTextBox"
         Me.offsiteTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.offsiteTextBox.TabIndex = 48
+        Me.offsiteTextBox.TabIndex = 8
         '
         'Label4
         '
@@ -539,7 +539,7 @@ Partial Class Configuration
         Me.faultTextBox.Location = New System.Drawing.Point(21, 516)
         Me.faultTextBox.Name = "faultTextBox"
         Me.faultTextBox.Size = New System.Drawing.Size(239, 27)
-        Me.faultTextBox.TabIndex = 51
+        Me.faultTextBox.TabIndex = 10
         '
         'Label7
         '

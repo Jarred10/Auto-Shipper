@@ -1,9 +1,9 @@
 Jarred Green
 Foodstuffs
-SV1606220059
-G14M91831
-MJ0049368
-110467
-900004369
-PAK'nSAVE Mill Street
-failed calibration. Replaced and tested weight and scanning items. Working fine. Told staff to get calibrated.
+SV1702200002
+AG22016765E0
+AK25005042E0
+900015159
+900017086
+New World Rototuna
+printer destroyed multiple ink ribbons this morning. Replaced with new printer, configured and tested. Working fine.
