@@ -257,7 +257,25 @@ Public Class main
         ElseIf Not selectedJob.shipDocFound Then
             MsgBox("No shipping document has been downloaded for the selected job.")
         Else
-            If selectedJob.jobType = jobTypes.Foodstuffs Then Process.Start("cmd", "/C start wordpad.exe /p fsDoc-Filled.docx")
+
+            If selectedJob.jobType = jobTypes.Foodstuffs Then
+                Dim poApp As Word.Application
+                Dim poDoc As Word.Document
+
+                poApp = New Word.Application
+                poApp.DisplayAlerts = Word.WdAlertLevel.wdAlertsNone
+                poDoc = poApp.Documents.Open(FileSystem.CurDir + "\fsDoc-Filled.docx")
+                'If you want to change what printer it goes to, it's poApp.ActivePrinter = "System Printer Name"
+                'print it out
+                poDoc.PrintOut()
+                poDoc.Close(Word.WdSaveOptions.wdDoNotSaveChanges)
+                'clean up
+                poDoc = Nothing
+                'close word
+                poApp.Quit(Word.WdSaveOptions.wdDoNotSaveChanges)
+                poApp = Nothing
+                ' Process.Start("cmd", "/C start wordpad.exe /p fsDoc-Filled.docx")
+            End If
             If selectedJob.jobType = jobTypes.Lotto Then Process.Start("cmd", "/C start wordpad.exe /p lottoDoc-Filled.docx")
             Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default shipDoc-Filled.pdf")
 
