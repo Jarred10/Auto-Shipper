@@ -49,14 +49,6 @@ Public Class main
 
         partsItemsSearch.Sort("[SentOn]")
 
-        'searches for updates that are within timeframe and contain the shipping keyword in the subject or body
-        Dim shippedItemsSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).Items
-        shippedItemsSearch = shippedItemsSearch.Restrict("[SentOn] >= '" + modifiedDate.ToShortDateString + "'")
-
-        shippedItemsSearch = shippedItemsSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%' AND (" _
-            + quote("urn:schemas:httpmail:subject") + " LIKE '%" + My.Settings.ShippingKeyword + "%' OR " _
-            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.ShippingKeyword + "%')")
-
         Dim checkNewPart = ContainsNonAlphaChars(My.Settings.InstalledSerialKeyword)
         Dim checkFaultyPart = ContainsNonAlphaChars(My.Settings.FaultySerialKeyword)
         Dim checkOnsite = ContainsNonAlphaChars(My.Settings.OnsiteTimeKeyword)
@@ -66,9 +58,9 @@ Public Class main
         For Each partItem As Outlook.MailItem In partsItemsSearch
             Dim jobNumberMatch As Match = findJobNumber(partItem.Subject)
             If jobNumberMatch.Success Then
-                If Not checkNewPart Or (checkNewPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.InstalledSerialKeyword)) Then
-                    If Not checkFaultyPart Or (checkFaultyPart AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.FaultySerialKeyword)) Then
-                        If Not checkOnsite Or (checkOnsite AndAlso partItem.Body.ToString.ContainsIgnoreCase(My.Settings.OnsiteTimeKeyword)) Then
+                If partItem.Body.ToString.ContainsIgnoreCase(My.Settings.InstalledSerialKeyword) Then
+                    If partItem.Body.ToString.ContainsIgnoreCase(My.Settings.FaultySerialKeyword) Then
+                        If partItem.Body.ToString.ContainsIgnoreCase(My.Settings.OnsiteTimeKeyword) Then
                             Dim job As Item = New Item(partItem, jobNumberMatch.Value)
                             If Not activeBlackList Or (activeBlackList AndAlso Not My.Settings.BlackList.Contains(job.jobNumber)) Then
                                 ' Adds mail item to a list of unshipped jobs.
@@ -82,10 +74,18 @@ Public Class main
 
         setStatus("Removing shipped jobs.")
 
+        'searches for updates that are within timeframe and contain the shipping keyword in the subject or body
+        Dim shippedItemsSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderSentMail).Items
+        shippedItemsSearch = shippedItemsSearch.Restrict("[SentOn] >= '" + modifiedDate.ToShortDateString + "'")
+
+        shippedItemsSearch = shippedItemsSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%' AND (" _
+            + quote("urn:schemas:httpmail:subject") + " LIKE '%" + My.Settings.ShippingKeyword + "%' OR " _
+            + quote("urn:schemas:httpmail:textdescription") + " LIKE '%" + My.Settings.ShippingKeyword + "%')")
+
         For Each shippedItem As Outlook.MailItem In shippedItemsSearch
             Dim jobNumberMatch As Match = findJobNumber(shippedItem.Subject)
             If jobNumberMatch.Success Then
-                If Not checkShipping Or (checkShipping AndAlso (shippedItem.Subject.ContainsIgnoreCase(My.Settings.ShippingKeyword) Or shippedItem.Body.ToString.ContainsIgnoreCase(My.Settings.ShippingKeyword))) Then
+                If (shippedItem.Subject.ContainsIgnoreCase(My.Settings.ShippingKeyword) Or shippedItem.Body.ToString.ContainsIgnoreCase(My.Settings.ShippingKeyword)) Then
                     unshippedJobs.Remove(New Item(shippedItem, jobNumberMatch.Value))
                 End If
             End If
@@ -93,6 +93,7 @@ Public Class main
 
         setStatus("Parsing found jobs.")
 
+        'finds all calendar appointments with SV in subject in the timeframe specified
         Dim calendarSearch As Outlook.Items = olNs.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).Items.Restrict("[Start] >= '" + modifiedDate.ToShortDateString + "'")
         calendarSearch = calendarSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%SV%'")
         calendarSearch.Sort("[Start]")

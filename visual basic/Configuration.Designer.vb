@@ -70,6 +70,7 @@ Partial Class Configuration
         Me.faultError = New System.Windows.Forms.PictureBox()
         Me.faultTextBox = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.weeksNumericUpDown, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nameError, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.installedSerialError, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -412,12 +413,12 @@ Partial Class Configuration
         Me.blackListContextMenuStrip.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.blackListContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteBlacklistedItemToolStripMenuItem})
         Me.blackListContextMenuStrip.Name = "blackListContextMenuStrip"
-        Me.blackListContextMenuStrip.Size = New System.Drawing.Size(238, 30)
+        Me.blackListContextMenuStrip.Size = New System.Drawing.Size(232, 28)
         '
         'DeleteBlacklistedItemToolStripMenuItem
         '
         Me.DeleteBlacklistedItemToolStripMenuItem.Name = "DeleteBlacklistedItemToolStripMenuItem"
-        Me.DeleteBlacklistedItemToolStripMenuItem.Size = New System.Drawing.Size(237, 26)
+        Me.DeleteBlacklistedItemToolStripMenuItem.Size = New System.Drawing.Size(231, 24)
         Me.DeleteBlacklistedItemToolStripMenuItem.Text = "Delete Blacklisted Item"
         '
         'folderError
@@ -551,11 +552,22 @@ Partial Class Configuration
         Me.Label7.TabIndex = 52
         Me.Label7.Text = "Fault Description Keyword:"
         '
+        'Button1
+        '
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(453, 683)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(156, 32)
+        Me.Button1.TabIndex = 54
+        Me.Button1.Text = "Default"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'Configuration
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(678, 735)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.faultError)
         Me.Controls.Add(Me.faultTextBox)
         Me.Controls.Add(Me.Label7)
@@ -668,4 +680,5 @@ Partial Class Configuration
     Friend WithEvents faultError As PictureBox
     Friend WithEvents faultTextBox As TextBox
     Friend WithEvents Label7 As Label
+    Friend WithEvents Button1 As Button
 End Class

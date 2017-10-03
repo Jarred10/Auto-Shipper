@@ -40,6 +40,9 @@ Public Class Item
     End Function
 
     Public Overrides Function ToString() As String
+        If IsNothing(appointment) Then
+            Return "No Calendar appointment found for: " + jobNumber
+        End If
         If Not String.IsNullOrEmpty(appointment.Subject) Then Return appointment.Subject
         If Not String.IsNullOrEmpty(item.Subject) Then Return item.Subject
         Return jobNumber

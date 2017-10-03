@@ -28,3 +28,16 @@ C:\Users\Jarred\Desktop\Development\OneShipper\visual basic\obj\Debug\OneShipper
 C:\Users\Jarred\Desktop\Development\OneShipper\visual basic\obj\Debug\OneShipper.main.resources
 C:\Users\Jarred\Desktop\Development\OneShipper\visual basic\obj\Debug\OneShipper.Resources.resources
 C:\Users\Jarred\Desktop\Development\OneShipper\visual basic\obj\Debug\OneShipper.vbproj.GenerateResource.Cache
+C:\Users\Jarred\Source\Repos\OneShipper\Testing\OneShipper.exe.config
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.vbproj.ResolveComReference.cache
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.exe
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.xml
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.pdb
+C:\Users\Jarred\Source\Repos\OneShipper\Testing\OneShipper.exe
+C:\Users\Jarred\Source\Repos\OneShipper\Testing\OneShipper.pdb
+C:\Users\Jarred\Source\Repos\OneShipper\Testing\OneShipper.xml
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.vbprojResolveAssemblyReference.cache
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.Configuration.resources
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.main.resources
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.Resources.resources
+C:\Users\Jarred\Source\Repos\OneShipper\visual basic\obj\Debug\OneShipper.vbproj.GenerateResource.Cache

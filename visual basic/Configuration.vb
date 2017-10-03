@@ -146,4 +146,23 @@ Public Class Configuration
             End If
         End If
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        System.Console.WriteLine(folderID)
+
+        nameTextBox.Text = "Jarred Green"
+        folderID = "000000008198D8EA44A5EC468DBAF2D95B8686740100CB2F7F322010694DB8141871AD7B821700000A1E7C6F0000"
+        deleteCheckBox.Checked = False
+        installedSerialTextBox.Text = "Installed Serial Number:"
+        installedAssetTextBox.Text = "Installed Asset Tag:"
+        faultySerialTextBox.Text = "Faulty Serial Number:"
+        faultyAssetTextBox.Text = "Faulty Asset Tag:"
+        toTextBox.Text = "Travel To"
+        onsiteTextBox.Text = "Onsite"
+        offsiteTextBox.Text = "Offsite"
+        awayTextBox.Text = "Away"
+        faultTextBox.Text = "Fault Description:"
+        shippingTextBox.Text = "Shipping"
+        weeksNumericUpDown.Value = 4
+    End Sub
 End Class
