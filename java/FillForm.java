@@ -105,29 +105,27 @@ public class FillForm {
 
 			//checks if job is for foodstuffs
 			if (jobType.equals("Foodstuffs")) {
-				
 
-				
 		        String fileName = "fsDoc.docx";
 		        InputStream fis = new FileInputStream(fileName);
 		        
 		        XWPFDocument document = new XWPFDocument(fis);
 
-		        List<XWPFTable> tablesList = document.getTables();
+		        List<XWPFTable> tables = document.getTables();
 		        
-		        setRun(tablesList.get(0).getRow(2).getCell(2), name);
-		        setRun(tablesList.get(0).getRow(4).getCell(2), dateInString);
-		        setRun(tablesList.get(0).getRow(6).getCell(2), jobNo);
-		        setRun(tablesList.get(0).getRow(8).getCell(2), site);
+		        setRun(tables.get(0).getRow(4).getCell(1), name);
+		        setRun(tables.get(0).getRow(5).getCell(1), dateInString);
+		        setRun(tables.get(0).getRow(6).getCell(1), jobNo);
+		        setRun(tables.get(0).getRow(7).getCell(1), site);
 
 
-		        setRun(tablesList.get(1).getRow(5).getCell(1), inSerial);
-		        setRun(tablesList.get(1).getRow(7).getCell(1), inAsset);
+		        setRun(tables.get(0).getRow(15).getCell(1), inSerial);
+		        setRun(tables.get(0).getRow(16).getCell(1), inAsset);
 		        
-		        setRun(tablesList.get(2).getRow(4).getCell(1), outSerial);
-		        setRun(tablesList.get(2).getRow(6).getCell(1), outAsset);
+		        setRun(tables.get(0).getRow(22).getCell(1), outSerial);
+		        setRun(tables.get(0).getRow(23).getCell(1), outAsset);
 		        		        
-		        setRun(tablesList.get(3).getRow(0).getCell(0), fault);	        
+		        setRun(tables.get(0).getRow(27).getCell(0), fault);
 		        
 		        OutputStream out = new FileOutputStream("fsDoc-Filled.docx");
 		        document.write(out);

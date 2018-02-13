@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FillForm.jar">
+    <output-path>$PROJECT_DIR$/Testing</output-path>
+    <root id="archive" name="FillForm.jar">
+      <element id="module-output" name="OneShipper" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Testing/FillForm.jar" path-in-jar="/" />
+      <element id="library" level="project" name="testProgram" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Final/fillForm.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/xmlworker-5.5.8-javadoc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itext-pdfa-5.5.8-javadoc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/xmlworker-5.5.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itext-pdfa-5.5.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itextpdf-5.5.8-javadoc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/xmlworker-5.5.8-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itext-xtra-5.5.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itextpdf-5.5.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itext-pdfa-5.5.8-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itext-xtra-5.5.8-javadoc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itext-xtra-5.5.8-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/java/itext-5.5.8/itextpdf-5.5.8-sources.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

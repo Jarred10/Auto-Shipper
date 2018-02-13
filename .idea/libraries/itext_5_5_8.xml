@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="itext-5.5.8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/xmlworker-5.5.8-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itext-pdfa-5.5.8-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/xmlworker-5.5.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itext-pdfa-5.5.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itextpdf-5.5.8-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/xmlworker-5.5.8-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itext-xtra-5.5.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itextpdf-5.5.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itext-pdfa-5.5.8-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itext-xtra-5.5.8-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itext-xtra-5.5.8-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java/itext-5.5.8/itextpdf-5.5.8-sources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

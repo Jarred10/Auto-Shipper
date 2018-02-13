@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="fillForm">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Testing/FillForm.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

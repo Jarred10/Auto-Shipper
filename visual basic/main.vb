@@ -102,43 +102,47 @@ Public Class main
         For Each unshippedJob As Item In unshippedJobs
             Dim jobCalendarSearch = calendarSearch.Restrict("@SQL=" + quote("urn:schemas:httpmail:subject") + " LIKE '%" + unshippedJob.jobNumber + "%'")
             For Each calendarItem As Outlook.AppointmentItem In jobCalendarSearch
-                Dim itemString = calendarItem.Body.ToLower
-                If itemString.ContainsIgnoreCase("1639") Then
-                    'Determines if job is for foodstuffs
-                    If itemString.Contains("site :: ") Then
-                        unshippedJob.site = parseLine(calendarItem.Body, "site ::")
-                        unshippedJob.jobType = jobTypes.Foodstuffs
+                If Not String.IsNullOrEmpty(calendarItem.Body) Then
+
+                    Dim itemString = calendarItem.Body.ToLower
+                    If itemString.ContainsIgnoreCase("1639") Then
+                        'Determines if job is for foodstuffs
+                        If itemString.Contains("site :: ") Then
+                            unshippedJob.site = parseLine(calendarItem.Body, "site ::")
+                            unshippedJob.jobType = jobTypes.Foodstuffs
+                            unshippedJob.appointment = calendarItem
+                            Exit For
+                        ElseIf itemString.Contains("site name:") Then
+                            unshippedJob.site = parseLine(calendarItem.Body, "site name:")
+                            unshippedJob.jobType = jobTypes.Foodstuffs
+                            unshippedJob.appointment = calendarItem
+                            Exit For
+                        ElseIf itemString.Contains("location:") Then
+                            unshippedJob.site = parseLine(calendarItem.Body, "location:")
+                            unshippedJob.jobType = jobTypes.Foodstuffs
+                            unshippedJob.appointment = calendarItem
+                            Exit For
+                        End If
+                    ElseIf itemString.Contains("nzlotteries") Then
+                        'Determines if job is for Lotto
+                        unshippedJob.site = parseLine(calendarItem.Body, "retailer name:")
+                        unshippedJob.jobType = jobTypes.Lotto
                         unshippedJob.appointment = calendarItem
                         Exit For
-                    ElseIf itemString.Contains("site name:") Then
-                        unshippedJob.site = parseLine(calendarItem.Body, "site name:")
-                        unshippedJob.jobType = jobTypes.Foodstuffs
+                    ElseIf itemString.Contains("4611nzptwncorp") Then
+                        'Determines if job is for post
+                        unshippedJob.site = parseLine(calendarItem.Body, "customer contact at site:")
+                        unshippedJob.jobType = jobTypes.NZPost
                         unshippedJob.appointment = calendarItem
                         Exit For
-                    ElseIf itemString.Contains("location:") Then
-                        unshippedJob.site = parseLine(calendarItem.Body, "location:")
-                        unshippedJob.jobType = jobTypes.Foodstuffs
+                    Else
+                        unshippedJob.site = ""
+                        unshippedJob.jobType = jobTypes.Other
                         unshippedJob.appointment = calendarItem
-                        Exit For
                     End If
-                ElseIf itemString.Contains("nzlotteries") Then
-                    'Determines if job is for Lotto
-                    unshippedJob.site = parseLine(calendarItem.Body, "retailer name:")
-                    unshippedJob.jobType = jobTypes.Lotto
-                    unshippedJob.appointment = calendarItem
-                    Exit For
-                ElseIf itemString.Contains("4611nzptwncorp") Then
-                    'Determines if job is for post
-                    unshippedJob.site = parseLine(calendarItem.Body, "customer contact at site:")
-                    unshippedJob.jobType = jobTypes.NZPost
-                    unshippedJob.appointment = calendarItem
-                    Exit For
-                Else
-                    unshippedJob.site = ""
-                    unshippedJob.jobType = jobTypes.Other
-                    unshippedJob.appointment = calendarItem
                 End If
             Next
+
 
             unshippedJobsListBox.Items.Add(unshippedJob)
             unshippedJobsListBox.Refresh()
@@ -259,22 +263,36 @@ Public Class main
         Else
 
             If selectedJob.jobType = jobTypes.Foodstuffs Then
-                Dim poApp As Word.Application
-                Dim poDoc As Word.Document
+                Dim p As New PrintDialog
+                Dim app As Word.Application
+                Dim doc As Word.Document
 
-                poApp = New Word.Application
-                poApp.DisplayAlerts = Word.WdAlertLevel.wdAlertsNone
-                poDoc = poApp.Documents.Open(FileSystem.CurDir + "\fsDoc-Filled.docx")
-                'If you want to change what printer it goes to, it's poApp.ActivePrinter = "System Printer Name"
-                'print it out
-                poDoc.PrintOut()
-                poDoc.Close(Word.WdSaveOptions.wdDoNotSaveChanges)
-                'clean up
-                poDoc = Nothing
-                'close word
-                poApp.Quit(Word.WdSaveOptions.wdDoNotSaveChanges)
-                poApp = Nothing
-                ' Process.Start("cmd", "/C start wordpad.exe /p fsDoc-Filled.docx")
+                If p.ShowDialog = DialogResult.OK Then
+                    'Create instance of Word Application
+                    app = New Word.Application
+
+                    'Set Printer
+                    app.WordBasic.FilePrintSetup(Printer:=p.PrinterSettings.PrinterName, DoNotSetAsSysDefault:=1)
+
+                    'Set filename to object type
+                    Dim filename As Object = FileSystem.CurDir + "\fsDoc-Filled.docx"
+                    Dim m As Object = System.Reflection.Missing.Value
+
+                    'Open document
+                    doc = app.Documents.Open(filename, m, m, m, m, m, m, m, m, m, m, m)
+
+                    'Print document
+                    app.PrintOut()
+
+                    'Close document
+                    app.Documents.Close()
+
+                    'Quit word application
+                    app.Quit()
+
+                    'Release 
+                    app = Nothing
+                End If
             End If
             If selectedJob.jobType = jobTypes.Lotto Then Process.Start("cmd", "/C start wordpad.exe /p lottoDoc-Filled.docx")
             Process.Start("cmd", "/C SumatraPDF.exe -silent -print-to-default shipDoc-Filled.pdf")
@@ -454,7 +472,12 @@ Public Class main
             MsgBox("No job selected.")
         Else
             If unshippedJobsListBox.SelectedIndex > -1 Then
-                selectedJob.appointment.GetInspector.Display()
+                If IsNothing(selectedJob.appointment) Then
+                    MsgBox("No calendar appointment found for job.")
+                Else
+                    selectedJob.appointment.GetInspector.Display()
+                End If
+
             End If
         End If
     End Sub
